@@ -7,6 +7,7 @@ from playwright.sync_api import (
     Page
 )
 from app.omni_app import OmniApp
+from config.settings import ACCOUNT_PASSWORD, ACCOUNT_USERNAME, HEADLESS
 
 """
 fixture
@@ -30,7 +31,7 @@ def app(page: Page):
 def logged_app(page: Page):
     try:
         omni_app  = OmniApp(page)
-        omni_app.login_by_account("testuser01", "testuser01")
+        omni_app.login_by_account(ACCOUNT_USERNAME, ACCOUNT_PASSWORD)
         return omni_app
     except Exception as e:
         raise Exception(f"Failed to log in: {e}")
@@ -50,7 +51,7 @@ def browser(playwright_instance: Playwright):
     try:
         browser = playwright_instance.chromium.launch(
             channel="chrome",
-            headless=False,
+            headless=HEADLESS,
             args=[
                 "--disable-features=Translate,TranslateUI",
                 "--disable-translate",
@@ -78,8 +79,8 @@ def context(browser: Browser):
             java_script_enabled=True,
             locale="zh-TW",
             viewport={
-                "width": 1500,
-                "height": 768,
+                "width": 1920,
+                "height": 1080,
             },
             extra_http_headers={
                 "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7"

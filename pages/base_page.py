@@ -1,6 +1,5 @@
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
 from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
-from pages.elements import Elements
 import random
 import allure
 from allure_commons.types import AttachmentType
@@ -8,7 +7,6 @@ from allure_commons.types import AttachmentType
 class BasePage:
     def __init__(self, page: Page):
         self.page = page
-        self.elements = Elements(page)
         
     def sleep(self, seconds: int):
         try:
@@ -64,38 +62,6 @@ class BasePage:
         except Exception as e:
             raise Exception(f"Failed while waiting for loading to disappear: {e}")
             
-    def verify_input(self, inputElement, ErrorElement, cases):
-        try:
-            for input_value, expected_msg in cases:
-                inputElement.fill(input_value)
-
-                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應該出現").to_be_visible()
-                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為：{expected_msg}").to_have_text(expected_msg)
-
-                inputElement.fill("")
-        except Exception as e:
-            raise Exception(f"Failed to verify input : {e}")
-    
-    def verify_delete(self):
-        try:
-            input_cases = [
-                "delete",
-                "   ",
-                "Delete"
-            ]
-            input_element  = self.elements.dialog_input_delete
-
-            for input_value in input_cases:
-                input_element.fill(input_value)
-                expect(self.elements.dialog_btn_confirm).to_be_disabled()
-                input_element.clear()
-            
-            input_element.fill("DELETE")
-            self.elements.dialog_btn_confirm.click()
-            self.elements.dialog_btn_checked.click()
-        except Exception as e:
-            raise  Exception(f'Failed to :{e}')
-    
     def get_random_number(self, value) -> int:
         try:
             return random.randint(0, value)

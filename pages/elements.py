@@ -188,7 +188,7 @@ class Elements:
     def btn_filter_level_editor(self):
         return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="編輯者", exact=True)
     @property
-    def btn_filter_level_viwer(self):
+    def btn_filter_level_viewer(self):
         return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="檢視者", exact=True)
     @property
     def btn_filter_index_oldtonew(self):
