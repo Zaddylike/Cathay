@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
-
+from pages.elements import Elements
 """
 locator
 get_by_placeholder
@@ -11,32 +11,36 @@ get_by_text
 class OperationPage:
     def __init__(self, page: Page):
         self.page = page
+        self.elements = Elements(page)
 
-        # Locators
-        self.todo_input = page.get_by_placeholder("What needs to be done?")
-        self.todo_items = page.locator(".todo-list li")
-
-    def filling_field(self, todo_name: str):
+    def verify_delete(self):
         try:
-            self.todo_input.fill(todo_name)
-            self.todo_input.press("Enter")
-        except Exception as e:
-            raise Exception(f"Add todo failed: {e}")
+            input_cases = [
+                "delete",
+                "   ",
+                "Delete"
+            ]
+            input_element  = self.elements.dialog_input_delete
 
-    def verify_todo_visible(self, todo_name: str):
-        try:
-            expect(self.page.get_by_text(todo_name)).to_be_visible()
+            for input_value in input_cases:
+                input_element.fill(input_value)
+                expect(self.elements.dialog_btn_confirm).to_be_disabled()
+                input_element.clear()
+            
+            input_element.fill("DELETE")
+            self.elements.dialog_btn_confirm.click()
+            self.elements.dialog_btn_checked.click()
         except Exception as e:
-            raise AssertionError(f"Verify todo visible failed: {e}")
+            raise  Exception(f'Failed to :{e}')
 
-    def verify_todo_count(self, count: int):
+    def verify_input(self, inputElement, ErrorElement, cases):
         try:
-            expect(self.todo_items).to_have_count(count)
-        except Exception as e:
-            raise AssertionError(f"Verify todo count failed: {e}")
+            for input_value, expected_msg in cases:
+                inputElement.fill(input_value)
 
-    def complete_first_todo(self):
-        try:
-            self.page.locator(".todo-list li .toggle").first.click()
+                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應該出現").to_be_visible()
+                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為：{expected_msg}").to_have_text(expected_msg)
+
+                inputElement.fill("")
         except Exception as e:
-            raise Exception(f"Complete first todo failed: {e}")
+            raise Exception(f"Failed to verify input : {e}")

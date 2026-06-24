@@ -2,7 +2,6 @@ from playwright.sync_api import Page
 from pages.base_page import BasePage
 from pages.login_page import LoginPage
 from pages.project_page import ProjectPage
-from pages.elements import Elements
 import allure
 
 class OmniApp:
@@ -19,4 +18,4 @@ class OmniApp:
             self.login_page.verify_title()
             self.login_page.user_login(account, password)
         except Exception as e:
-            raise Exception("Failed to login by account: {e}")
+            raise Exception(f"Failed to login by account: {e}")
