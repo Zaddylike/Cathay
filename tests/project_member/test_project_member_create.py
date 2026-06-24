@@ -2,7 +2,7 @@ from app.omni_app import OmniApp
 import allure
 
 
-@allure.title("新增專案")
+@allure.title("新增成員")
 def test_project_create_success(logged_app: OmniApp):
     logged_app.project_page.open_create_project_dialog()
     logged_app.project_page.validate_and_fill_project_abbreviation()

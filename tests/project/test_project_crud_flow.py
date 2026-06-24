@@ -3,8 +3,7 @@ import allure
 
 
 
-@allure.step("新增專案")
-@allure.title("[PROJECT-CRUD] Create project successfully")
+@allure.title("新增專案")
 def test_project_create_success(logged_app: OmniApp):
     logged_app.project_page.open_create_project_dialog()
     logged_app.project_page.validate_and_fill_project_abbreviation()
@@ -16,8 +15,7 @@ def test_project_create_success(logged_app: OmniApp):
     logged_app.project_page.select_project_icon()
     logged_app.project_page.submit_project_and_verify_created()
 
-@allure.step("檢視專案")
-@allure.title("[PROJECT-CRUD] Read project successfully")
+@allure.title("檢視專案")
 def test_project_read_success(logged_app: OmniApp):
     logged_app.project_page.verify_project_cards_visible()
     logged_app.project_page.switch_to_project_list_view()
@@ -33,8 +31,7 @@ def test_project_read_success(logged_app: OmniApp):
     logged_app.project_page.filter_project_members_by_role()
     logged_app.project_page.return_to_project_overview()
 
-@allure.step("編輯專案")
-@allure.title("[PROJECT-CRUD] Update project successfully")
+@allure.title("編輯專案")
 def test_project_update_success(logged_app: OmniApp):
     logged_app.project_page.open_project_edit_form()
     logged_app.project_page.validate_and_update_project_zh_name()
@@ -45,8 +42,7 @@ def test_project_update_success(logged_app: OmniApp):
     logged_app.project_page.update_project_icon()
     logged_app.project_page.submit_project_update_and_verify()
 
-@allure.step("刪除專案")
-@allure.title("[PROJECT-CRUD] Delete project successfully")
+@allure.title("刪除專案")
 def test_project_delete_success(logged_app: OmniApp):
     logged_app.project_page.open_project_delete_dialog()
     logged_app.project_page.verify_delete_confirm_disabled_by_default()

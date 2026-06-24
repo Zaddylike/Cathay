@@ -7,3 +7,6 @@ venv_dev/
 .venv/
 venv/
 .env
+.agents
+.codex
+.example
