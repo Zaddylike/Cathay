@@ -1,8 +1,7 @@
 from app.omni_app import OmniApp
 import allure
 
-@allure.step("檢視專案")
-@allure.title("[PROJECT-READ] Read project successfully")
+@allure.title("檢視專案")
 def test_project_read_success(logged_app: OmniApp):
     logged_app.project_page.verify_project_cards_visible()
     logged_app.project_page.switch_to_project_list_view()

@@ -1,8 +1,7 @@
 from app.omni_app import OmniApp
 import allure
 
-
-@allure.title("[PROJECT-UPDATE] Update project successfully")
+@allure.title("編輯專案")
 def test_project_update_success(logged_app: OmniApp):
     logged_app.project_page.open_project_edit_form()
     logged_app.project_page.validate_and_update_project_zh_name()
