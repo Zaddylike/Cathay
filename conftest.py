@@ -53,10 +53,9 @@ def browser(playwright_instance: Playwright):
             channel="chrome",
             headless=HEADLESS,
             args=[
+                "--window-position=0,0",
                 "--disable-features=Translate,TranslateUI",
                 "--disable-translate",
-                # "--lang=zh-TW",
-                # "--headless=new"
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
@@ -78,9 +77,13 @@ def context(browser: Browser):
         context = browser.new_context(
             java_script_enabled=True,
             locale="zh-TW",
-            viewport={
-                "width": 1920,
-                "height": 1080,
+            viewport= {
+                "width": 1536,
+                "height": 824,
+            },
+            screen= {
+                "width": 1536,
+                "height": 824,
             },
             extra_http_headers={
                 "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7"

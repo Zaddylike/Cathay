@@ -134,8 +134,20 @@ class Elements:
     def dialog_btn_cancel(self):
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
     @property
+    def btn_add_member_confirm(self):
+        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
+    @property
+    def btn_add_member_cancel(self):
+        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 取消 ")
+    @property
     def input_search_field(self):
         return self.page.locator(".function-bar .relative input")
+    @property
+    def input_search_member_field(self):
+        return self.page.locator(".w-full .w-full p-multiselect .p-multiselect-label-container .p-multiselect-label").first
+    @property
+    def list_search_member(self):
+        return self.page.locator('[role="listbox"] [role="option"] p-checkbox')
     @property
     def list_project_member(self):
         return self.page.locator('[datakey="memberId"] tbody')
@@ -148,6 +160,15 @@ class Elements:
     @property
     def btn_filter_page(self):
         return self.page.locator('.function-bar .relative p-inputicon.cursor-pointer img[tooltipstyleclass="custom-form-field-tooltip"]')
+    @property
+    def btn_filter_add_member_page(self):
+        return self.page.locator('.w-full .relative p-inputicon.cursor-pointer img[tooltipstyleclass="custom-form-field-tooltip"]')
+    @property
+    def input_add_member_search(self):
+        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
+    @property
+    def checkbox_add_member(self):
+        return self.page.locator('[role="treeitem"] p-checkbox .p-checkbox-input').last
     @property
     def btn_clean_nodata(self):
         return self.page.locator('.btn--secondary')
@@ -220,3 +241,10 @@ class Elements:
     @property
     def arrow_go_back(self):
         return self.page.locator('[class="go-back-btn__icon"]')
+    @property
+    def btn_edit_member(self):
+        return self.page.locator('div.main-container--wrapper app-share-project div button.btn').first
+    @property
+    def btn_add_member(self):
+        return self.page.locator('div.main-container--wrapper app-share-project-edit div button.btn').first
+    
