@@ -29,7 +29,7 @@ class OperationPage:
             
             input_element.fill("DELETE")
             self.elements.dialog_btn_confirm.click()
-            self.elements.dialog_btn_checked.click()
+            self.elements.btn_dialog_checked.click()
         except Exception as e:
             raise  Exception(f'Failed to :{e}')
 
