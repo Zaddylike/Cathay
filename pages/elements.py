@@ -134,7 +134,25 @@ class Elements:
     def dialog_btn_cancel(self):
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
     @property
-    def btn_add_member_confirm(self):
+    def btn_member_add_level_list(self):
+        return self.page.locator('.flex-column app-select p-select [role="button"]').first
+    @property
+    def list_member_level(self):
+        return self.page.locator('.p-select-list-container .p-select-list')
+    @property
+    def list_member_level_owner(self):
+        return self.page.locator('.p-select-list-container .p-select-list [aria-label="OWNER"]')
+    @property
+    def list_member_level_editor(self):
+        return self.page.locator('.p-select-list-container .p-select-list [aria-label="EDITOR"]')
+    @property
+    def list_member_level_viewer(self):
+        return self.page.locator('.p-select-list-container .p-select-list [aria-label="VIEWER"]')
+    @property
+    def btn_member_add_member_page(self):
+        return self.page.locator('.w-full .flex button')
+    @property
+    def btn_memberadd_filter_page_confirm(self):
         return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
     @property
     def btn_add_member_cancel(self):
@@ -155,22 +173,25 @@ class Elements:
     def msg_search_nodata(self):
         return self.page.locator(".text-type--secondary-title")
     @property
-    def btn_clean_search(self):
+    def btn_clear_search(self):
         return self.page.locator(".function-bar .relative p-inputicon.cursor-pointer img").first
     @property
     def btn_filter_page(self):
         return self.page.locator('.function-bar .relative p-inputicon.cursor-pointer img[tooltipstyleclass="custom-form-field-tooltip"]')
     @property
-    def btn_filter_add_member_page(self):
+    def btn_member_add_filter_page(self):
         return self.page.locator('.w-full .relative p-inputicon.cursor-pointer img[tooltipstyleclass="custom-form-field-tooltip"]')
     @property
     def input_add_member_search(self):
         return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
     @property
+    def input_member_search(self):
+        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)   
+    @property
     def checkbox_add_member(self):
         return self.page.locator('[role="treeitem"] p-checkbox .p-checkbox-input').last
     @property
-    def btn_clean_nodata(self):
+    def btn_clear_nodata(self):
         return self.page.locator('.btn--secondary')
     @property
     def cards_project(self):
