@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
-from pages.elements import Elements
+from pages.locators.elements import OperationElements
 """
 locator
 get_by_placeholder
@@ -11,7 +11,7 @@ get_by_text
 class OperationPage:
     def __init__(self, page: Page):
         self.page = page
-        self.elements = Elements(page)
+        self.elements = OperationElements(page)
 
     def verify_delete(self):
         try:

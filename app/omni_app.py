@@ -4,6 +4,7 @@ from pages.operation_page import OperationPage
 from pages.login_page import LoginPage
 from pages.project_page import ProjectPage
 from pages.project_member_page import ProjectMemberPage
+from pages.application_page import ApplicationPage
 import allure
 
 class OmniApp:
@@ -13,6 +14,7 @@ class OmniApp:
         self.base_page = BasePage(page)
         self.project_page = ProjectPage(page)
         self.project_member_page = ProjectMemberPage(page)
+        self.application_page = ApplicationPage(page)
         
     @allure.step("開啟瀏覽器")
     def login_by_account(self, account: str, password: str):
