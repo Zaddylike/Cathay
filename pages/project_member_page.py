@@ -19,9 +19,12 @@ class ProjectMemberPage:
         self.elements.cards_project.click()
         self.base_page.click_expect(self.elements.btn_member, self.elements.btn_edit_member)
 
-    @allure.step("進入編輯頁面|搜尋新增成員")
-    def add_member_to_list(self):
+    @allure.step("進入編輯頁面")
+    def go_to_member_edit_page(self):
         self.base_page.click_expect(self.elements.btn_edit_member, self.elements.btn_add_member)
+    
+    @allure.step("搜索新增成員")
+    def search_member_to_list(self):
         self.elements.btn_member_add_filter_page.click()
         self.elements.input_add_member_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
@@ -29,15 +32,16 @@ class ProjectMemberPage:
         
     @allure.step("調整新增成員權限")
     def adjust_member_level(self):
-        self.base_page.click_expect(self.elements.btn_member_add_level_list, self.elements.list_member_level)
-        self.elements.btn_member_add_member_page.click()
-        self.elements.btn_submit.click()
-        self.elements.dialog_btn_checked.click()
+        self.base_page.click_expect(self.elements.btn_editmember_levellist, self.elements.list_member_level)
+        self.elements.list_member_level_viewer.click()
+        self.elements.btn_editmember_addmember.click()
     
     @allure.step("搜尋新增成員")
     def search_member_add(self):
+        self.elements.btn_submit.click()
+        self.elements.dialog_btn_checked.click()
         self.elements.input_member_search.fill("測試人員3")
-        expect(self.elements.msg_search_nodata).not_to_be_visible()
+        expect(self.elements.btn_clear_nodata).not_to_be_visible()
     
     #read
     @allure.step("搜尋成員")
@@ -79,3 +83,30 @@ class ProjectMemberPage:
         
         self.elements.btn_filter_page.click()
         self.elements.btn_filter_clean_filter.click()
+
+    #update
+    @allure.step("新增第二個成員")
+    def add_another_member(self):
+        self.elements.btn_member_add_filter_page.click()
+        self.elements.input_add_member_search.fill("測試人員2")
+        self.elements.checkbox_add_member.click()
+        self.elements.btn_memberadd_filter_page_confirm.click()
+        self.base_page.click_expect(self.elements.btn_editmember_levellist, self.elements.list_member_level)
+        self.elements.list_member_level_viewer.click()
+        self.elements.btn_editmember_addmember.click()
+        
+    @allure.step("調整舊成員權限")
+    def adjust_previous_member_level(self):
+        self.elements.list_editmember_tester3.locator("app-select p-select").click()
+        expect(self.elements.list_member_level).to_be_visible()
+        self.elements.list_member_level_editor.click()
+        self.elements.btn_submit.click()
+        self.elements.dialog_btn_checked.click()
+
+    #delete
+    @allure.step("刪除成員")
+    def delete_member(self):
+        self.elements.list_editmember_tester3.locator("app-icon img").click()
+        expect(self.elements.list_editmember_tester3).not_to_be_visible()
+        self.elements.btn_submit.click()
+        self.elements.dialog_btn_checked.click()

@@ -134,7 +134,7 @@ class Elements:
     def dialog_btn_cancel(self):
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
     @property
-    def btn_member_add_level_list(self):
+    def btn_editmember_levellist(self):
         return self.page.locator('.flex-column app-select p-select [role="button"]').first
     @property
     def list_member_level(self):
@@ -149,8 +149,11 @@ class Elements:
     def list_member_level_viewer(self):
         return self.page.locator('.p-select-list-container .p-select-list [aria-label="VIEWER"]')
     @property
-    def btn_member_add_member_page(self):
+    def btn_editmember_addmember(self):
         return self.page.locator('.w-full .flex button')
+    @property
+    def list_editmember_tester3(self):
+        return self.page.locator('[datakey="memberId"] tbody tr').filter(has_text = " 測試人員3 ")
     @property
     def btn_memberadd_filter_page_confirm(self):
         return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
@@ -186,7 +189,7 @@ class Elements:
         return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
     @property
     def input_member_search(self):
-        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)   
+        return self.page.get_by_placeholder("請輸入關鍵字", exact=True)   
     @property
     def checkbox_add_member(self):
         return self.page.locator('[role="treeitem"] p-checkbox .p-checkbox-input').last
