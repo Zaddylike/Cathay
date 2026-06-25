@@ -105,19 +105,19 @@ class ProjectPage:
     def search_project_with_no_result(self):
         self.elements.input_search_field.fill("xxxxxxxxxxxx")
         expect(self.elements.msg_search_nodata).to_be_visible()
-        self.elements.btn_clean_nodata.click()
+        self.elements.btn_clear_nodata.click()
 
     @allure.step("搜尋框搜尋已存在專案縮寫")
     def search_project_by_abbreviation(self):
         self.elements.input_search_field.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_nodata).not_to_be_visible()
-        self.elements.btn_clean_search.click()
+        self.elements.btn_clear_search.click()
 
     @allure.step("搜尋框搜尋已存在專案中文")
     def search_project_by_zh_name(self):
         self.elements.input_search_field.fill("e2e-testing-zh")
         expect(self.elements.msg_search_nodata).not_to_be_visible()
-        self.elements.btn_clean_search.click(force=True)
+        self.elements.btn_clear_search.click(force=True)
         
     @allure.step("進階篩選面板篩選狀態")
     def filter_projects_by_status(self):
