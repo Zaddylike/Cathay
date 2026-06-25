@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect
-from pages.elements import Elements
+from pages.locators.elements import ProjectMemberElements
 from pages.base_page import BasePage
 from pages.operation_page import OperationPage
 import allure
@@ -7,7 +7,7 @@ import allure
 class ProjectMemberPage:
     def __init__(self, page: Page):
         self.page = page
-        self.elements = Elements(page)
+        self.elements = ProjectMemberElements(page)
         self.base_page = BasePage(page)
         self.operate_page = OperationPage(page)
     #create

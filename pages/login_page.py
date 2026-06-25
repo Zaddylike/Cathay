@@ -1,13 +1,13 @@
 from playwright.sync_api import Page, expect
 from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
-from pages.elements import Elements
+from pages.locators.elements import LoginElements
 from pages.base_page import BasePage
 import allure
 
 class LoginPage:
     def __init__(self, page: Page):
         self.page = page
-        self.elements = Elements(page)
+        self.elements = LoginElements(page)
         self.base_page = BasePage(page)
 
     @allure.step("開啟瀏覽器")
