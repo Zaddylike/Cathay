@@ -123,35 +123,35 @@ class ProjectPage:
     def filter_projects_by_status(self):
         self.elements.input_search_project.click()
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter, True)
-        self.elements.btn_dialog_project_fileter_status_enable.click()
-        self.base_page.click_expect(self.elements.btn_dialog_project_filter_search, self.elements.list_projects)
+        self.elements.btn_dialog_project_filter_status_enable.click()
+        self.base_page.click_expect(self.elements.btn_dialog_footer_filter_search, self.elements.list_projects)
 
         self.base_page.sleep(1)
         self.elements.input_search_project.click()
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter, True)
-        self.elements.btn_dialog_project_fileter_status_disable.click()
-        self.base_page.click_expect(self.elements.btn_dialog_project_filter_search, self.elements.list_projects)
+        self.elements.btn_dialog_project_filter_status_disable.click()
+        self.base_page.click_expect(self.elements.btn_dialog_footer_filter_search, self.elements.list_projects)
 
         self.base_page.sleep(1)
         self.elements.input_search_project.click()
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter, True)
-        self.elements.btn_filter_clean_filter.click()
+        self.elements.btn_dialog_footer_filter_clear.click()
 
     @allure.step("進階篩選面板排序日期")
     def sort_projects_by_created_time(self):
         self.elements.input_search_project.click()
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter, True)
         self.elements.btn_dialog_project_filter_oldtonew.click()
-        self.base_page.click_expect(self.elements.btn_dialog_project_filter_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_dialog_footer_filter_search, self.elements.list_projects)
 
         self.elements.input_search_project.click()
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter, True)
         self.elements.btn_dialog_project_filter_newtoold.click()
-        self.base_page.click_expect(self.elements.btn_dialog_project_filter_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_dialog_footer_filter_search, self.elements.list_projects)
 
         self.elements.input_search_project.click()
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter, True)
-        self.elements.btn_filter_clean_filter.click()
+        self.elements.btn_dialog_footer_filter_clear.click()
 
     @allure.step("檢視專案詳細資訊頁面")
     def open_project_detail_from_search(self):
@@ -161,7 +161,7 @@ class ProjectPage:
 
     @allure.step("檢視專案成員頁面")
     def open_project_members(self):
-        self.elements.btn_project_member_edit.click()
+        self.elements.btn_project_edit_member.click()
 
     @allure.step("專案成員頁面搜尋成員")
     def search_project_members(self):
@@ -181,22 +181,22 @@ class ProjectPage:
     @allure.step("專案成員頁面進階搜尋成員權限")
     def filter_project_members_by_role(self):
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter)
-        self.elements.btn_filter_level_editor.click()
-        self.elements.btn_dialog_project_filter_search.click()
+        self.elements.btn_memberadd_filter_level_editor.click()
+        self.elements.btn_dialog_footer_filter_search.click()
         expect(self.elements.list_project_members).not_to_be_visible()
 
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter)
-        self.elements.btn_filter_level_viewer.click()
-        self.elements.btn_dialog_project_filter_search.click()
+        self.elements.btn_memberadd_filter_level_viewer.click()
+        self.elements.btn_dialog_footer_filter_search.click()
         expect(self.elements.list_project_members).not_to_be_visible()
 
         self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter)
-        self.elements.btn_filter_level_owner.click()
-        self.elements.btn_dialog_project_filter_search.click()
+        self.elements.btn_memberadd_filter_level_owner.click()
+        self.elements.btn_dialog_footer_filter_search.click()
         expect(self.elements.list_project_members).to_be_visible()
         
         self.elements.btn_filter_search.click()
-        self.elements.btn_filter_clean_filter.click()
+        self.elements.btn_dialog_footer_filter_clear.click()
 
     @allure.step("使用專案清單切換專案")
     def return_to_project_overview(self):
@@ -261,7 +261,7 @@ class ProjectPage:
         self.elements.input_search_project.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.list_projects.first.click()
-        self.base_page.click_expect(self.elements.btn_delete_project, self.elements.dialog_delete)
+        self.base_page.click_expect(self.elements.btn_delete_project, self.elements.dialog_page)
 
     @allure.step("驗證無內容時不可點確認")
     def verify_delete_confirm_disabled_by_default(self):
@@ -269,7 +269,7 @@ class ProjectPage:
 
     @allure.step("重新開啟視窗驗證專案沒有誤刪")
     def cancel_project_delete_then_reopen(self):
-        self.base_page.click_expect(self.elements.dialog_btn_cancel)
+        self.base_page.click_expect(self.elements.btn_dialog_cancel)
         self.base_page.click_expect(self.elements.btn_delete_project)
 
     @allure.step("輸入DELETE並驗證輸入欄位")

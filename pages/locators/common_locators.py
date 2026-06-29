@@ -5,93 +5,72 @@ class CommonLocators:
     def __init__(self, page: Page):
         self.page = page
 
+    @property
+    def btn_login(self):
+        # 首頁: 登入按鈕
+        return self.page.get_by_role("button", name="登入", exact=True)
+    
+    @property
+    def btn_login_nextStep(self):
+        # 登入頁面: 下一步按鈕
+        return self.page.locator("#idSIButton9")
+
+    @property
+    def btn_nextStep(self):
+        # 登入頁面: 下一步按鈕
+        return self.page.get_by_text(" 下一步")
+
+    @property
+    def input_member_search(self):
+        # 共用篩選搜尋欄, project, project member, project member add
+        return self.page.get_by_placeholder("請輸入關鍵字", exact=True)   
 
     @property
     def btn_clear_noResult(self):
-        return self.page.locator('.btn--secondary')
+        # 清除搜尋按鈕
+        return self.page.locator('.btn--secondary', has_text=" 清除搜尋 ")
 
     @property
     def btn_clear_search(self):
+        # 清除關鍵字按鈕
         return self.page.locator(".function-bar .relative p-inputicon.cursor-pointer img").first
 
     @property
-    def btn_delete_project(self):
-        return self.page.get_by_text("刪除專案")    
-
-    @property
     def btn_dialog_checked(self):
+        # 異動通知確認按鈕, 確認
         return self.page.locator('[role="dialog"] app-prompt-dialog .prompt-dialog__footer')
+    
+    @property
+    def btn_dialog_footer_filter_search(self):
+        # 篩選框內搜尋按鈕
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__btns button', has=self.page.get_by_text(" 搜尋 ", exact=True))
 
     @property
-    def btn_dialog_project_filter_search(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__btns').get_by_role("button", name=" 搜尋 ", exact=True)
+    def btn_dialog_footer_filter_clear(self):
+        # 篩選框內清除搜尋按鈕
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__btns button', has=self.page.get_by_text(" 清除搜尋 ", exact=True))
 
     @property
-    def btn_editmember_edit_project_member(self):
-        return self.page.locator('div.main-container--wrapper app-share-project div button.btn').first
-
-    @property
-    def btn_filter_clean_filter(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__btns').get_by_role("button", name=" 清除搜尋 ", exact=True)
-
-    @property
-    def btn_filter_level_editor(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="編輯者", exact=True)
-
-    @property
-    def btn_filter_level_owner(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="擁有者", exact=True)
-
-    @property
-    def btn_filter_level_viewer(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="檢視者", exact=True)
-
-    @property
+        # 篩選條件設定按鈕
     def btn_filter_search(self):
-        return self.page.locator('.function-bar .relative p-inputicon.cursor-pointer img[tooltipstyleclass="custom-form-field-tooltip"]')
-
+        return self.page.locator('p-iconfield p-inputicon.cursor-pointer')
+    
     @property
     def btn_filter_status_all(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="全部", exact=True)
+        # 篩選條件: 全部
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text("全部", exact=True))
 
     @property
-    def btn_login(self):
-        return self.page.get_by_role("button", name="登入", exact=True)
-    
-
-    @property
-    def btn_login_nextStep(self):
-        self.page.get_by_role
-        return self.page.locator("#idSIButton9")
-    
-
-    @property
-    def btn_project_edit_member(self):
-        return self.page.get_by_text("編輯成員")
-
-    @property
-    def btn_project_member_add(self):
-        return self.page.locator('div.main-container--wrapper app-share-project-edit div button.btn').first
-
-    @property
-    def btn_project_member_add_cancel(self):
+    def btn_memberadd_add_member_cancel(self):
         return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 取消 ")
 
     @property
-    def btn_project_member_add_filter(self):
-        return self.page.locator('.w-full .relative p-inputicon.cursor-pointer img[tooltipstyleclass="custom-form-field-tooltip"]')
-
-    @property
-    def btn_project_member_add_filter_confirm(self):
+    def btn_memberadd_filter_add_search_confirm(self):
         return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
 
     @property
-    def btn_project_member_add_levellist(self):
+    def btn_memberadd_add_member_levellist(self):
         return self.page.locator('.flex-column app-select p-select [role="button"]').first
-
-    @property
-    def btn_project_member_edit(self):
-        return self.page.get_by_text("編輯成員")
 
     @property
     def btn_submit(self):
@@ -116,12 +95,13 @@ class CommonLocators:
 
     @property
     def dialog_page(self):
+        # 任何_彈窗頁面
         return self.page.locator('[role="dialog"]')
-
+    
     @property
-    def dialog_page_delete(self):
-        return self.page.locator('[role="dialog"] app-prompt-delete-dialog')
-
+    def btn_dialog_cancel(self):    
+        return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
+    
     @property
     def dialog_project_filter(self):
         return self.page.locator('[role="dialog"] .p-popover-content')
@@ -133,42 +113,10 @@ class CommonLocators:
     @property
     def img_planets(self):
         return self.page.locator(".planets-icon-box")
-
-    @property
-    def input_add_member_search(self):
-        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
-
-    @property
-    def input_project_abbr(self):
-        return self.page.locator('input[formcontrolname="nameAbbr"]')
-
-    @property
-    def input_project_description(self):
-        return self.page.locator('textarea[formcontrolname="description"]')
-
-    @property
-    def input_project_nameEn(self):
-        return self.page.locator('input[formcontrolname="nameEn"]')
-
-    @property
-    def input_project_nameZh(self):
-        return self.page.locator('input[formcontrolname="nameCn"]')
-
-    @property
-    def input_project_tag(self):
-        return self.page.locator('input[formcontrolname="tag"]')
-
-    @property
-    def input_search_member_field(self):
-        return self.page.locator(".w-full .w-full p-multiselect .p-multiselect-label-container .p-multiselect-label").first
-
+    
     @property
     def input_search_project(self):
         return self.page.locator(".function-bar .relative input")
-
-    @property
-    def list_editmember_tester3(self):
-        return self.page.locator('[datakey="memberId"] tbody tr').filter(has_text = " 測試人員3 ")
 
     @property
     def list_project_member_add_levellist(self):
@@ -210,6 +158,7 @@ class CommonLocators:
 
     @property
     def msg_field_error(self):
+        # 欄位錯誤訊息
         return self.page.locator('app-error-message.ng-star-inserted div span')
 
     @property
