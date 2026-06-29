@@ -1,8 +1,10 @@
-from pages.locators.application_locators import ApplicationLocators
+from pages.locators.application_permission_locators import ApplicationPermissionLocators
 from pages.locators.common_locators import CommonLocators
 from pages.locators.elements import (
     AllElements,
-    ApplicationElements,
+    ApplicationPermissionElements,
+    ApplicationS2sElements,
+    ApplicationSsoElements,
     BaseElements,
     LoginElements,
     OperationElements,
