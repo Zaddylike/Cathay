@@ -25,6 +25,7 @@ class ApplicationPage:
         self.base_page.click_expect(self.elements.tab_permission, self.elements.btn_permission_add_permission)
         self.base_page.click_expect(self.elements.btn_permission_add_permission, self.elements.btn_permission_add_scope)
 
+    #scope
     @allure.step("驗證輸入範圍代碼新增資料")
     def validate_and_fill_scope_code(self):
         self.input_scope_cases = [
@@ -82,9 +83,11 @@ class ApplicationPage:
         self.elements.input_permission_init_scope_description.last.fill("e2e-scope-description-2")
 
     @allure.step("點擊下一步到角色新增頁面")
-    def click_to_next_step(self):
+    def click_to_role_next_step(self):
         self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_role)
     
+
+    # role
     @allure.step("展開角色新增頁面")
     def click_to_extend_role_page(self):
         self.base_page.click_expect(self.elements.btn_permission_add_role)
@@ -154,9 +157,10 @@ class ApplicationPage:
         self.base_page.click_expect(self.elements.btn_permission_scope_list.last, self.elements.opt_permission_scope_list.first)
         self.base_page.click_expect(self.elements.opt_permission_scope_list.first)
 
-        self.base_page.click_expect(self.elements.btn_permission_role_create_scope.last)
+        self.base_page.click_expect(self.elements.btn_permission_role_more_scope.last)
         self.base_page.click_expect(self.elements.btn_permission_scope_list.last, self.elements.opt_permission_scope_list.first)
-        expect(self.elements.opt_permission_scope_list.first).to_have_attribute("data-p-disabled", "false")
+        option = self.elements.opt_permission_scope_list.filter(has_text=" e2e-scope-code-2 e2e-scope-name-2 ")
+        expect(option).to_contain_class("p-disabled")
 
         self.elements.input_permission_init_scope_code.last.fill("e2e-scope-code-3")
         self.elements.input_permission_init_scope_name.last.fill("e2e-scope-name-3")
@@ -165,17 +169,35 @@ class ApplicationPage:
         self.elements.opt_permission_scope_list.first.click()
 
     @allure.step("點擊下一步到新增群組頁面")
-    def click_to_next_group_step(self):
+    def click_to_group_next_step(self):
         self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_group)
 
+    #group
+    @allure.step("展開群組新增頁面")
+    def click_to_extend_group_page(self):
+        self.base_page.click_expect(self.elements.btn_permission_add_group)
 
+    @allure.step("驗證輸入群駔名稱新增資料")
+    def validate_and_fill_group_name(self):
+        self.input_group_cases = [
+            ("8" * 41, "輸入字數超過限制長度40"),
+            ("", "必填欄位")
+        ]
+        element_input = self.elements.input_permission_init_group_name
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_group_cases)
+        self.elements.input_permission_init_group_name.fill("e2e-group-name")
 
-#     @allure.step("")
-    # def (self):
-    # @allure.step("")
-    # def (self):
-    #     @allure.step("")
-    # def (self):
+    @allure.step("驗證輸入群駔描述新增資料")
+    def validate_and_fill_group_description(self):
+        self.input_group_cases = [
+            ("8" * 201, "輸入字數超過限制長度200"),
+        ]
+        element_input = self.elements.input_permission_init_group_description
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_group_cases)
+        self.elements.input_permission_init_group_description.fill("e2e-group-description")
+
     # @allure.step("")
     # def (self):
     #     @allure.step("")

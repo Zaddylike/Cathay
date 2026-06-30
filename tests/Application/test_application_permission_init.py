@@ -11,8 +11,7 @@ def test_application_init_success(logged_app: OmniApp):
     logged_app.application_page.validate_and_fill_scope_description()
     logged_app.application_page.validate_duplicate_scope()
     logged_app.application_page.create_another_scope()
-    logged_app.application_page.click_to_next_step()
-
+    logged_app.application_page.click_to_role_next_step()
 
     logged_app.application_page.click_to_extend_role_page()
     logged_app.application_page.validate_and_fill_role_code()
@@ -22,10 +21,11 @@ def test_application_init_success(logged_app: OmniApp):
     logged_app.application_page.validate_duplicate_role()
     logged_app.application_page.create_another_role()
     logged_app.application_page.create_scope_in_role_page()
-    logged_app.application_page.click_to_next_step()
-    # logged_app.application_page.
-    # logged_app.application_page.
-    # logged_app.application_page.
+    logged_app.application_page.click_to_group_next_step()
+
+    logged_app.application_page.click_to_extend_group_page()
+    logged_app.application_page.validate_and_fill_group_name()
+    logged_app.application_page.validate_and_fill_group_description()
     # logged_app.application_page.
     # logged_app.application_page.
 
