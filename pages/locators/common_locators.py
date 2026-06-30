@@ -18,7 +18,7 @@ class CommonLocators:
     @property
     def btn_nextStep(self):
         # 下一步按鈕
-        return self.page.get_by_role("button", name=" 下一步", exact=True)
+        return self.page.get_by_role("button", name="下一步", exact=True)
 
     @property
     def input_member_search(self):

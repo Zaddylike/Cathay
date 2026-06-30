@@ -1,10 +1,184 @@
 from playwright.sync_api import Page, expect
-from pages.locators.elements import ApplicationPermissionElements
+from pages.locators.elements import ApplicationPermissionElements, ApplicationSsoElements, ApplicationS2sElements
 from pages.base_page import BasePage
 from pages.operation_page import OperationPage
 import allure
 
-class ApplicationPage:
+class ApplicationSingleSignOnPage:
+    def __init__(self, page: Page):
+            self.page = page
+            self.elements = ApplicationSsoElements(page)
+            self.base_page = BasePage(page)
+            self.operate_page = OperationPage(page)
+
+    @allure.step("進入專案身分驗證頁面")
+    def open_to_permission_page(self):
+        expect(self.elements.list_projects).to_be_visible()
+        self.elements.input_search_project.fill("e2e-testing-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.elements.list_projects.click()
+        self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
+        expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
+    
+    @allure.step("進入單一登入新增頁面")
+    def open_to_create_sso_page(self):
+        self.base_page.click_expect(self.elements.tab_signon, self.elements.btn_permission_add_sso)
+        self.base_page.click_expect(self.elements.btn_permission_add_sso, self.elements.btn_nextStep)
+
+    @allure.step("點擊下一步")    
+    def click_to_next_step(self):
+        self.elements.btn_nextStep.click()
+    
+    @allure.step("新增Microsoft Entra Id")
+    def create_provider_entraId(self):
+        self.base_page.click_expect(self.elements.list_providers, self.elements.opt_providers_entraId)
+        self.base_page.click_expect(self.elements.opt_providers_entraId, self.page.get_by_text("設定 Microsoft Entra ID SSO"))
+    
+    @allure.step("驗證輸入用戶端ID新增資料")
+    def input_entraId_clientId(self):
+        self.input_client_cases = [
+            ("  ", "必填欄位"),
+            ("", "必填欄位"),
+            ("8" * 101, "輸入字數超過限制長度100"),
+        ]
+        element_input = self.elements.input_entra_clientId
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_client_cases)
+        self.elements.input_entra_clientId.fill("e2e-testing-clientId")
+
+    @allure.step("驗證輸入密鑰新增資料")
+    def input_entraId_secret(self):
+        self.input_secret_cases = [
+            ("  ", "必填欄位"),
+            ("", "必填欄位"),
+            ("8" * 201, "輸入字數超過限制長度200"),
+        ]
+        element_input = self.elements.input_entra_client_secret
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_secret_cases)
+        self.elements.input_entra_client_secret.fill("e2e-testing-secret")
+
+    @allure.step("驗證輸入租戶ID新增資料")
+    def input_entraId_tenant(self):
+        self.input_tenant_cases = [
+            ("8" * 41, "輸入字數超過限制長度40"),
+            ("", "必填欄位"),
+        ]
+        element_input = self.elements.input_entra_tenant_id
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_tenant_cases)
+        self.elements.input_entra_tenant_id.fill("e2e-testing-tenant")
+
+    @allure.step("點擊設定進階設定")
+    def verify_advanced(self):
+        self.base_page.click_expect(self.elements.btn_entra_advanced_setting)
+        expect(self.elements.input_entra_authorization_uri).to_be_visible()
+
+        self.operate_page.verify_input_text(self.elements.input_entra_authorization_uri, "e2e-testing-tenant")
+        self.operate_page.verify_input_text(self.elements.input_entra_token_uri, "e2e-testing-tenant")
+        self.operate_page.verify_input_text(self.elements.input_entra_jwk_set_uri, "e2e-testing-tenant")
+        self.elements.input_entra_user_name_attribute_name.fill("e2e-tseting-entra-attr")
+
+    @allure.step("點擊已新增供應商")
+    def verify_dup_create(self):
+        self.elements.btn_sso_create_more_provider.click()
+        self.base_page.click_expect(self.elements.list_providers.last, self.elements.opt_providers_entraId)
+        expect(self.elements.opt_providers_entraId).to_contain_class("p-disabled")
+
+
+    @allure.step("新增Google供應商")
+    def create_provider_google(self):
+        self.base_page.click_expect(self.elements.opt_providers_google, self.page.get_by_text("設定 GOOGLE SSO"))
+    
+    @allure.step("驗證google輸入用戶端ID")
+    def input_google_clientId(self):
+        self.input_client_cases = [
+            ("  ", "必填欄位"),
+            ("", "必填欄位"),
+            ("8" * 101, "輸入字數超過限制長度100"),
+        ]
+        element_input = self.elements.input_google_clientId
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_client_cases)
+        self.elements.input_google_clientId.fill("e2e-google-clientId")
+
+    @allure.step("驗證google輸入密鑰")
+    def input_google_secret(self):
+        self.input_secret_cases = [
+            ("  ", "必填欄位"),
+            ("", "必填欄位"),
+            ("8" * 201, "輸入字數超過限制長度200"),
+        ]
+        element_input = self.elements.input_google_client_secret
+        element_error = self.elements.msg_field_error
+        self.operate_page.verify_input(element_input, element_error, self.input_secret_cases)
+        self.elements.input_google_client_secret.fill("e2e-google-secret")
+
+    @allure.step("驗證google設定白名單")
+    def switch_whitelist_active(self):
+        self.elements.switch_google_whitelist_active.click()
+        
+    @allure.step("驗證google輸入識別欄位")
+    def input_identify_field(self):
+        expect(self.elements.input_google_identify_field).to_be_visible()
+        self.elements.input_google_identify_field.fill("e2e-google-testing")
+
+    @allure.step("新增OIDC供應商")
+    def create_provider_oidc(self):
+        self.elements.btn_sso_create_more_provider.click()
+        self.base_page.click_expect(self.elements.list_providers.last, self.elements.opt_providers_entraId)
+        expect(self.elements.input_oidc_whitelistKey).to_contain_class("p-disabled")
+        self.base_page.click_expect(self.elements.opt_providers_oidc, self.page.get_by_text("自訂設定"))
+    
+    @allure.step("驗證 OIDC 欄位輸入")
+    def input_oidc_setting(self):
+        try:
+            oidc_value = "e2e-oidc-testing"
+            self.elements.switch_google_whitelist_active.click()
+            expect(self.elements.switch_google_whitelist_active).to_contain_class('p-radiobutton-checked')
+
+            oidc_inputs = [
+                self.elements.input_oidc_buttonName,
+                self.elements.input_oidc_clientId,
+                self.elements.input_oidc_clientSecret,
+                self.elements.input_oidc_name,
+                self.elements.input_oidc_authorizationUri,
+                self.elements.input_oidc_tokenUri,
+                self.elements.input_oidc_userInfoUri,
+                self.elements.input_oidc_jwkSetUri,
+                self.elements.input_oidc_userNameAttributeName,
+            ]
+
+            for input_element in oidc_inputs:
+                input_element.fill(oidc_value)
+                expect(input_element).to_have_value(oidc_value)
+            
+
+        except Exception as e:
+            raise AssertionError(f"Failed to input oidc field: {e}")
+
+class ApplicationServerToServerPage:
+    def __init__(self, page: Page):
+            self.page = page
+            self.elements = ApplicationS2sElements(page)
+            self.base_page = BasePage(page)
+            self.operate_page = OperationPage(page)
+
+    @allure.step("進入專案身分驗證頁面")
+    def open_to_permission_page(self):
+        expect(self.elements.list_projects).to_be_visible()
+        self.elements.input_search_project.fill("e2e-testing-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.elements.list_projects.click()
+        self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
+        expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
+    
+    # @allure.step("進入權限新增頁面")
+    # def open_to_create_permission_page(self):
+    #     self.base_page.click_expect(self.elements.tab_permission, self.elements.btn_permission_add_permission)
+    #     self.base_page.click_expect(self.elements.btn_permission_add_permission, self.elements.btn_permission_add_scope)
+
+class ApplicationPermissionPage:
     def __init__(self, page: Page):
         self.page = page
         self.elements = ApplicationPermissionElements(page)
@@ -197,10 +371,3 @@ class ApplicationPage:
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_group_cases)
         self.elements.input_permission_init_group_description.fill("e2e-group-description")
-
-    # @allure.step("")
-    # def (self):
-    #     @allure.step("")
-    # def (self):
-    # @allure.step("")
-    # def (self):
