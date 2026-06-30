@@ -85,15 +85,25 @@ class ApplicationPermissionLocators:
         return self.page.locator('[role="option"]')
     
     @property
-    def btn_permission_role_create_scope(self):
+    def btn_permission_role_more_scope(self):
         #
         return self.page.locator('[tooltipposition="bottom"] p', has=self.page.get_by_text(" 新增 ", exact=True))
     @property
     def btn_dialog_permission_add_scope(self):
         #
         return self.page.get_by_text(" 新增範圍 ")
+    
     @property
     def btn_permission_add_group(self):
         # 身分驗證頁面_分頁_新增頁面_群組
-        return self.page.get_by_text(" 新增群組 ")
+        return self.page.locator("app-permission-group button")
     
+    @property
+    def input_permission_init_group_name(self):
+        # 身分驗證頁面_分頁_新增頁面_群組_名稱
+        return self.page.locator('[formcontrolname="name"]')
+    
+    @property
+    def input_permission_init_group_description(self):
+        # 身分驗證頁面_分頁_新增頁面_群組_描述
+        return self.page.locator('[formcontrolname="description"]')
