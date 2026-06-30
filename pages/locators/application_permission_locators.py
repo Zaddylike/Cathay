@@ -86,11 +86,12 @@ class ApplicationPermissionLocators:
     
     @property
     def btn_permission_role_more_scope(self):
-        #
+        # 角色新增頁面_新增設定範圍筆數的按鈕
         return self.page.locator('[tooltipposition="bottom"] p', has=self.page.get_by_text(" 新增 ", exact=True))
+    
     @property
     def btn_dialog_permission_add_scope(self):
-        #
+        # 角色新增頁面_範圍選擇清單_新增範圍按鈕
         return self.page.get_by_text(" 新增範圍 ")
     
     @property

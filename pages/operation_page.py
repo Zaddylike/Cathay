@@ -1,6 +1,7 @@
 from playwright.sync_api import Page, expect
 from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
 from pages.locators.elements import OperationElements
+import re
 """
 locator
 get_by_placeholder
@@ -14,6 +15,7 @@ class OperationPage:
         self.elements = OperationElements(page)
 
     def verify_delete(self):
+        # Delete 完整流程(反向)
         try:
             input_cases = [
                 "delete",
@@ -34,6 +36,7 @@ class OperationPage:
             raise  Exception(f'Failed to :{e}')
 
     def verify_input(self, inputElement, ErrorElement, cases):
+        # 欄位內容輸入驗證
         try:
             for input_value, expected_msg in cases:
                 inputElement.fill(input_value)
@@ -44,3 +47,12 @@ class OperationPage:
                 inputElement.fill("")
         except Exception as e:
             raise Exception(f"Failed to verify input : {e}")
+
+    def verify_input_text(self,inputElement, value):
+        # 驗證input類型欄位內容預期
+        try:
+            expect(inputElement).to_have_value(
+                re.compile(rf".*{re.escape(value)}.*")
+            )
+        except Exception as e :
+            raise Exception(f"Failed to verify input value contains : {e}")
