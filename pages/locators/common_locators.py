@@ -121,6 +121,10 @@ class CommonLocators:
     @property
     def input_search_project(self):
         return self.page.locator(".function-bar .relative input")
+    
+    @property
+    def opt_item(self):
+        return self.page.locator('[role="option"]')
 
     @property
     def list_project_member_add_levellist(self):
@@ -170,6 +174,11 @@ class CommonLocators:
         return self.page.locator(".text-type--secondary-title")
 
     @property
+    def date_picker_startDate(self):
+        # 生效日期選擇欄位
+        return self.page.locator('p-datepicker[formcontrolname="startDate"]')
+
+    @property
     def date_picker_endDate(self):
         # 到期日期選擇欄位
         return self.page.locator('p-datepicker[formcontrolname="endDate"]')
@@ -193,3 +202,13 @@ class CommonLocators:
     def date_picker_day(self):
         # 日期選擇視窗面板_日期按鈕
         return self.page.locator(f'.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-calendar [data-pc-section="tablebody"] [data-pc-section="tablebodyrow"] .p-datepicker-day-cell')
+    
+    @property
+    def btn_filter_to_search(self):
+        # 
+        return self.page.locator('p-iconfield p-inputicon.cursor-pointer').first
+
+    @property
+    def input_member_advanced_search(self):
+        # _篩選成員彈窗_篩選欄位
+        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
