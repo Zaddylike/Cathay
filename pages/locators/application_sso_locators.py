@@ -108,7 +108,7 @@ class ApplicationSsoLocators:
     @property
     def switch_google_whitelist_active(self):
         #
-        return self.page.locator('formcontrolname="whitelistEnabled"').last
+        return self.page.locator('[formcontrolname="whitelistEnabled"]').nth(2)
     
     @property
     def input_google_identify_field(self):
@@ -135,27 +135,64 @@ class ApplicationSsoLocators:
     def input_oidc_authorizationGrantTypes(self):
         #
         return self.page.locator('[formcontrolname="authorizationGrantTypes"]').last
+    
     @property
     def input_oidc_name(self):
         #
         return self.page.locator('[formcontrolname="name"]').last
+    
+    @property
+    def input_application_name(self):
+        #
+        return self.page.locator('[formcontrolname="name"]').last
+    
     @property
     def input_oidc_authorizationUri(self):
         #
         return self.page.locator('[formcontrolname="authorizationUri"]').last
+    
     @property
     def input_oidc_tokenUri(self):
         #
         return self.page.locator('[formcontrolname="tokenUri"]').last
+    
     @property
     def input_oidc_userInfoUri(self):
         #
         return self.page.locator('[formcontrolname="userInfoUri"]').last
+    
     @property
     def input_oidc_jwkSetUri(self):
         #
         return self.page.locator('[formcontrolname="jwkSetUri"]').last
+    
     @property
     def input_oidc_userNameAttributeName(self):
         #
         return self.page.locator('[formcontrolname="userNameAttributeName"]').last
+    
+    @property
+    def list_tenants(self):
+        #
+        return self.page.locator('[formcontrolname="tenantId"]').last
+
+    @property
+    def opt_tenant(self):
+        #
+        return self.page.locator('[role="option"]')
+
+    @property
+    def input_application_redirectUrl(self):
+        #
+        return self.page.locator('[formcontrolname="redirectUri"]').last
+    
+    @property
+    def input_application_logoutUrl(self):
+        #
+        return self.page.locator('[formcontrolname="logoutRedirectUri"]').last
+    
+    @property
+    def input_application_description(self):
+        #
+        return self.page.locator('[formcontrolname="description"]').last
+    

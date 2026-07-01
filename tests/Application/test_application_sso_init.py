@@ -19,7 +19,15 @@ def test_single_sign_on_init_success(logged_app: OmniApp):
     logged_app.single_signon_page.input_google_secret()
     logged_app.single_signon_page.switch_whitelist_active()
     logged_app.single_signon_page.input_identify_field()
+
     logged_app.single_signon_page.create_provider_oidc()
     logged_app.single_signon_page.input_oidc_setting()
     logged_app.single_signon_page.click_to_next_step()
+
+    logged_app.single_signon_page.input_application_name()
+    logged_app.single_signon_page.select_tenant()
+    logged_app.single_signon_page.input_application_redirectUrl()
+    logged_app.single_signon_page.input_application_logoutUrl()
+    logged_app.single_signon_page.setting_date()
+    logged_app.single_signon_page.submit_and_verify_success()
 
