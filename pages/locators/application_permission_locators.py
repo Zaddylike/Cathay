@@ -108,3 +108,18 @@ class ApplicationPermissionLocators:
     def input_permission_init_group_description(self):
         # 身分驗證頁面_分頁_新增頁面_群組_描述
         return self.page.locator('[formcontrolname="description"]')
+    
+    @property
+    def btn_group_add_member(self):
+        # 身分驗證頁面_分頁_新增頁面_群組_新增成員按鈕
+        return self.page.locator('[formarrayname="members"] button', has=self.page.get_by_text(" 新增成員 ", exact=True))
+
+    @property
+    def list_permission_role(self):
+        # 身分驗證頁面_分頁_新增頁面_預設權限_成員清單
+        return self.page.locator('[formcontrolname="id"]')
+
+    @property
+    def input_permission_remark(self):
+        # 身分驗證頁面_分頁_新增頁面_預設權限_
+        return self.page.locator('formcontrolname="remark"')

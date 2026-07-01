@@ -26,6 +26,15 @@ def test_application_init_success(logged_app: OmniApp):
     logged_app.permission_page.click_to_extend_group_page()
     logged_app.permission_page.validate_and_fill_group_name()
     logged_app.permission_page.validate_and_fill_group_description()
-    # logged_app.permission_page.
-    # logged_app.permission_page.
+    logged_app.permission_page.invite_team_member()
+    logged_app.permission_page.click_to_permission_next_step()
 
+    logged_app.permission_page.create_permission_setting()
+    logged_app.permission_page.create_permission_role()
+    logged_app.permission_page.create_permission_scope()
+    logged_app.permission_page.create_permission_description()
+
+    logged_app.permission_page.click_to_extend_permission_page()
+    logged_app.permission_page.create_role_for_member()
+    logged_app.permission_page.create_scope_for_member()
+    logged_app.permission_page.verify_permission_creation()
