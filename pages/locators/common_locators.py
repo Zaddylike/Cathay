@@ -74,7 +74,7 @@ class CommonLocators:
 
     @property
     def btn_submit(self):
-        return self.page.locator('div.footer').get_by_role("button", name="送出")
+        return self.page.get_by_role("button", name="送出")
 
     @property
     def btn_tag(self):
@@ -98,6 +98,10 @@ class CommonLocators:
         # 任何_彈窗頁面
         return self.page.locator('[role="dialog"]')
     
+    @property
+    def btn_dialog_permission_confirm(self):
+        return self.page.locator('[role="dialog"] .prompt-dialog__footer', has=self.page.get_by_role("button", name=" 權限設定 ", exact=True))
+
     @property
     def btn_dialog_cancel(self):    
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
@@ -164,3 +168,28 @@ class CommonLocators:
     @property
     def msg_search_noResult(self):
         return self.page.locator(".text-type--secondary-title")
+
+    @property
+    def date_picker_endDate(self):
+        # 到期日期選擇欄位
+        return self.page.locator('p-datepicker[formcontrolname="endDate"]')
+    
+    @property
+    def date_picker_panel(self):
+        # 日期選擇視窗面板
+        return self.page.locator('.p-datepicker-panel [data-pc-section="calendarcontainer"]')
+    
+    @property
+    def dete_picker_arrow_previous(self):
+        # 日期選擇視窗面板_上一個月箭頭
+        return self.page.locator('.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-header [severity="secondary"]').nth(0)
+    
+    @property
+    def dete_picker_arrow_next(self):
+        # 日期選擇視窗面板_下一個月箭頭
+        return self.page.locator('.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-header [severity="secondary"]').nth(1)
+    
+    @property
+    def date_picker_day(self):
+        # 日期選擇視窗面板_日期按鈕
+        return self.page.locator(f'.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-calendar [data-pc-section="tablebody"] [data-pc-section="tablebodyrow"] .p-datepicker-day-cell')

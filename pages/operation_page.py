@@ -56,3 +56,14 @@ class OperationPage:
             )
         except Exception as e :
             raise Exception(f"Failed to verify input value contains : {e}")
+    
+    def select_list(self, listElement, optionElement, optionIndex, optionValue=None):
+        # 驗證下拉選單選項
+        try:
+            listElement.click()
+            expect(optionElement.nth(optionIndex)).to_be_visible()
+            optionElement.nth(optionIndex).click()
+            if optionValue:
+                expect(listElement).to_have_text(optionValue)
+        except Exception as e:
+            raise Exception(f"Failed to select list : {e}")
