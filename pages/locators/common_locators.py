@@ -28,7 +28,7 @@ class CommonLocators:
         return self.page.get_by_role("button", name="下一步", exact=True)
 
     @property
-    def input_member_search(self):
+    def input_keyword_search(self):
         # 共用篩選搜尋欄, project, project member, project member add
         return self.page.get_by_placeholder("請輸入關鍵字", exact=True)   
 
@@ -219,3 +219,48 @@ class CommonLocators:
     def input_member_advanced_search(self):
         # _篩選成員彈窗_篩選欄位
         return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
+    
+    @property
+    def tab_permission(self):
+        # 身分驗證頁面_分頁_權限設定
+        return self.page.locator('[role="tablist"] p-tab', has_text=" 權限設定 ")
+    
+    @property
+    def arrow_extend_page(self):
+        #展開範圍新增頁面箭頭
+        return self.page.locator('.border-circle')
+
+    @property
+    def page_permission(self):
+        # 身分驗證頁面_logo
+        return self.page.locator(".text-type--content-title")
+    
+    @property
+    def card_permission_scope(self):
+        # 身分驗證頁面_分頁_權限設定_範圍卡片
+        return self.page.locator("app-permission-card")
+    
+    @property
+    def threepoint_menu(self):
+        #
+        return self.page.locator('app-permission-card  .p-splitbutton-dropdown')
+    
+    @property
+    def page_threepoint_menu(self):
+        #
+        return self.page.locator('[role="menu"]')
+
+    @property
+    def btn_menu_update(self):
+        #
+        return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('編輯', exact=True)
+    
+    @property
+    def radio_status_disable(self):
+        # 新增專案頁面_狀態_停用
+        return self.page.get_by_text("停用")
+
+    @property
+    def radio_status_enable(self):
+        # 新增專案頁面_狀態_啟用
+        return self.page.get_by_text("啟用")

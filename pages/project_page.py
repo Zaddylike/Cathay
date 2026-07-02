@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 from pages.locators.elements import ProjectElements
 from pages.base_page import BasePage
-from pages.operation_page import OperationPage
+from pages.operate_page import OperatePage
 import allure
 
 class ProjectPage:
@@ -9,7 +9,7 @@ class ProjectPage:
         self.page = page
         self.elements = ProjectElements(page)
         self.base_page = BasePage(page)
-        self.operate_page = OperationPage(page)
+        self.operate_page = OperatePage(page)
     #create
     @allure.step("點擊「新增專案」按鈕")
     def open_create_project_dialog(self):

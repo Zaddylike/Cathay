@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 from pages.locators.elements import ProjectMemberElements
 from pages.base_page import BasePage
-from pages.operation_page import OperationPage
+from pages.operate_page import OperatePage
 import allure
 
 class ProjectMemberPage:
@@ -9,7 +9,7 @@ class ProjectMemberPage:
         self.page = page
         self.elements = ProjectMemberElements(page)
         self.base_page = BasePage(page)
-        self.operate_page = OperationPage(page)
+        self.operate_page = OperatePage(page)
     #create
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self):
@@ -40,7 +40,7 @@ class ProjectMemberPage:
     def search_member_add(self):
         self.elements.btn_submit.click()
         self.elements.btn_dialog_checked.click()
-        self.elements.input_member_search.fill("測試人員3")
+        self.elements.input_keyword_search.fill("測試人員3")
         expect(self.elements.btn_clear_noResult).not_to_be_visible()
     
     #read
