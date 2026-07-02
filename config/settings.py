@@ -11,6 +11,7 @@ def get_bool_env(name: str, default: bool) -> bool:
 BASE_URL_DEV = os.getenv("OMNI_BASE_URL", "https://dev.omnihubs.cloud/")
 DEFAULT_TIMEOUT = int(os.getenv("OMNI_DEFAULT_TIMEOUT", "20000"))
 HEADLESS = get_bool_env("OMNI_HEADLESS", False)
+# HEADLESS = get_bool_env("OMNI_HEADLESS", True)
 
 ACCOUNT_USERNAME = os.getenv("OMNI_ACCOUNT_USERNAME", "testuser01")
 ACCOUNT_PASSWORD = os.getenv("OMNI_ACCOUNT_PASSWORD", "testuser01")

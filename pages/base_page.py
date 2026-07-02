@@ -23,11 +23,12 @@ class BasePage:
 
     def click_expect(self, locator, expected_after_click=None, double=False):
         try:
+            locator.wait_for(state="visible", timeout=10*1000)
             locator.click()
         except PlaywrightTimeoutError as e:
-            raise AssertionError(f"Timeout: {e}")
+            raise AssertionError(f"Failed to find this element: {e}")
         except Exception as e:
-            raise Exception(f"Failed to click: {e}")
+            raise Exception(f"Failed to click this element: {e}")
 
         if expected_after_click is not None:
             try:
@@ -36,7 +37,7 @@ class BasePage:
                 if double:
                     self.click_expect(locator, expected_after_click, False)
                 else:
-                    raise AssertionError(f"Timeout: {e}")
+                    raise AssertionError(f"Failed to find expected element: {e}")
             except Exception as e:
                 raise Exception(f"Click passed, but expected element is not visible: {e}")
         

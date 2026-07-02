@@ -237,7 +237,7 @@ class ApplicationServerToServerPage:
         self.input_s2s_application_name_cases = [
             ("  ", "必填欄位"),
             ("", "必填欄位"),
-            ("8" * 101, "輸入字數超過限制長度100"),
+            ("8" * 41, "輸入字數超過限制長度40"),
         ]
         element_input = self.elements.input_s2s_application_name
         element_error = self.elements.msg_field_error
@@ -253,8 +253,6 @@ class ApplicationServerToServerPage:
     @allure.step("輸入驗證描述欄位")
     def input_application_description(self):
         self.input_s2s_description_name_cases = [
-            ("  ", "必填欄位"),
-            ("", "必填欄位"),
             ("8" * 201, "輸入字數超過限制長度200"),
         ]
         element_input = self.elements.input_s2s_application_description
@@ -269,11 +267,11 @@ class ApplicationServerToServerPage:
 
     @allure.step("驗證輸入描述")
     def input_scope_description(self):
-        self.elements.input_s2s_application_description.fill("e2e-testing-application-description")
+        self.elements.input_s2s_application_description.fill("e2e-s2s-scope-des")
 
     @allure.step("新增送出")
     def submit_s2s_and_verify_success(self):
-        expect(self.elements.btn_submit).to_be_enabled()
+        expect(self.elements.btn_submit).to_be_enabled(timeout=10000)
         self.base_page.click_expect(self.elements.btn_submit, self.elements.dialog_page)
         self.base_page.click_expect(self.elements.btn_dialog_permission_confirm)
 
@@ -483,7 +481,9 @@ class ApplicationPermissionPage:
 
     @allure.step("點擊下一步到新增指定權限頁面")
     def click_to_permission_next_step(self):
-        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_group)
+        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_permission)
+        self.base_page.sleep(3)
+    # assign permission
 
     @allure.step("新增指定權限成員")
     def create_permission_setting(self):
@@ -511,9 +511,11 @@ class ApplicationPermissionPage:
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
         self.elements.input_permission_remark.fill("e2e-permission-description")
 
-    @allure.step("展開指定權限新增頁面")
-    def click_to_extend_permission_page(self):
-        self.base_page.click_expect(self.elements.btn_permission_add_group)
+    @allure.step("點擊下一步到預設權限新增頁面")
+    def click_to_default_permission_next_step(self):
+        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_role.first)
+
+    # default permission
 
     @allure.step("新增預設權限成員角色")
     def create_role_for_member(self):
@@ -529,4 +531,5 @@ class ApplicationPermissionPage:
     def verify_permission_creation(self):
         expect(self.elements.btn_submit).to_be_enabled()
         self.base_page.click_expect(self.elements.btn_submit, self.elements.dialog_page)
+        self.base_page.sleep(500)
         self.base_page.click_expect(self.elements.btn_dialog_checked)

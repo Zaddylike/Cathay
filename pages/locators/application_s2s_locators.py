@@ -48,4 +48,4 @@ class ApplicationS2sLocators:
     @property
     def list_s2s_scope(self):
         #
-        return self.page.locator('[formcontrolname="scopes"]')
+        return self.page.locator('[formcontrolname="code"] p-select')

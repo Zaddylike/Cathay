@@ -14,5 +14,10 @@ C.運行後:
 1. run_allure.bat
 2. open_allure.bat
 
-ps:
+
+
+Memo:
 1. 產生在reports, 路徑設定在pytset.ini
+2. setting.py 管基本測設設定
+
+

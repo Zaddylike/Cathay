@@ -122,4 +122,4 @@ class ApplicationPermissionLocators:
     @property
     def input_permission_remark(self):
         # 身分驗證頁面_分頁_新增頁面_預設權限_
-        return self.page.locator('formcontrolname="remark"')
+        return self.page.locator('[formcontrolname="remark"]')
