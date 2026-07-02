@@ -8,8 +8,15 @@ class CommonLocators:
     @property
     def btn_login(self):
         # 首頁: 登入按鈕
-        return self.page.get_by_role("button", name="登入", exact=True)
-    
+        # 撈重複多再篩內部有符合的抓
+        return self.page.locator('.header__feature-item', has=self.page.get_by_role("button", name="登入", exact=True))
+
+    @property
+    def btn_login_welcome(self):
+        # 登入頁: 登入按鈕
+        # 先抓指定區域再從中有符合的抓
+        return self.page.locator('[method="post"]').get_by_role("button", name="登入", exact=True)
+    #auth > div.welcome-box > div:nth-child(2)
     @property
     def btn_login_nextStep(self):
         # 登入頁面: 下一步按鈕

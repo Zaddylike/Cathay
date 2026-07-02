@@ -40,10 +40,10 @@ class LoginPage:
     @allure.step("點擊登入按鈕/輸入帳號密碼: {account}")
     def user_login(self, account: str, password: str):
         try:
-            self.elements.btn_login.click()
+            self.base_page.click_expect(self.elements.btn_login, self.elements.input_account)
             self.elements.input_account.fill(account)
             self.elements.input_password.fill(password)
-            self.base_page.click_expect(self.elements.btn_login, self.elements.btn_user_avatar)
+            self.base_page.click_expect(self.elements.btn_login_welcome, self.elements.btn_user_avatar)
         except Exception as e:
             raise Exception(f"Failed to log in: {e}")
 

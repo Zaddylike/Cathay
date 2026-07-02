@@ -29,5 +29,5 @@ def test_single_sign_on_init_success(logged_app: OmniApp):
     logged_app.single_signon_page.input_application_redirectUrl()
     logged_app.single_signon_page.input_application_logoutUrl()
     logged_app.single_signon_page.setting_date()
-    logged_app.single_signon_page.submit_and_verify_success()
+    logged_app.single_signon_page.submit_sso_and_verify_success()
 
