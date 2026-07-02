@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, expect
 from pages.locators.elements import ApplicationPermissionElements, ApplicationSsoElements, ApplicationS2sElements
 from pages.base_page import BasePage
-from pages.operation_page import OperationPage
+from pages.operate_page import OperatePage
 import allure
 
 class ApplicationSingleSignOnPage:
@@ -9,7 +9,7 @@ class ApplicationSingleSignOnPage:
             self.page = page
             self.elements = ApplicationSsoElements(page)
             self.base_page = BasePage(page)
-            self.operate_page = OperationPage(page)
+            self.operate_page = OperatePage(page)
 
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
@@ -212,7 +212,7 @@ class ApplicationServerToServerPage:
             self.page = page
             self.elements = ApplicationS2sElements(page)
             self.base_page = BasePage(page)
-            self.operate_page = OperationPage(page)
+            self.operate_page = OperatePage(page)
     
     @allure.step("點擊下一步")    
     def click_to_next_step(self):
@@ -281,7 +281,7 @@ class ApplicationPermissionPage:
         self.page = page
         self.elements = ApplicationPermissionElements(page)
         self.base_page = BasePage(page)
-        self.operate_page = OperationPage(page)
+        self.operate_page = OperatePage(page)
 
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
@@ -311,7 +311,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_scope_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_scope_cases)
-        self.elements.input_permission_init_scope_code.fill("e2e-scope-code")
+        self.elements.input_permission_init_scope_code.fill("e2e-app-scope-code")
 
     @allure.step("驗證輸入範圍名稱新增資料")
     def validate_and_fill_scope_name(self):
@@ -323,7 +323,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_scope_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_scope_cases)
-        self.elements.input_permission_init_scope_name.fill("e2e-scope-name")
+        self.elements.input_permission_init_scope_name.fill("e2e-app-scope-name")
 
     @allure.step("驗證輸入範圍名稱新增資料")
     def validate_and_fill_scope_description(self):
@@ -333,7 +333,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_scope_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_scope_cases)
-        self.elements.input_permission_init_scope_description.fill("e2e-scope-description")
+        self.elements.input_permission_init_scope_description.fill("e2e-app-scope-description")
 
 
     @allure.step("驗證重複code")
@@ -348,11 +348,11 @@ class ApplicationPermissionPage:
 
     @allure.step("新增第二筆範圍資料")
     def create_another_scope(self):
-        self.elements.input_permission_init_scope_code.last.fill("e2e-scope-code-2")
+        self.elements.input_permission_init_scope_code.last.fill("e2e-app-scope-code-2")
         if ( self.elements.input_permission_init_scope_name.last.is_hidden() ): 
             self.elements.arrow_extend_page.last.click()
-        self.elements.input_permission_init_scope_name.last.fill("e2e-scope-name-2")
-        self.elements.input_permission_init_scope_description.last.fill("e2e-scope-description-2")
+        self.elements.input_permission_init_scope_name.last.fill("e2e-app-scope-name-2")
+        self.elements.input_permission_init_scope_description.last.fill("e2e-app-scope-description-2")
 
     @allure.step("點擊下一步到角色新增頁面")
     def click_to_role_next_step(self):
@@ -377,7 +377,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_role_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_role_cases)
-        self.elements.input_permission_init_role_code.fill("e2e-role-code")
+        self.elements.input_permission_init_role_code.fill("e2e-app-role-code")
 
     @allure.step("驗證輸入角色名稱新增資料")
     def validate_and_fill_role_name(self):
@@ -389,7 +389,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_role_cases)
-        self.elements.input_permission_init_role_name.fill("e2e-role-name")
+        self.elements.input_permission_init_role_name.fill("e2e-app-role-name")
 
     @allure.step("驗證輸入角色描述新增資料")
     def validate_and_fill_role_description(self):
@@ -399,7 +399,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_role_cases)
-        self.elements.input_permission_init_role_description.fill("e2e-role-description")
+        self.elements.input_permission_init_role_description.fill("e2e-app-role-description")
 
     @allure.step("驗證選擇已被新增的範圍資料")
     def select_created_scope(self):
@@ -418,11 +418,11 @@ class ApplicationPermissionPage:
 
     @allure.step("新增第二筆角色資料")
     def create_another_role(self):
-        self.elements.input_permission_init_role_code.last.fill("e2e-role-code-2")
+        self.elements.input_permission_init_role_code.last.fill("e2e-app-role-code-2")
         if ( self.elements.input_permission_init_role_name.last.is_hidden() ): 
             self.elements.arrow_extend_page.last.click()
-        self.elements.input_permission_init_role_name.last.fill("e2e-role-name-2")
-        self.elements.input_permission_init_role_description.last.fill("e2e-role-description-2")
+        self.elements.input_permission_init_role_name.last.fill("e2e-app-role-name-2")
+        self.elements.input_permission_init_role_description.last.fill("e2e-app-role-description-2")
 
     @allure.step("新增第三筆範圍資料")
     def create_scope_in_role_page(self):
@@ -431,13 +431,13 @@ class ApplicationPermissionPage:
 
         self.base_page.click_expect(self.elements.btn_permission_role_more_scope.last)
         self.base_page.click_expect(self.elements.btn_permission_scope_list.last, self.elements.opt_permission_scope_list.first)
-        option = self.elements.opt_permission_scope_list.filter(has_text=" e2e-scope-code-2 e2e-scope-name-2 ")
+        option = self.elements.opt_permission_scope_list.filter(has_text=" e2e-app-scope-code-2 e2e-app-scope-name-2 ")
         expect(option).to_contain_class("p-disabled")
 
-        self.elements.input_permission_init_scope_code.last.fill("e2e-scope-code-3")
-        self.elements.input_permission_init_scope_name.last.fill("e2e-scope-name-3")
+        self.elements.input_permission_init_scope_code.last.fill("e2e-app-scope-code-3")
+        self.elements.input_permission_init_scope_name.last.fill("e2e-app-scope-name-3")
         self.elements.btn_dialog_permission_add_scope.click()
-        expect(self.elements.opt_permission_scope_list.first).to_have_text(" e2e-scope-code-3 e2e-scope-name-3 ")
+        expect(self.elements.opt_permission_scope_list.first).to_have_text(" e2e-app-scope-code-3 e2e-app-scope-name-3 ")
         self.elements.opt_permission_scope_list.first.click()
 
     @allure.step("點擊下一步到新增群組頁面")
@@ -458,7 +458,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_group_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_group_cases)
-        self.elements.input_permission_init_group_name.fill("e2e-group-name")
+        self.elements.input_permission_init_group_name.fill("e2e-app-group-name")
 
     @allure.step("驗證輸入群駔描述新增資料")
     def validate_and_fill_group_description(self):
@@ -468,7 +468,7 @@ class ApplicationPermissionPage:
         element_input = self.elements.input_permission_init_group_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_group_cases)
-        self.elements.input_permission_init_group_description.fill("e2e-group-description")
+        self.elements.input_permission_init_group_description.fill("e2e-app-group-description")
     
     @allure.step("邀請團隊成員")
     def invite_team_member(self):
@@ -477,7 +477,7 @@ class ApplicationPermissionPage:
         self.elements.checkbox_add_member.click()
         self.elements.btn_memberadd_filter_add_search_confirm.click()
         self.elements.btn_group_add_member.click()        
-        self.elements.input_permission_init_group_description.last.fill("e2e-group-description-member")
+        self.elements.input_permission_init_group_description.last.fill("e2e-app-group-description-member")
 
     @allure.step("點擊下一步到新增指定權限頁面")
     def click_to_permission_next_step(self):

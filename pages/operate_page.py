@@ -1,6 +1,8 @@
+import allure
 from playwright.sync_api import Page, expect
 from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
 from pages.locators.elements import OperationElements
+from pages.base_page import BasePage
 import re
 """
 locator
@@ -9,10 +11,11 @@ get_by_role
 get_by_text
 """
 
-class OperationPage:
+class OperatePage:
     def __init__(self, page: Page):
         self.page = page
         self.elements = OperationElements(page)
+        self.base_page = BasePage(page)
 
     def verify_delete(self):
         # Delete 完整流程(反向)
@@ -37,6 +40,7 @@ class OperationPage:
 
     def verify_input(self, inputElement, ErrorElement, cases):
         # 欄位內容輸入驗證
+        ErrorElement = self.elements.msg_field_error if ErrorElement is None else ErrorElement
         try:
             for input_value, expected_msg in cases:
                 inputElement.fill(input_value)
@@ -67,3 +71,20 @@ class OperationPage:
                 expect(listElement).to_have_text(optionValue)
         except Exception as e:
             raise Exception(f"Failed to select list : {e}")
+        
+    @allure.step("進入專案身分驗證頁面")
+    def go_to_permission_page(self):
+        expect(self.elements.list_projects).to_be_visible()
+        self.elements.input_search_project.fill("e2e-testing-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.elements.list_projects.click()
+        self.elements.btn_project_info_permission.click()
+        expect(self.elements.page_permission).to_be_visible()
+        expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
+
+    @allure.step("進入權限設定頁面")
+    def open_to_permissions_page(self):
+        self.base_page.click_expect(self.elements.tab_permission)
+        expect(self.elements.tab_permission).to_have_attribute("aria-selected", "true")
+
+    

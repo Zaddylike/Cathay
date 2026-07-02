@@ -9,7 +9,7 @@ class ApplicationS2sLocators:
     def btn_project_info_permission(self):
         # 專案資訊頁面_身分認證按鈕
         return self.page.locator(".sidebar__list", has=self.page.get_by_text(" 身份認證 ", exact=True))
-
+    
     @property
     def page_permission(self):
         # 身分驗證頁面_logo
