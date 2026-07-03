@@ -14,10 +14,10 @@ class ProjectMemberPage:
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self):
         expect(self.elements.option_cards.first).to_be_visible()
-        self.elements.input_keyword_search.fill("e2e-testing-abbr")
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.option_cards.first.click()
-        self.base_page.click_expect(self.elements.btn_project_edit_member, self.elements.btn_member_edit_member)
+        self.base_page.click_expect(self.elements.btn_project_edit_member.first, self.elements.btn_member_edit_member)
 
     @allure.step("進入編輯頁面")
     def go_to_member_edit_page(self):
@@ -26,7 +26,7 @@ class ProjectMemberPage:
     @allure.step("搜索新增成員")
     def search_member_to_list(self):
         self.elements.btn_memberadd_filter_add_search.click()
-        self.elements.input_memberadd_member_search.fill("測試人員3")
+        self.elements.input_memberadd_advanced_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
         self.elements.btn_memberadd_footer_confirm.click()
         
@@ -87,7 +87,7 @@ class ProjectMemberPage:
     @allure.step("新增第二個成員")
     def add_another_member(self):
         self.elements.btn_memberadd_filter_add_search.click()
-        self.elements.input_memberadd_member_search.fill("測試人員2")
+        self.elements.input_memberadd_advanced_search.fill("測試人員2")
         self.elements.checkbox_add_member.click()
         self.elements.btn_memberadd_footer_confirm.click()
         self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.page_members_level_list_select)

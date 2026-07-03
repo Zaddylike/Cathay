@@ -51,6 +51,16 @@ class CommonLocators:
         return self.page.locator('.function-bar .btn').nth(0)
 
     @property
+    # 專案總覽_列表模式
+    def btn_projet_type_list(self):
+        return self.page.locator('.function-bar .btn div').nth(1)
+    
+    @property
+    # 專案總覽_卡片模式
+    def btn_projet_type_card(self):
+        return self.page.locator('.function-bar .btn div').nth(0)
+
+    @property
     # 行星圖像
     def img_planets(self):
         return self.page.locator(".planets-icon-box")
@@ -299,5 +309,6 @@ class CommonLocators:
         return self.page.locator('app-error-message.ng-star-inserted div span')
 
     @property
+    # 查無資訊文字元素
     def msg_search_noResult(self):
         return self.page.locator(".text-type--secondary-title")

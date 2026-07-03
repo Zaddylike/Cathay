@@ -141,7 +141,7 @@ class ScopePage:
         self.page.mouse.wheel(0, 500)
         self.base_page.sleep(1)
         self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_update, double=True)
+        self.base_page.click_expect(self.elements.btn_card_menu_update, reclick=True)
 
     @allure.step("Validate and update scope name")
     def validate_and_update_scope_name(self):
@@ -171,8 +171,7 @@ class ScopePage:
 
     @allure.step("Submit scope and verify updated")
     def submit_and_verify_updated(self):
-        self.elements.btn_submit.click()
-        expect(self.elements.page_dialog).to_be_visible()
+        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
         self.elements.btn_dialog_checked.click()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.elements.input_keyword_search.fill("e2e-scope-code-edit")
@@ -186,7 +185,7 @@ class ScopePage:
         self.page.mouse.wheel(0, 500)
         self.base_page.sleep(1)
         self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_delete, double=True)
+        self.base_page.click_expect(self.elements.btn_card_menu_delete, reclick=True)
 
     @allure.step("Verify delete confirm disabled by default")
     def verify_deleted_input(self):
@@ -209,8 +208,7 @@ class ScopePage:
 
     @allure.step("Validate and fill scope code")
     def validate_copy_and_fill_code(self):
-        expect(self.elements.input_scope_code).to_have_value(re.compile("copy-"),timeout=5000)
-
+        self.operate_page.verify_input_text(self.elements.input_scope_code, "copy-")
         self.input_code_cases = [
             ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
@@ -226,8 +224,7 @@ class ScopePage:
 
     @allure.step("Validate and update scope name")
     def validate_copy_and_fill_name(self):
-        expect(self.elements.input_scope_code).to_have_value(re.compile("copy-"),timeout=5000)
-
+        self.operate_page.verify_input_text(self.elements.input_scope_name, "copy-")
         self.input_name_cases = [
             ("  ", "必填欄位"),
             ("#" * 41, "輸入字數超過限制長度40"),

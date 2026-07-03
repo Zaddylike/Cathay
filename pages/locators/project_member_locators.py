@@ -4,7 +4,7 @@ class ProjectMemberLocators:
     def __init__(self, page: Page):
         self.page = page
 
-    # Member Page Navigation
+#   Member Page Navigation
 
     @property
     # 專案頁面_編輯成員按鈕
@@ -16,7 +16,7 @@ class ProjectMemberLocators:
     def btn_member_edit_member(self):
         return self.page.locator("div.main-container--wrapper.ng-star-inserted > app-share-project > div > button")
 
-    # Add Member
+#   Add Member
 
     @property
     # 專案成員新增頁面_新增成員按鈕
@@ -29,17 +29,11 @@ class ProjectMemberLocators:
         return self.page.locator('p-iconfield p-inputicon.cursor-pointer').first
 
     @property
-    # 專案成員新增頁面_篩選成員彈窗_篩選欄位
-    def input_memberadd_member_search(self):
-        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
-    
-
-    @property
     # 專案成員新增頁面_篩選成員欄位
     def input_search_member_field(self):
         return self.page.locator(".w-full .w-full p-multiselect .p-multiselect-label-container .p-multiselect-label").first
 
-    # Member Level
+#   Member Level
 
     @property
     # 專案成員新增頁面_新增篩選欄位_權限清單_編輯者
@@ -61,7 +55,7 @@ class ProjectMemberLocators:
     def btn_memberadd_filter_level_viewer(self):
         return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 檢視者 ",exact=True))
 
-    # Existing Member
+#   Existing Member
 
     @property
     # 專案成員新增頁面_成員名單_測試資料
