@@ -13,10 +13,10 @@ class ProjectMemberPage:
     #create
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self):
-        expect(self.elements.list_projects).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.click()
+        self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_project_edit_member, self.elements.btn_member_edit_member)
 
     @allure.step("進入編輯頁面")
@@ -28,12 +28,12 @@ class ProjectMemberPage:
         self.elements.btn_memberadd_filter_add_search.click()
         self.elements.input_memberadd_member_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
-        self.elements.btn_memberadd_filter_add_search_confirm.click()
+        self.elements.btn_memberadd_footer_confirm.click()
         
     @allure.step("調整新增成員權限")
     def adjust_member_level(self):
-        self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.list_project_member_add_levellist)
-        self.elements.list_project_member_add_viewer.click()
+        self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.page_members_level_list_select)
+        self.elements.option_members_level_list_viewer.click()
         self.elements.btn_memberadd_add_member.click()
 
     @allure.step("搜尋新增成員")
@@ -50,7 +50,7 @@ class ProjectMemberPage:
             "testuser01","OmniHub","數位數據","omnitest3"
         ]
         inputElement = self.elements.input_keyword_search
-        expectElement = self.elements.list_project_members
+        expectElement = self.elements.option_cards_members
         try:
             for input_value in cases:
                 inputElement.fill(input_value)
@@ -65,19 +65,19 @@ class ProjectMemberPage:
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_editor.click()
         self.elements.btn_filter_footer_search.click()
-        expect(self.elements.list_project_members).not_to_be_visible()
+        expect(self.elements.option_cards_members).not_to_be_visible()
 
         expect(self.elements.page_filter_condition).not_to_be_visible()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_viewer.click()
         self.elements.btn_filter_footer_search.click()
-        expect(self.elements.list_project_members).to_be_visible()
+        expect(self.elements.option_cards_members).to_be_visible()
 
         expect(self.elements.page_filter_condition).not_to_be_visible()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_owner.click()
         self.elements.btn_filter_footer_search.click()
-        expect(self.elements.list_project_members).to_be_visible()
+        expect(self.elements.option_cards_members).to_be_visible()
         
         expect(self.elements.page_filter_condition).not_to_be_visible()
         self.elements.btn_filter_condition_page.click()
@@ -89,16 +89,16 @@ class ProjectMemberPage:
         self.elements.btn_memberadd_filter_add_search.click()
         self.elements.input_memberadd_member_search.fill("測試人員2")
         self.elements.checkbox_add_member.click()
-        self.elements.btn_memberadd_filter_add_search_confirm.click()
-        self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.list_project_member_add_levellist)
-        self.elements.list_project_member_add_viewer.click()
+        self.elements.btn_memberadd_footer_confirm.click()
+        self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.page_members_level_list_select)
+        self.elements.option_members_level_list_viewer.click()
         self.elements.btn_memberadd_add_member.click()
         
     @allure.step("調整舊成員權限")
     def adjust_previous_member_level(self):
         self.elements.list_editmember_tester3.locator("app-select p-select").click()
-        expect(self.elements.list_project_member_add_levellist).to_be_visible()
-        self.elements.list_project_member_as_editor.click()
+        expect(self.elements.page_members_level_list_select).to_be_visible()
+        self.elements.option_cards_member_as_editor.click()
         self.elements.btn_submit.click()
         self.elements.btn_dialog_checked.click()
 

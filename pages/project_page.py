@@ -89,17 +89,17 @@ class ProjectPage:
     #read
     @allure.step("檢視專案總覽")
     def verify_project_cards_visible(self):
-        expect(self.elements.list_projects).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
 
     @allure.step("切換列表模式")
     def switch_to_project_list_view(self):
         self.base_page.click_expect(self.elements.btn_card_transtfer_list)
-        expect(self.elements.list_transform).to_contain_class("right")
+        expect(self.elements.dashboard_type_projects).to_contain_class("right")
 
     @allure.step("切換卡片模式")
     def switch_to_project_card_view(self):
         self.base_page.click_expect(self.elements.btn_list_transtfer_card)
-        expect(self.elements.list_transform).to_contain_class("left")
+        expect(self.elements.dashboard_type_projects).to_contain_class("left")
 
     @allure.step("搜尋框搜尋不存在專案縮寫")
     def search_project_with_no_result(self):
@@ -124,13 +124,13 @@ class ProjectPage:
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_page_filter_condition_status_enable.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.base_page.sleep(1)
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_page_filter_condition_status_disable.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.base_page.sleep(1)
         self.elements.input_keyword_search.click()
@@ -142,12 +142,12 @@ class ProjectPage:
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_page_filter_condition_oldtonew.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_page_filter_condition_newtoold.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
@@ -157,7 +157,7 @@ class ProjectPage:
     def open_project_detail_from_search(self):
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.click()
+        self.elements.option_cards.first.click()
 
     @allure.step("檢視專案成員頁面")
     def open_project_members(self):
@@ -169,7 +169,7 @@ class ProjectPage:
             "testuser01","預設公司","OmniHub","預設單位"
         ]
         inputElement = self.elements.input_keyword_search
-        expectElement = self.elements.list_project_members
+        expectElement = self.elements.option_cards_members
         try:
             for input_value in cases:
                 inputElement.fill(input_value)
@@ -183,17 +183,17 @@ class ProjectPage:
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_editor.click()
         self.elements.btn_filter_footer_search.click()
-        expect(self.elements.list_project_members).not_to_be_visible()
+        expect(self.elements.option_cards_members).not_to_be_visible()
 
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_viewer.click()
         self.elements.btn_filter_footer_search.click()
-        expect(self.elements.list_project_members).not_to_be_visible()
+        expect(self.elements.option_cards_members).not_to_be_visible()
 
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_owner.click()
         self.elements.btn_filter_footer_search.click()
-        expect(self.elements.list_project_members).to_be_visible()
+        expect(self.elements.option_cards_members).to_be_visible()
         
         self.elements.btn_filter_condition_page.click()
         self.elements.btn_filter_footer_clearfilter.click()
@@ -207,7 +207,7 @@ class ProjectPage:
     def open_project_edit_form(self):
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.first.click()
+        self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_edit_project, self.elements.btn_submit)
         
     @allure.step("編輯並驗證專案中文欄位")
@@ -260,7 +260,7 @@ class ProjectPage:
     def open_project_delete_dialog(self):
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.first.click()
+        self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_delete_project, self.elements.page_dialog)
 
     @allure.step("驗證無內容時不可點確認")

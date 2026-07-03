@@ -43,7 +43,7 @@ class ProjectMemberLocators:
 
     @property
     # 專案成員新增頁面_新增篩選欄位_權限清單_編輯者
-    def list_project_member_as_editor(self):
+    def option_cards_member_as_editor(self):
         return self.page.locator('.p-select-list-container .p-select-list [aria-label="EDITOR"]')
 
     @property

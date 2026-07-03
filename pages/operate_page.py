@@ -74,10 +74,10 @@ class OperatePage:
         
     @allure.step("進入專案身分驗證頁面")
     def go_to_permission_page(self):
-        expect(self.elements.list_projects).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.click()
+        self.elements.option_cards.first.click()
         self.elements.btn_project_info_permission.click()
         expect(self.elements.page_permission).to_be_visible()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")

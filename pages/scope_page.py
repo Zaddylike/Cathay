@@ -80,7 +80,7 @@ class ScopePage:
         self.elements.btn_dialog_checked.click()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.elements.input_keyword_search.fill("e2e-scope-code")
-        expect(self.elements.card_permission_scope.first).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
 
     # read
 
@@ -103,13 +103,13 @@ class ScopePage:
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition, True)
         self.elements.btn_filter_status_enable.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.base_page.sleep(1)
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_filter_status_disable.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.base_page.sleep(1)
         self.elements.input_keyword_search.click()
@@ -121,12 +121,12 @@ class ScopePage:
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_filter_date_reyoung.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
         self.elements.btn_filter_date_grewup.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.list_projects)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
 
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
@@ -140,8 +140,8 @@ class ScopePage:
         self.elements.input_keyword_search.fill("e2e-scope-code")
         self.page.mouse.wheel(0, 500)
         self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.threepoint_menu.last, self.elements.page_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_menu_update, double=True)
+        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
+        self.base_page.click_expect(self.elements.btn_card_menu_update, double=True)
 
     @allure.step("Validate and update scope name")
     def validate_and_update_scope_name(self):
@@ -176,7 +176,7 @@ class ScopePage:
         self.elements.btn_dialog_checked.click()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.elements.input_keyword_search.fill("e2e-scope-code-edit")
-        expect(self.elements.card_permission_scope.first).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
 
     # delete
     @allure.step("Open delete scope dialog")
@@ -185,8 +185,8 @@ class ScopePage:
         self.elements.input_keyword_search.fill("e2e-scope-code2")
         self.page.mouse.wheel(0, 500)
         self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.threepoint_menu.last, self.elements.page_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_menu_delete, double=True)
+        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
+        self.base_page.click_expect(self.elements.btn_card_menu_delete, double=True)
 
     @allure.step("Verify delete confirm disabled by default")
     def verify_deleted_input(self):
@@ -195,7 +195,7 @@ class ScopePage:
     @allure.step("Cancel scope delete then reopen")
     def verify_scope_deleted(self):
         self.elements.input_keyword_search.fill("e2e-scope-code2")
-        expect(self.elements.card_permission_scope).not_to_be_visible()
+        expect(self.elements.option_cards).not_to_be_visible()
 
     # copy
     @allure.step("Open copy scope dialog")
@@ -204,8 +204,8 @@ class ScopePage:
         self.elements.input_keyword_search.fill("e2e-scope-code")
         self.page.mouse.wheel(0, 500)
         self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.threepoint_menu.last, self.elements.page_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_menu_copy)
+        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
+        self.base_page.click_expect(self.elements.btn_card_menu_copy)
 
     @allure.step("Validate and fill scope code")
     def validate_copy_and_fill_code(self):
@@ -259,4 +259,4 @@ class ScopePage:
         self.elements.btn_dialog_checked.click()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.elements.input_keyword_search.fill("copy-")
-        expect(self.elements.card_permission_scope.first).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
