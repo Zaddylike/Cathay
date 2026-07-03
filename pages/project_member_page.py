@@ -14,7 +14,7 @@ class ProjectMemberPage:
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self):
         expect(self.elements.list_projects).to_be_visible()
-        self.elements.input_search_project.fill("e2e-testing-abbr")
+        self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.list_projects.click()
         self.base_page.click_expect(self.elements.btn_project_edit_member, self.elements.btn_member_edit_member)
@@ -41,7 +41,7 @@ class ProjectMemberPage:
         self.elements.btn_submit.click()
         self.elements.btn_dialog_checked.click()
         self.elements.input_keyword_search.fill("測試人員3")
-        expect(self.elements.btn_clear_noResult).not_to_be_visible()
+        expect(self.elements.btn_filter_clear_noResult).not_to_be_visible()
     
     #read
     @allure.step("搜尋成員")
@@ -49,7 +49,7 @@ class ProjectMemberPage:
         cases = [
             "testuser01","OmniHub","數位數據","omnitest3"
         ]
-        inputElement = self.elements.input_search_project
+        inputElement = self.elements.input_keyword_search
         expectElement = self.elements.list_project_members
         try:
             for input_value in cases:
@@ -61,27 +61,27 @@ class ProjectMemberPage:
         
     @allure.step("成員頁面進階搜尋成員權限")
     def filter_project_members_by_role(self):
-        expect(self.elements.dialog_project_filter).not_to_be_visible()
-        self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter)
+        expect(self.elements.page_filter_condition).not_to_be_visible()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_editor.click()
-        self.elements.btn_dialog_footer_filter_search.click()
+        self.elements.btn_filter_footer_search.click()
         expect(self.elements.list_project_members).not_to_be_visible()
 
-        expect(self.elements.dialog_project_filter).not_to_be_visible()
-        self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter)
+        expect(self.elements.page_filter_condition).not_to_be_visible()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_viewer.click()
-        self.elements.btn_dialog_footer_filter_search.click()
+        self.elements.btn_filter_footer_search.click()
         expect(self.elements.list_project_members).to_be_visible()
 
-        expect(self.elements.dialog_project_filter).not_to_be_visible()
-        self.base_page.click_expect(self.elements.btn_filter_search, self.elements.dialog_project_filter)
+        expect(self.elements.page_filter_condition).not_to_be_visible()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
         self.elements.btn_memberadd_filter_level_owner.click()
-        self.elements.btn_dialog_footer_filter_search.click()
+        self.elements.btn_filter_footer_search.click()
         expect(self.elements.list_project_members).to_be_visible()
         
-        expect(self.elements.dialog_project_filter).not_to_be_visible()
-        self.elements.btn_filter_search.click()
-        self.elements.btn_dialog_footer_filter_clear.click()
+        expect(self.elements.page_filter_condition).not_to_be_visible()
+        self.elements.btn_filter_condition_page.click()
+        self.elements.btn_filter_footer_clearfilter.click()
 
     #update
     @allure.step("新增第二個成員")
