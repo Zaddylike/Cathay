@@ -4,23 +4,17 @@ class ApplicationPermissionLocators:
     def __init__(self, page: Page):
         self.page = page
 
-    # Entry / Page
+#   Entry / Page
 
     @property
     # 專案資訊頁面_身分認證按鈕
     def btn_project_info_permission(self):
         return self.page.locator(".sidebar__list", has=self.page.get_by_text(" 身份認證 ", exact=True))
     
-
     @property
     # 身分驗證頁面_logo
     def page_permission(self):
         return self.page.locator(".text-type--content-title")
-
-    # @property
-    # def tab_permission(self):
-    #     # 身分驗證頁面_分頁_權限設定
-    #     return self.page.locator('[role="tablist"] p-tab', has_text=" 權限設定 ")
 
     @property
     # 身分驗證頁面_分頁_權限設定
@@ -28,7 +22,7 @@ class ApplicationPermissionLocators:
         return self.page.get_by_text(" 新增權限 ")
     
 
-    # Scope
+#   Scope
 
     @property
     # 身分驗證頁面_分頁_新增頁面_範圍
@@ -60,7 +54,7 @@ class ApplicationPermissionLocators:
         return self.page.locator('.border-circle')
     
 
-    # Role
+#   Role
 
     @property
     # 身分驗證頁面_分頁_新增頁面_角色
@@ -114,7 +108,7 @@ class ApplicationPermissionLocators:
         return self.page.get_by_text(" 新增範圍 ")
     
 
-    # Group
+#   Group
 
     @property
     # 身分驗證頁面_分頁_新增頁面_群組

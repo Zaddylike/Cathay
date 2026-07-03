@@ -4,10 +4,10 @@ class ProjectLocators:
     def __init__(self, page: Page):
         self.page = page
 
-    # Create Project
+#   Create Project
 
     @property
-    # 專案總覽_新增專案按鈕
+    # 專案總覽頁面_新增專案按鈕
     def btn_create_project(self):
         return self.page.locator(".function-bar").get_by_role("button", name="新增專案", exact=True)
     
@@ -39,98 +39,48 @@ class ProjectLocators:
         return self.page.locator('[tooltipposition="bottom"]>div>button')
     
     @property
-    # 新增專案頁面_狀態_啟用
-    def radio_status_enable(self):
-        return self.page.get_by_text("啟用")
-
-    @property
-    # 新增專案頁面_狀態_停用
-    def radio_status_disable(self):
-        return self.page.get_by_text("停用")
-
-    @property
     # 新增專案頁面_專案描述
     def input_project_description(self):
         return self.page.locator('textarea[formcontrolname="description"]')
 
-    # Project Detail
+#   Project Detail
 
     @property
     # 專案資訊頁面_返回箭頭
     def arrow_go_back(self):
         return self.page.locator('[class="go-back-btn__icon"]')
     
-
     @property
     # 專案資訊頁面_返回專案總覽
     def btn_back_to_overview(self):
         return self.page.get_by_text(" 返回專案總覽 ")
-
-    @property
-    # 專案資訊頁面_返回專案總覽
-    def btn_back_to_imformation(self):
-        return self.page.get_by_text(" 返回專案資訊 ")
     
-
     @property
     # 專案資訊頁面_編輯專案按鈕
     def btn_edit_project(self):
         return self.page.get_by_text("編輯專案")
     
-
     @property
     # 專案資訊頁面_刪除專案按鈕
     def btn_delete_project(self):
         return self.page.get_by_text("刪除專案")    
     
-
     @property
     # 專案頁面_編輯成員按鈕
     def btn_project_edit_member(self):
-        return self.page.get_by_text("編輯成員").first
+        return self.page.get_by_text("編輯成員")
 
     @property
     # 專案成員頁面_編輯成員按鈕
     def btn_member_edit_member(self):
         return self.page.locator("div.main-container--wrapper.ng-star-inserted > app-share-project > div > button")
 
-    # Project List View
+#   Member Page
 
     @property
-    # 專案總覽_列表模式
-    def btn_card_transtfer_list(self):
-        return self.page.locator('.function-bar .btn div').nth(1)
-    
-
-    @property
-    # 專案總覽_卡片模式
-    def btn_list_transtfer_card(self):
-        return self.page.locator('.function-bar .btn div').nth(0)
-    
-
-    # Project Filter
-
-    @property
-    # 專案總覽_篩選面板_狀態_停用
-    def btn_page_filter_condition_status_disable(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="停用", exact=True)
-
-    @property
-    # 專案總覽_篩選面板_狀態_啟用
-    def btn_page_filter_condition_status_enable(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="啟用", exact=True)
-
-    @property
-    # 專案總覽_篩選面板_日期排序_由新至舊
-    def btn_page_filter_condition_newtoold(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').last.get_by_role("button", name=" 由新至舊 ", exact=True)
-
-    @property
-    # 專案總覽_篩選面板_日期排序_由舊至新
-    def btn_page_filter_condition_oldtonew(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').last.get_by_role("button", name=" 由舊至新 ", exact=True)
-
-    # Member Filter
+    # 專案成員頁面_返回專案總覽
+    def btn_back_to_imformation(self):
+        return self.page.get_by_text(" 返回專案資訊 ")
 
     @property
     # 專案成員新增頁面_成員名單_篩選清單_編輯者

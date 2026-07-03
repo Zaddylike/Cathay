@@ -1,8 +1,7 @@
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
-from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
+from config.settings import DEFAULT_TIMEOUT
 import random
 import allure
-from allure_commons.types import AttachmentType
 
 class BasePage:
     def __init__(self, page: Page):
@@ -21,39 +20,33 @@ class BasePage:
             attachment_type=allure.attachment_type.PNG
         )
 
-    def click_expect(self, locator, expected_after_click=None, double=False):
+    def click_expect(self, locator, expected_value=None, reclick=False):
         try:
-            locator.wait_for(state="visible", timeout=10*1000)
+            locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
             locator.click()
+            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
         except PlaywrightTimeoutError as e:
             raise AssertionError(f"Failed to find this element: {e}")
         except Exception as e:
             raise Exception(f"Failed to click this element: {e}")
 
-        if expected_after_click is not None:
+        if expected_value is not None:
             try:
-                expect(expected_after_click).to_be_visible()
+                expect(expected_value).to_be_visible()
             except PlaywrightTimeoutError as e:
-                if double:
-                    self.click_expect(locator, expected_after_click, False)
+                if reclick:
+                    self.click_expect(locator, expected_value, False)
                 else:
                     raise AssertionError(f"Failed to find expected element: {e}")
             except Exception as e:
                 raise Exception(f"Click passed, but expected element is not visible: {e}")
-        
-        self.wait_loading_disapper()
 
-    def fill(self, locator, value: str):
+    def wait_fill(self, locator, value: str):
         try:
+            locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
             locator.fill(value)
         except Exception as e:
             raise Exception(f"Failed to fill value: {e}")
-
-    def verify_visible(self, locator, action_name: str = "Verify visible"):
-        try:
-            expect(locator).to_be_visible()
-        except Exception as e:
-            raise AssertionError(f"{action_name} failed: {e}")
         
     def wait_loading_disapper(self):
         try:
