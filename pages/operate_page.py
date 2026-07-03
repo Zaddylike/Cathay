@@ -29,11 +29,11 @@ class OperatePage:
 
             for input_value in input_cases:
                 input_element.fill(input_value)
-                expect(self.elements.dialog_btn_confirm).to_be_disabled()
+                expect(self.elements.btn_dialog_delete_confirm).to_be_disabled()
                 input_element.clear()
             
             input_element.fill("DELETE")
-            self.elements.dialog_btn_confirm.click()
+            self.elements.btn_dialog_delete_confirm.click()
             self.elements.btn_dialog_checked.click()
         except Exception as e:
             raise  Exception(f'Failed to :{e}')
@@ -75,7 +75,7 @@ class OperatePage:
     @allure.step("進入專案身分驗證頁面")
     def go_to_permission_page(self):
         expect(self.elements.list_projects).to_be_visible()
-        self.elements.input_search_project.fill("e2e-testing-abbr")
+        self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.list_projects.click()
         self.elements.btn_project_info_permission.click()

@@ -8,3 +8,4 @@ def test_project_delete_success(logged_app: OmniApp):
     logged_app.project_page.verify_delete_confirm_disabled_by_default()
     logged_app.project_page.cancel_project_delete_then_reopen()
     logged_app.project_page.confirm_project_delete()
+    logged_app.project_page.verify_project_deleted()

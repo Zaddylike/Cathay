@@ -8,6 +8,7 @@ from pages.locators.login_locators import LoginLocators
 from pages.locators.operation_locators import OperationLocators
 from pages.locators.project_locators import ProjectLocators
 from pages.locators.project_member_locators import ProjectMemberLocators
+from pages.locators.role_locators import RoleLocators
 from pages.locators.scope_locators import ScopeLocators
 
 
@@ -36,6 +37,11 @@ class ScopeElements(CommonLocators, ScopeLocators):
         self.page = page
 
 
+class RoleElements(CommonLocators, RoleLocators):
+    def __init__(self, page: Page):
+        self.page = page
+
+
 class ApplicationPermissionElements(CommonLocators, ApplicationPermissionLocators):
     def __init__(self, page: Page):
         self.page = page
@@ -59,6 +65,7 @@ class AllElements(
     ProjectLocators,
     ProjectMemberLocators,
     ScopeLocators,
+    RoleLocators,
     ApplicationPermissionLocators,
     ApplicationS2sLocators,
     ApplicationSsoLocators,

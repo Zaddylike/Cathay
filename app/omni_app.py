@@ -5,6 +5,7 @@ from pages.operate_page import OperatePage
 from pages.login_page import LoginPage
 from pages.project_page import ProjectPage
 from pages.project_member_page import ProjectMemberPage
+from pages.role_page import RolePage
 from pages.scope_page import ScopePage
 from pages.application_page import ApplicationPermissionPage, ApplicationSingleSignOnPage, ApplicationServerToServerPage
 
@@ -18,6 +19,7 @@ class OmniApp:
         self.project_page = ProjectPage(page)
         self.project_member_page = ProjectMemberPage(page)
         self.scope_page = ScopePage(page)
+        self.role_page = RolePage(page)
         self.permission_page = ApplicationPermissionPage(page)
         self.single_signon_page = ApplicationSingleSignOnPage(page)
         self.server_to_servser_page = ApplicationServerToServerPage(page)

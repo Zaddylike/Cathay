@@ -14,7 +14,7 @@ class ApplicationSingleSignOnPage:
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
         expect(self.elements.list_projects).to_be_visible()
-        self.elements.input_search_project.fill("e2e-testing-abbr")
+        self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.list_projects.click()
         self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
@@ -23,11 +23,11 @@ class ApplicationSingleSignOnPage:
     @allure.step("進入單一登入新增頁面")
     def open_to_create_sso_page(self):
         self.base_page.click_expect(self.elements.tab_signon, self.elements.btn_permission_add_sso)
-        self.base_page.click_expect(self.elements.btn_permission_add_sso, self.elements.btn_nextStep)
+        self.base_page.click_expect(self.elements.btn_permission_add_sso, self.elements.btn_next_step)
 
     @allure.step("點擊下一步")    
     def click_to_next_step(self):
-        self.elements.btn_nextStep.click()
+        self.elements.btn_next_step.click()
     
     @allure.step("新增Microsoft Entra Id")
     def create_provider_entraId(self):
@@ -203,7 +203,7 @@ class ApplicationSingleSignOnPage:
     @allure.step("驗證確認送出")
     def submit_sso_and_verify_success(self):
         expect(self.elements.btn_submit).to_be_enabled()
-        self.base_page.click_expect(self.elements.btn_submit, self.elements.dialog_page)
+        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
         self.base_page.click_expect(self.elements.btn_dialog_permission_confirm)
 
 
@@ -216,12 +216,12 @@ class ApplicationServerToServerPage:
     
     @allure.step("點擊下一步")    
     def click_to_next_step(self):
-        self.elements.btn_nextStep.click()
+        self.elements.btn_next_step.click()
 
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
         expect(self.elements.list_projects).to_be_visible()
-        self.elements.input_search_project.fill("e2e-testing-abbr")
+        self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.list_projects.click()
         self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
@@ -230,7 +230,7 @@ class ApplicationServerToServerPage:
     @allure.step("進入伺服器串接新增頁面")
     def open_to_create_s2s_page(self):
         self.base_page.click_expect(self.elements.tab_s2s, self.elements.btn_permission_add_s2s)
-        self.base_page.click_expect(self.elements.btn_permission_add_s2s, self.elements.btn_nextStep)
+        self.base_page.click_expect(self.elements.btn_permission_add_s2s, self.elements.btn_next_step)
 
     @allure.step("驗證輸入應用端名稱新增資料")
     def input_s2s_application_name(self):
@@ -263,7 +263,7 @@ class ApplicationServerToServerPage:
     @allure.step("新增範圍")
     def create_scope(self):
         self.elements.btn_s2s_add_scope.click()
-        self.operate_page.select_list(self.elements.list_s2s_scope, self.elements.opt_item, 0)
+        self.operate_page.select_list(self.elements.list_s2s_scope, self.elements.option_unit, 0)
 
     @allure.step("驗證輸入描述")
     def input_scope_description(self):
@@ -272,7 +272,7 @@ class ApplicationServerToServerPage:
     @allure.step("新增送出")
     def submit_s2s_and_verify_success(self):
         expect(self.elements.btn_submit).to_be_enabled(timeout=10000)
-        self.base_page.click_expect(self.elements.btn_submit, self.elements.dialog_page)
+        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
         self.base_page.click_expect(self.elements.btn_dialog_permission_confirm)
 
 
@@ -286,7 +286,7 @@ class ApplicationPermissionPage:
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
         expect(self.elements.list_projects).to_be_visible()
-        self.elements.input_search_project.fill("e2e-testing-abbr")
+        self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.list_projects.click()
         self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
@@ -356,7 +356,7 @@ class ApplicationPermissionPage:
 
     @allure.step("點擊下一步到角色新增頁面")
     def click_to_role_next_step(self):
-        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_role)
+        self.base_page.click_expect(self.elements.btn_next_step, self.elements.btn_permission_add_role)
     
 
     # role
@@ -442,7 +442,7 @@ class ApplicationPermissionPage:
 
     @allure.step("點擊下一步到新增群組頁面")
     def click_to_group_next_step(self):
-        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_group)
+        self.base_page.click_expect(self.elements.btn_next_step, self.elements.btn_permission_add_group)
 
     #group
     @allure.step("展開群組新增頁面")
@@ -472,7 +472,7 @@ class ApplicationPermissionPage:
     
     @allure.step("邀請團隊成員")
     def invite_team_member(self):
-        self.elements.btn_filter_to_search.click()
+        self.elements.btn_filter_condition_page.first.click()
         self.elements.input_member_advanced_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
         self.elements.btn_memberadd_filter_add_search_confirm.click()
@@ -481,25 +481,25 @@ class ApplicationPermissionPage:
 
     @allure.step("點擊下一步到新增指定權限頁面")
     def click_to_permission_next_step(self):
-        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_permission)
+        self.base_page.click_expect(self.elements.btn_next_step, self.elements.btn_permission_add_permission)
         self.base_page.sleep(3)
     # assign permission
 
     @allure.step("新增指定權限成員")
     def create_permission_setting(self):
         self.elements.btn_permission_add_permission.click()
-        self.elements.btn_filter_to_search.click()
+        self.elements.btn_filter_condition_page.first.click()
         self.elements.input_member_advanced_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
         self.elements.btn_memberadd_filter_add_search_confirm.click()
 
     @allure.step("新增指定權限角色")
     def create_permission_role(self):
-        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.opt_item.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.option_unit.last, 0)
         
     @allure.step("新增指定權限範圍")
     def create_permission_scope(self):
-        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.opt_item.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.option_unit.last, 0)
 
     @allure.step("新增指定權限描述")
     def create_permission_description(self):
@@ -513,23 +513,23 @@ class ApplicationPermissionPage:
 
     @allure.step("點擊下一步到預設權限新增頁面")
     def click_to_default_permission_next_step(self):
-        self.base_page.click_expect(self.elements.btn_nextStep, self.elements.btn_permission_add_role.first)
+        self.base_page.click_expect(self.elements.btn_next_step, self.elements.btn_permission_add_role.first)
 
     # default permission
 
     @allure.step("新增預設權限成員角色")
     def create_role_for_member(self):
         self.elements.btn_permission_add_role.click()
-        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.opt_item.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.option_unit.last, 0)
 
     @allure.step("新增預設權限成員範圍")
     def create_scope_for_member(self):
         self.elements.btn_permission_add_scope.click()
-        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.opt_item.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.option_unit.last, 0)
 
     @allure.step("確認送出並驗證成功")
     def verify_permission_creation(self):
         expect(self.elements.btn_submit).to_be_enabled()
-        self.base_page.click_expect(self.elements.btn_submit, self.elements.dialog_page)
+        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
         self.base_page.sleep(500)
         self.base_page.click_expect(self.elements.btn_dialog_checked)
