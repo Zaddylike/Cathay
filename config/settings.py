@@ -1,19 +1,11 @@
 import os
-
-
-def get_bool_env(name: str, default: bool) -> bool:
-    value = os.getenv(name)
-    if value is None:
-        return default
-    return value.strip().lower() in ("1", "true", "yes", "y", "on")
-
-
+# Testing Basic Parameters
 BASE_URL_DEV = os.getenv("OMNI_BASE_URL", "https://dev.omnihubs.cloud/")
 DEFAULT_TIMEOUT = int(os.getenv("OMNI_DEFAULT_TIMEOUT", "20000"))
-HEADLESS = get_bool_env("OMNI_HEADLESS", False)
+HEADLESS = os.getenv("OMNI_HEADLESS", False)
 
-PROJECT_ABBR = os.getenv("OMNI_PROJECT_NAME", "e2e-project-abbr")
 
+# Testing Data
 ACCOUNT_USERNAME = os.getenv("OMNI_ACCOUNT_USERNAME", "testuser01")
 ACCOUNT_PASSWORD = os.getenv("OMNI_ACCOUNT_PASSWORD", "testuser01")
 
@@ -22,3 +14,5 @@ ENTRA_PASSWORD = os.getenv("OMNI_ENTRA_PASSWORD", "Omni168168168")
 
 GOOGLE_USERNAME = os.getenv("OMNI_GOOGLE_USERNAME", "")
 GOOGLE_PASSWORD = os.getenv("OMNI_GOOGLE_PASSWORD", "")
+
+PROJECT_ABBR = os.getenv("OMNI_PROJECT_NAME", "e2e-project-abbr")
