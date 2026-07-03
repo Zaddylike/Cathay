@@ -13,10 +13,10 @@ class ApplicationSingleSignOnPage:
 
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
-        expect(self.elements.list_projects).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.click()
+        self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
     
@@ -220,10 +220,10 @@ class ApplicationServerToServerPage:
 
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
-        expect(self.elements.list_projects).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.click()
+        self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
     
@@ -263,7 +263,7 @@ class ApplicationServerToServerPage:
     @allure.step("新增範圍")
     def create_scope(self):
         self.elements.btn_s2s_add_scope.click()
-        self.operate_page.select_list(self.elements.list_s2s_scope, self.elements.option_unit, 0)
+        self.operate_page.select_list(self.elements.list_s2s_scope, self.elements.option_dropdown_list, 0)
 
     @allure.step("驗證輸入描述")
     def input_scope_description(self):
@@ -285,10 +285,10 @@ class ApplicationPermissionPage:
 
     @allure.step("進入專案身分驗證頁面")
     def open_to_permission_page(self):
-        expect(self.elements.list_projects).to_be_visible()
+        expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-testing-abbr")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.list_projects.click()
+        self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_project_info_permission, self.elements.page_permission)
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
     
@@ -473,9 +473,9 @@ class ApplicationPermissionPage:
     @allure.step("邀請團隊成員")
     def invite_team_member(self):
         self.elements.btn_filter_condition_page.first.click()
-        self.elements.input_member_advanced_search.fill("測試人員3")
+        self.elements.input_memberadd_advanced_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
-        self.elements.btn_memberadd_filter_add_search_confirm.click()
+        self.elements.btn_memberadd_footer_confirm.click()
         self.elements.btn_group_add_member.click()        
         self.elements.input_permission_init_group_description.last.fill("e2e-app-group-description-member")
 
@@ -489,17 +489,17 @@ class ApplicationPermissionPage:
     def create_permission_setting(self):
         self.elements.btn_permission_add_permission.click()
         self.elements.btn_filter_condition_page.first.click()
-        self.elements.input_member_advanced_search.fill("測試人員3")
+        self.elements.input_memberadd_advanced_search.fill("測試人員3")
         self.elements.checkbox_add_member.click()
-        self.elements.btn_memberadd_filter_add_search_confirm.click()
+        self.elements.btn_memberadd_footer_confirm.click()
 
     @allure.step("新增指定權限角色")
     def create_permission_role(self):
-        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.option_unit.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.option_dropdown_list.last, 0)
         
     @allure.step("新增指定權限範圍")
     def create_permission_scope(self):
-        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.option_unit.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.option_dropdown_list.last, 0)
 
     @allure.step("新增指定權限描述")
     def create_permission_description(self):
@@ -520,12 +520,12 @@ class ApplicationPermissionPage:
     @allure.step("新增預設權限成員角色")
     def create_role_for_member(self):
         self.elements.btn_permission_add_role.click()
-        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.option_unit.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.first, self.elements.option_dropdown_list.last, 0)
 
     @allure.step("新增預設權限成員範圍")
     def create_scope_for_member(self):
         self.elements.btn_permission_add_scope.click()
-        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.option_unit.last, 0)
+        self.operate_page.select_list(self.elements.list_permission_role.last, self.elements.option_dropdown_list.last, 0)
 
     @allure.step("確認送出並驗證成功")
     def verify_permission_creation(self):

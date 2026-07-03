@@ -5,7 +5,7 @@ class CommonLocators:
         self.page = page
 
 
-    # 未登入頁面、登入頁、Omni Logo
+#   未登入頁面、登入頁、Omni Logo
 
     @property
     # 登入按鈕, 撈重複多再篩內部有符合的抓
@@ -19,7 +19,6 @@ class CommonLocators:
     
     @property
     # Entra登入頁面: 下一步按鈕
-    # Entra登入頁面: 下一步按鈕
     def btn_login_nextStep(self):
         return self.page.locator("#idSIButton9")
     
@@ -29,32 +28,34 @@ class CommonLocators:
         return self.page.locator(".header__feature p-splitbutton button.p-splitbutton-dropdown")
     
 
-    # Common Actions
+#   常用欄位、按鈕
 
     @property
     # 下一步按鈕
     def btn_next_step(self):
         return self.page.get_by_role("button", name="下一步", exact=True)
 
-
-    # 常用欄位、按鈕
-
     @property
-    #All_送出字樣按鈕
+    # All_送出字樣按鈕
     def btn_submit(self):
         return self.page.get_by_role("button", name="送出")
 
     @property
-    #All_展開新增頁面箭頭
+    # All_展開新增頁面箭頭
     def arrow_extend_page(self):
         return self.page.locator('.border-circle')
 
     @property
-    # 
-    def list_transform(self):
+    # 專案總覽_卡片、清單按鈕的儀表板
+    def dashboard_type_projects(self):
         return self.page.locator('.function-bar .btn').nth(0)
 
-    # Search / Filter
+    @property
+    # 行星圖像
+    def img_planets(self):
+        return self.page.locator(".planets-icon-box")
+
+#   Search / Filter
 
     @property
     # 篩選面板_共用[請輸入關鍵字]的搜尋欄
@@ -116,8 +117,7 @@ class CommonLocators:
     def btn_filter_clear_search(self):
         return self.page.locator(".function-bar .relative p-inputicon.cursor-pointer img").first
 
-
-    # Dialog / Confirm
+#   Dialog / Confirm
 
     @property
     # 對話視窗_彈窗頁面
@@ -125,7 +125,7 @@ class CommonLocators:
         return self.page.locator('[role="dialog"]')
     
     @property
-    # 對話視窗_異動通知的確認按鈕
+    # 對話視窗_確認按鈕
     def btn_dialog_checked(self):
         return self.page.locator('[role="dialog"] app-prompt-dialog .prompt-dialog__footer')
 
@@ -144,8 +144,7 @@ class CommonLocators:
     def btn_dialog_permission_confirm(self):
         return self.page.locator('[role="dialog"] .prompt-dialog__footer', has=self.page.get_by_role("button", name=" 權限設定 ", exact=True))
 
-
-    # Date Picker
+#   Date Picker
 
     @property
     # 日期選擇視窗面板
@@ -177,115 +176,110 @@ class CommonLocators:
     def date_picker_day(self):
         return self.page.locator(f'.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-calendar [data-pc-section="tablebody"] [data-pc-section="tablebodyrow"] .p-datepicker-day-cell')
     
-
-    # Shared Lists / Options
+#   Cards / Options
 
     @property
     # All_下拉選單內的選項
-    def option_unit(self):
+    def option_dropdown_list(self):
         return self.page.locator('[role="option"]')
 
     @property
-    # 
-    def list_transform(self):
-        return self.page.locator('.function-bar .btn').nth(0)
+    # 專案, 權限設定內的項目
+    def option_cards(self):
+        return self.page.locator(".data-card")
+
+#   Member Common
 
     @property
-    def list_projects(self):
-        return self.page.locator(".data-card").first
-
-    @property
-    def list_project_members(self):
+    # 專案成員頁面內的項目
+    def option_cards_members(self):
         return self.page.locator('[datakey="memberId"] tbody')
 
     @property
-    def list_project_member_add_levellist(self):
-        return self.page.locator('.p-select-list-container .p-select-list')
-
-    @property
-    def list_project_member_add_owner(self):
-        return self.page.locator('.p-select-list-container .p-select-list [aria-label="OWNER"]')
-
-    @property
-    def list_project_member_add_viewer(self):
-        return self.page.locator('.p-select-list-container .p-select-list [aria-label="VIEWER"]')
-
-    @property
-    def list_search_member(self):
-        return self.page.locator('[role="listbox"] [role="option"] p-checkbox')
-
-    # Member Common
-
-    @property
-    def checkbox_add_member(self):
-        return self.page.locator('[role="treeitem"] p-checkbox .p-checkbox-input').last
-
-    @property
-    def btn_memberadd_add_member_cancel(self):
-        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 取消 ")
-
-    @property
-    def btn_memberadd_filter_add_search_confirm(self):
-        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
-
-    @property
+    # 新增專案成員頁面內的權限清單按鈕
     def btn_memberadd_add_member_levellist(self):
         return self.page.locator('.flex-column app-select p-select [role="button"]').first
 
     @property
-    # _篩選成員彈窗_篩選欄位
-    def input_member_advanced_search(self):
+    # 新增專案成員頁面內的權限清單
+    def page_members_level_list_select(self):
+        return self.page.locator('.p-select-list-container .p-select-list')
+
+    @property
+    # 新增專案成員頁面內的權限清單的選項 - owner
+    def option_members_level_list_owner(self):
+        return self.page.locator('.p-select-list-container .p-select-list [aria-label="OWNER"]')
+
+    @property
+    # 新增專案成員頁面內的權限清單的選項 - editor
+    def option_members_level_list_editor(self):
+        return self.page.locator('.p-select-list-container .p-select-list [aria-label="EDITOR"]')
+
+    @property
+    # 新增專案成員頁面內的權限清單的選項 - viewer
+    def option_members_level_list_viewer(self):
+        return self.page.locator('.p-select-list-container .p-select-list [aria-label="VIEWER"]')
+
+    @property
+    # 成員搜尋頁面_篩選成員彈窗_篩選欄位
+    def input_memberadd_advanced_search(self):
         return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
     
+    @property
+    # 成員搜尋頁面_checkbox最後一個
+    def checkbox_add_member(self):
+        return self.page.locator('[role="treeitem"] p-checkbox .p-checkbox-input').last
 
-    # Permission Common
+    @property
+    # 成員搜尋頁面_底部_取消
+    def btn_memberadd_footer_cancel(self):
+        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 取消 ")
+
+    @property
+    # 成員搜尋頁面_底部_確認
+    def btn_memberadd_footer_confirm(self):
+        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
+
+#   Permission Common
 
     @property
     # 身分驗證頁面_分頁_權限設定
     def tab_permission(self):
         return self.page.locator('[role="tablist"] p-tab', has_text=" 權限設定 ")
     
-
     @property
     # 身分驗證頁面_logo
     def page_permission(self):
         return self.page.locator(".text-type--content-title")
-    
+
+#   專案三點清單
 
     @property
-    # 身分驗證頁面_分頁_權限設定_範圍卡片
-    def card_permission_scope(self):
-        return self.page.locator("app-permission-card")
-    
-
-    @property
-    #
-    def threepoint_menu(self):
+    # 專案_三點清單按鈕
+    def btn_card_threepoint_menu(self):
         return self.page.locator('app-permission-card  .p-splitbutton-dropdown')
     
-
     @property
-    #
-    def page_threepoint_menu(self):
+    # 專案_三點清單頁面
+    def page_card_threepoint_menu(self):
         return self.page.locator('[role="menu"]')
 
     @property
-    #
-    def btn_menu_update(self):
+    # 專案_三點清單按鈕_編輯
+    def btn_card_menu_update(self):
         return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('編輯', exact=True)
 
     @property
-    #
-    def btn_menu_copy(self):
+    # 專案_三點清單按鈕_複製
+    def btn_card_menu_copy(self):
         return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('複製', exact=True)
     
-
     @property
-    #
-    def btn_menu_delete(self):
+    # 專案_三點清單按鈕_刪除
+    def btn_card_menu_delete(self):
         return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('刪除', exact=True)
 
-    # Status Controls
+#   Status Controls
 
     @property
     # 新增專案頁面_狀態_停用
@@ -297,14 +291,7 @@ class CommonLocators:
     def radio_status_enable(self):
         return self.page.get_by_text("啟用")
     
-        
-
-    # Messages / Visuals
-
-    @property
-    def img_planets(self):
-        return self.page.locator(".planets-icon-box")
-    
+#   Messages
 
     @property
     # 欄位錯誤訊息
