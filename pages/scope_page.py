@@ -80,7 +80,7 @@ class ScopePage:
         self.elements.btn_dialog_checked.click()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.elements.input_keyword_search.fill("e2e-scope-code")
-        expect(self.elements.option_cards.first).to_be_visible()
+        self.base_page.take_screenshot("Scope_Create_Success")
 
     # read
 
@@ -137,7 +137,7 @@ class ScopePage:
     @allure.step("Open update scope dialog")
     def click_to_update_scope_page(self):
         self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.elements.input_keyword_search.fill("e2e-scope-code")
+        self.elements.input_keyword_search.fill("e2e-scope-code2")
         self.page.mouse.wheel(0, 500)
         self.base_page.sleep(1)
         self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
@@ -153,7 +153,7 @@ class ScopePage:
         element_input = self.elements.input_scope_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
-        self.elements.input_scope_name.fill("e2e-scope-name-edit")
+        self.elements.input_scope_name.fill("e2e-scope-name2-edit")
 
     @allure.step("Validate and update scope description")
     def validate_and_update_scope_description(self):
@@ -163,7 +163,7 @@ class ScopePage:
         element_input = self.elements.input_scope_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
-        self.elements.input_scope_description.fill("e2e-scope-description-edit")
+        self.elements.input_scope_description.fill("e2e-scope-description2-edit")
 
     @allure.step("update scope status")
     def disable_scope_status(self):
@@ -174,7 +174,7 @@ class ScopePage:
         self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
         self.elements.btn_dialog_checked.click()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.elements.input_keyword_search.fill("e2e-scope-code-edit")
+        self.elements.input_keyword_search.fill("e2e-scope-name2-edit")
         expect(self.elements.option_cards.first).to_be_visible()
 
     # delete
@@ -191,7 +191,7 @@ class ScopePage:
     def verify_deleted_input(self):
         self.operate_page.verify_delete()
 
-    @allure.step("Cancel scope delete then reopen")
+    @allure.step("Verify deleted scope if exist")
     def verify_scope_deleted(self):
         self.elements.input_keyword_search.fill("e2e-scope-code2")
         expect(self.elements.option_cards).not_to_be_visible()
@@ -209,6 +209,7 @@ class ScopePage:
     @allure.step("Validate and fill scope code")
     def validate_copy_and_fill_code(self):
         self.operate_page.verify_input_text(self.elements.input_scope_code, "copy-")
+        
         self.input_code_cases = [
             ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
@@ -220,11 +221,12 @@ class ScopePage:
         element_input = self.elements.input_scope_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
-        self.elements.input_scope_code.fill("e2e-scope-code")
+        self.elements.input_scope_code.fill("copy-e2e-scope-code")
 
     @allure.step("Validate and update scope name")
     def validate_copy_and_fill_name(self):
-        self.operate_page.verify_input_text(self.elements.input_scope_name, "copy-")
+        expect(self.elements.input_scope_name).to_have_value(re.compile("copy-"),timeout=5000)
+
         self.input_name_cases = [
             ("  ", "必填欄位"),
             ("#" * 41, "輸入字數超過限制長度40"),
@@ -233,7 +235,7 @@ class ScopePage:
         element_input = self.elements.input_scope_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
-        self.elements.input_scope_name.fill("e2e-scope-name-edit")
+        self.elements.input_scope_name.fill("copy-e2e-scope-name")
 
     @allure.step("Validate and update scope description")
     def validate_and_copy_scope_description(self):
@@ -243,7 +245,7 @@ class ScopePage:
         element_input = self.elements.input_scope_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
-        self.elements.input_scope_description.fill("e2e-scope-description-edit")
+        self.elements.input_scope_description.fill("copy-e2e-scope-description")
 
     @allure.step("update scope status")
     def enable_scope_status(self):
