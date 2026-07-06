@@ -337,7 +337,7 @@ class ApplicationPermissionPage:
     def validate_duplicate_scope(self):
         self.elements.btn_permission_add_scope.click()
         self.input_scope_cases = [
-            ("e2e-scope-code", " 代碼不可重複 "),
+            ("e2e-app-scope-code", " 代碼不可重複 "),
         ]
         element_input = self.elements.input_permission_init_scope_code.last
         element_error = self.elements.msg_field_error
@@ -345,11 +345,11 @@ class ApplicationPermissionPage:
 
     @allure.step("新增第二筆範圍資料")
     def create_another_scope(self):
-        self.elements.input_permission_init_scope_code.last.fill("e2e-permission-scope-code2")
+        self.elements.input_permission_init_scope_code.last.fill("e2e-app-scope-code2")
         if ( self.elements.input_permission_init_scope_name.last.is_hidden() ): 
             self.elements.arrow_extend_page.last.click()
-        self.elements.input_permission_init_scope_name.last.fill("e2e-permission-scope-name2")
-        self.elements.input_permission_init_scope_description.last.fill("e2e-permission-scope-description2")
+        self.elements.input_permission_init_scope_name.last.fill("e2e-app-scope-name2")
+        self.elements.input_permission_init_scope_description.last.fill("e2e-app-scope-description2")
 
     @allure.step("點擊下一步到角色新增頁面")
     def click_to_role_next_step(self):
@@ -407,7 +407,7 @@ class ApplicationPermissionPage:
     def validate_duplicate_role(self):
         self.elements.btn_permission_add_role.click()
         self.input_role_cases = [
-            ("e2e-role-code", " 代碼不可重複 "),
+            ("e2e-app-role-code", " 代碼不可重複 "),
         ]
         element_input = self.elements.input_permission_init_role_code.last
         element_error = self.elements.msg_field_error
@@ -415,11 +415,11 @@ class ApplicationPermissionPage:
 
     @allure.step("新增第二筆角色資料")
     def create_another_role(self):
-        self.elements.input_permission_init_role_code.last.fill("e2e-permission-role-code2")
+        self.elements.input_permission_init_role_code.last.fill("e2e-app-role-code2")
         if ( self.elements.input_permission_init_role_name.last.is_hidden() ): 
             self.elements.arrow_extend_page.last.click()
-        self.elements.input_permission_init_role_name.last.fill("e2e-permission-role-name2")
-        self.elements.input_permission_init_role_description.last.fill("e2e-permission-role-description2")
+        self.elements.input_permission_init_role_name.last.fill("e2e-app-role-name2")
+        self.elements.input_permission_init_role_description.last.fill("e2e-app-role-description2")
 
     @allure.step("新增第三筆範圍資料")
     def create_scope_in_role_page(self):
@@ -428,13 +428,13 @@ class ApplicationPermissionPage:
 
         self.base_page.click_expect(self.elements.btn_permission_role_more_scope.last)
         self.base_page.click_expect(self.elements.btn_permission_scope_list.last, self.elements.opt_permission_scope_list.first)
-        option = self.elements.opt_permission_scope_list.filter(has_text=" e2e-permission-scope-code2 e2e-permission-scope-name2 ")
+        option = self.elements.opt_permission_scope_list.filter(has_text=" e2e-app-scope-code2 e2e-app-scope-name2 ")
         expect(option).to_contain_class("p-disabled")
 
-        self.elements.input_permission_init_scope_code.last.fill("e2e-permission-scope-code3")
-        self.elements.input_permission_init_scope_name.last.fill("e2e-permission-scope-name3")
+        self.elements.input_permission_init_scope_code.last.fill("e2e-app-scope-code3")
+        self.elements.input_permission_init_scope_name.last.fill("e2e-app-scope-name3")
         self.elements.btn_dialog_permission_add_scope.click()
-        expect(self.elements.opt_permission_scope_list.first).to_have_text(" e2e-permission-scope-code3 e2e-permission-scope-name3 ")
+        expect(self.elements.opt_permission_scope_list.first).to_have_text(" e2e-app-scope-code3 e2e-app-scope-name3 ")
         self.elements.opt_permission_scope_list.first.click()
 
     @allure.step("點擊下一步到新增群組頁面")
@@ -528,5 +528,5 @@ class ApplicationPermissionPage:
     def verify_permission_creation(self):
         expect(self.elements.btn_submit).to_be_enabled()
         self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
-        self.base_page.sleep(500)
+        self.base_page.sleep(1)
         self.base_page.click_expect(self.elements.btn_dialog_checked)

@@ -7,7 +7,7 @@ class ScopeLocators:
     # Scope Navigation
 
     @property
-    #
+    #   權限設定頁面_範圍
     def tab_permission_scope(self):
         return self.page.locator('[role="tabpanel"]:nth-child(3) div div.tab--wrapper:nth-child(3)')
 
