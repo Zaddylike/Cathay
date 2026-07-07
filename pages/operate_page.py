@@ -52,9 +52,14 @@ class OperatePage:
     def verify_input_text(self, inputElement, value):
         # 驗證input類型欄位內容預期
         try:
-            expect(inputElement).to_have_value(
-                re.compile(rf".*{re.escape(value)}.*")
-            )
+            expect(inputElement).to_be_visible()
+
+            actual_value = inputElement.input_value()
+
+            if value not in actual_value:
+                raise AssertionError(
+                    f"Expected input value to contain '{value}', but got '{actual_value}'"
+                )
         except Exception as e :
             raise Exception(f"Failed to verify input value contains : {e}")
     
@@ -72,7 +77,63 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to select list : {e}")
 
-    @allure.step("進入專案身分驗證頁面")
+    @allure.step("Submit form and confirm dialog")
+    def submit_and_confirm(self, submit_button=None, dialog=None, confirm_button=None, enabled_timeout=None):
+        try:
+            submit_button = self.elements.btn_submit if submit_button is None else submit_button
+            dialog = self.elements.page_dialog if dialog is None else dialog
+            confirm_button = self.elements.btn_dialog_checked if confirm_button is None else confirm_button
+
+            if enabled_timeout is None:
+                expect(submit_button).to_be_enabled()
+            else:
+                expect(submit_button).to_be_enabled(timeout=enabled_timeout)
+            self.base_page.click_expect(submit_button, dialog)
+            self.base_page.click_expect(confirm_button)
+        except Exception as e:
+            raise Exception(f"Failed to submit and confirm: {e}")
+
+    @allure.step("Search keyword and verify result")
+    def search_keyword(self, search_input, keyword, result_locator=None, should_exist=True):
+        try:
+            result_locator = self.elements.option_cards.first if result_locator is None else result_locator
+            search_input.fill(keyword)
+            if should_exist:
+                expect(result_locator).to_be_visible()
+            else:
+                expect(result_locator).not_to_be_visible()
+        except Exception as e:
+            raise Exception(f"Failed to search keyword [{keyword}]: {e}")
+
+    @allure.step("Open card action menu")
+    def open_card_action(self, search_input, keyword, menu_button, menu_page, action_button, action_reclick=False):
+        try:
+            search_input.fill(keyword)
+            self.page.mouse.wheel(0, 500)
+            self.base_page.sleep(1)
+            self.base_page.click_expect(menu_button.last, menu_page)
+            self.base_page.click_expect(action_button, reclick=action_reclick)
+        except Exception as e:
+            raise Exception(f"Failed to open card action for [{keyword}]: {e}")
+
+    @allure.step("Select member from advanced search")
+    def select_member_from_advanced_search(
+        self,
+        search_button,
+        search_input,
+        checkbox,
+        confirm_button,
+        keyword,
+    ):
+        try:
+            search_button.click()
+            search_input.fill(keyword)
+            checkbox.click()
+            confirm_button.click()
+        except Exception as e:
+            raise Exception(f"Failed to select member [{keyword}]: {e}")
+
+    @allure.step("Open project permission page")
     def go_to_permission_page(self):
         expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-project-abbr")
@@ -87,4 +148,6 @@ class OperatePage:
         self.base_page.click_expect(self.elements.tab_permission)
         expect(self.elements.tab_permission).to_have_attribute("aria-selected", "true")
 
-    
+    @allure.step("點擊下一步")    
+    def click_to_next_step(self):
+        self.elements.btn_next_step.click()

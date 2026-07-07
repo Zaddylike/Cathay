@@ -65,6 +65,8 @@ class CommonLocators:
     def img_planets(self):
         return self.page.locator(".planets-icon-box")
 
+#   Create btn / Create more btn
+
     @property
     # 新增設定筆數的按鈕
     def btn_create_more(self):

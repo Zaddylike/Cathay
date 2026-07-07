@@ -3,7 +3,10 @@ from playwright.sync_api import Page
 from pages.locators.application_permission_locators import ApplicationPermissionLocators
 from pages.locators.application_s2s_locators import ApplicationS2sLocators
 from pages.locators.application_sso_locators import ApplicationSsoLocators
+from pages.locators.assign_permission_locators import AssignPermissionLocators
 from pages.locators.common_locators import CommonLocators
+from pages.locators.default_permission_locators import DefaultPermissionLocators
+from pages.locators.group_locators import GroupLocators
 from pages.locators.login_locators import LoginLocators
 from pages.locators.operation_locators import OperationLocators
 from pages.locators.project_locators import ProjectLocators
@@ -42,6 +45,21 @@ class RoleElements(CommonLocators, RoleLocators):
         self.page = page
 
 
+class GroupElements(CommonLocators, GroupLocators):
+    def __init__(self, page: Page):
+        self.page = page
+
+
+class AssignPermissionElements(CommonLocators, AssignPermissionLocators):
+    def __init__(self, page: Page):
+        self.page = page
+
+
+class DefaultPermissionElements(CommonLocators, DefaultPermissionLocators):
+    def __init__(self, page: Page):
+        self.page = page
+
+
 class ApplicationPermissionElements(CommonLocators, ApplicationPermissionLocators):
     def __init__(self, page: Page):
         self.page = page
@@ -66,6 +84,9 @@ class AllElements(
     ProjectMemberLocators,
     ScopeLocators,
     RoleLocators,
+    GroupLocators,
+    AssignPermissionLocators,
+    DefaultPermissionLocators,
     ApplicationPermissionLocators,
     ApplicationS2sLocators,
     ApplicationSsoLocators,

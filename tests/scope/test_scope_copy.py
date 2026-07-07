@@ -9,5 +9,4 @@ def test_scope_copy_success(logged_app: OmniApp):
     logged_app.scope_page.click_to_copy_scope_page()
     logged_app.scope_page.validate_copy_and_fill_code()
     logged_app.scope_page.validate_and_copy_scope_description()
-    logged_app.scope_page.enable_scope_status()
     logged_app.scope_page.submit_and_verify_copied()
