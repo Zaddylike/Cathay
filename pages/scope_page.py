@@ -75,11 +75,14 @@ class ScopePage:
     
     @allure.step("Submit scope and verify created")
     def submit_and_verify_created(self):
-        self.elements.btn_submit.click()
-        expect(self.elements.page_dialog).to_be_visible()
-        self.elements.btn_dialog_checked.click()
+        self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.elements.input_keyword_search.fill("e2e-scope-code")
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "e2e-scope-code",
+            self.elements.msg_search_noResult,
+            should_exist=False,
+        )
         self.base_page.take_screenshot("Scope_Create_Success")
 
     # read
@@ -89,20 +92,31 @@ class ScopePage:
 
     @allure.step("搜尋框搜尋不存在範圍")
     def search_scope_with_no_result(self):
-        self.elements.input_keyword_search.fill("xxxxxxxxxxxx")
-        expect(self.elements.msg_search_noResult).to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "xxxxxxxxxxxx",
+            self.elements.msg_search_noResult,
+        )
         self.elements.btn_filter_clear_noResult.click()
 
     @allure.step("搜尋框搜尋代碼已存在範圍")
     def search_scope_by_code(self):
-        self.elements.input_keyword_search.fill("code")
-        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "code",
+            self.elements.msg_search_noResult,
+            should_exist=False,
+        )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("搜尋框搜尋姓名已存在範圍")
     def search_scope_by_name(self):
-        self.elements.input_keyword_search.fill("name")
-        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "name",
+            self.elements.msg_search_noResult,
+            should_exist=False,
+        )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("進階篩選面板篩選狀態")
@@ -144,11 +158,14 @@ class ScopePage:
     @allure.step("Open update scope dialog")
     def click_to_update_scope_page(self):
         self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.elements.input_keyword_search.fill("e2e-scope-code2")
-        self.page.mouse.wheel(0, 500)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_update, reclick=True)
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            "e2e-scope-code2",
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_update,
+            action_reclick=True,
+        )
 
     @allure.step("Validate and update scope name")
     def validate_and_update_scope_name(self):
@@ -178,21 +195,25 @@ class ScopePage:
 
     @allure.step("Submit scope and verify updated")
     def submit_and_verify_updated(self):
-        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
-        self.elements.btn_dialog_checked.click()
+        self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.elements.input_keyword_search.fill("e2e-scope-name2-edit")
-        expect(self.elements.option_cards.first).to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "e2e-scope-name2-edit",
+        )
 
     # delete
     @allure.step("Open delete scope dialog")
     def click_to_delete_scope_page(self):
         self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.elements.input_keyword_search.fill("e2e-scope-code2")
-        self.page.mouse.wheel(0, 500)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_delete, reclick=True)
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            "e2e-scope-code2",
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_delete,
+            action_reclick=True,
+        )
 
     @allure.step("Verify delete confirm disabled by default")
     def verify_deleted_input(self):
@@ -200,18 +221,24 @@ class ScopePage:
 
     @allure.step("Verify deleted scope if exist")
     def verify_scope_deleted(self):
-        self.elements.input_keyword_search.fill("e2e-scope-code2")
-        expect(self.elements.option_cards).not_to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "e2e-scope-code2",
+            self.elements.option_cards,
+            should_exist=False,
+        )
 
     # copy
     @allure.step("Open copy scope dialog")
     def click_to_copy_scope_page(self):
         self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.elements.input_keyword_search.fill("e2e-scope-code")
-        self.page.mouse.wheel(0, 500)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_copy)
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            "e2e-scope-code",
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_copy,
+        )
 
     @allure.step("Validate and fill scope code")
     def validate_copy_and_fill_code(self):
@@ -260,9 +287,9 @@ class ScopePage:
 
     @allure.step("Submit scope and verify updated")
     def submit_and_verify_copied(self):
-        self.elements.btn_submit.click()
-        expect(self.elements.page_dialog).to_be_visible()
-        self.elements.btn_dialog_checked.click()
+        self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.elements.input_keyword_search.fill("copy-")
-        expect(self.elements.option_cards.first).to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "copy-",
+        )

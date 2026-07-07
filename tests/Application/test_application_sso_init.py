@@ -6,7 +6,7 @@ import allure
 def test_single_sign_on_init_success(logged_app: OmniApp):
     logged_app.single_signon_page.open_to_permission_page()
     logged_app.single_signon_page.open_to_create_sso_page()
-    logged_app.single_signon_page.click_to_next_step()
+    logged_app.operate_page.click_to_next_step()
     logged_app.single_signon_page.create_provider_entraId()
     logged_app.single_signon_page.input_entraId_clientId()
     logged_app.single_signon_page.input_entraId_secret()
@@ -22,7 +22,7 @@ def test_single_sign_on_init_success(logged_app: OmniApp):
 
     logged_app.single_signon_page.create_provider_oidc()
     logged_app.single_signon_page.input_oidc_setting()
-    logged_app.single_signon_page.click_to_next_step()
+    logged_app.operate_page.click_to_next_step()
 
     logged_app.single_signon_page.input_application_name()
     logged_app.single_signon_page.select_tenant()

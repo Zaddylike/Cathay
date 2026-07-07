@@ -63,32 +63,41 @@ class RolePage:
 
     @allure.step("確認送出並驗證成功")
     def submit_and_verify_created(self):
-        expect(self.elements.btn_submit).to_be_enabled()
-        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_dialog_checked)
+        self.operate_page.submit_and_confirm()
         
-    # read
+    #  read
+
     @allure.step("Verify role list visible")
     def verify_role_list_visible(self):
         self.base_page.click_expect(self.elements.tab_permission_role, self.elements.btn_create_role)
     
     @allure.step("Search role with no result")
     def search_role_with_no_result(self):
-        self.elements.input_keyword_search.fill("xxxxxxxxxxxx")
-        expect(self.elements.msg_search_noResult).to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "xxxxxxxxxxxx",
+            self.elements.msg_search_noResult,
+        )
         self.elements.btn_filter_clear_noResult.click()
 
     @allure.step("Search role by code")
     def search_role_by_code(self):
-        self.elements.input_keyword_search.fill("code")
-        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "code",
+            self.elements.msg_search_noResult,
+            should_exist=False,
+        )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("Search role by name")
     def search_role_by_name(self):
-        self.elements.input_keyword_search.fill("name")
-        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "name",
+            self.elements.msg_search_noResult,
+            should_exist=False,
+        )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("Filter roles by status")
@@ -129,11 +138,14 @@ class RolePage:
     @allure.step("Open update role page")
     def click_to_update_role_page(self):
         self.base_page.click_expect(self.elements.tab_permission_role)
-        self.elements.input_keyword_search.fill("e2e-role-code")
-        self.page.mouse.wheel(0, 500)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_update, reclick=True)
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            "e2e-role-code",
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_update,
+            action_reclick=True,
+        )
 
     @allure.step("Validate and update role name")
     def validate_and_update_role_name(self):
@@ -168,22 +180,25 @@ class RolePage:
 
     @allure.step("Submit role and verify updated")
     def submit_and_verify_updated(self):
-        self.elements.btn_submit.click()
-        expect(self.elements.page_dialog).to_be_visible()
-        self.elements.btn_dialog_checked.click()
+        self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.elements.input_keyword_search.fill("e2e-scope-name2-edit")
-        expect(self.elements.option_cards.first).to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "e2e-scope-name2-edit",
+        )
 
     # delete
     @allure.step("Open role delete dialog")
     def open_role_delete_dialog(self):
         self.base_page.click_expect(self.elements.tab_permission_role)
-        self.elements.input_keyword_search.fill("e2e-role-code")
-        self.page.mouse.wheel(0, 500)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_delete, reclick=True)
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            "e2e-role-code",
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_delete,
+            action_reclick=True,
+        )
 
 
     @allure.step("Verify delete confirm disabled by default")
@@ -192,18 +207,24 @@ class RolePage:
 
     @allure.step("Verify deleted role if exist")
     def verify_role_deleted(self):
-        self.elements.input_keyword_search.fill("e2e-role-code")
-        expect(self.elements.option_cards).not_to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "e2e-role-code",
+            self.elements.option_cards,
+            should_exist=False,
+        )
 
     # copy
     @allure.step("Open copy role page")
     def click_to_copy_role_page(self):
         self.base_page.click_expect(self.elements.tab_permission_role)
-        self.elements.input_keyword_search.fill("e2e-scope-code")
-        self.page.mouse.wheel(0, 500)
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.btn_card_threepoint_menu.last, self.elements.page_card_threepoint_menu)
-        self.base_page.click_expect(self.elements.btn_card_menu_copy)
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            "e2e-scope-code",
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_copy,
+        )
 
     @allure.step("Validate and fill copied role code")
     def validate_copy_and_fill_code(self):
@@ -248,9 +269,9 @@ class RolePage:
 
     @allure.step("Submit role and verify updated")
     def submit_and_verify_copied(self):
-        self.elements.btn_submit.click()
-        expect(self.elements.page_dialog).to_be_visible()
-        self.elements.btn_dialog_checked.click()
+        self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.elements.input_keyword_search.fill("copy-")
-        expect(self.elements.option_cards.first).to_be_visible()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            "copy-",
+        )
