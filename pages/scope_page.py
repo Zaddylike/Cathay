@@ -83,18 +83,25 @@ class ScopePage:
         self.base_page.take_screenshot("Scope_Create_Success")
 
     # read
+    @allure.step("進入範圍頁面")
+    def verify_scope_list_visible(self):
+        self.base_page.click_expect(self.elements.tab_permission_scope, self.elements.btn_create_scope)
 
     @allure.step("搜尋框搜尋不存在範圍")
     def search_scope_with_no_result(self):
-        self.elements.tab_permission_scope.click()
-
         self.elements.input_keyword_search.fill("xxxxxxxxxxxx")
         expect(self.elements.msg_search_noResult).to_be_visible()
         self.elements.btn_filter_clear_noResult.click()
 
-    @allure.step("搜尋框搜尋已存在範圍")
+    @allure.step("搜尋框搜尋代碼已存在範圍")
     def search_scope_by_code(self):
-        self.elements.input_keyword_search.fill("e2e-scope-code")
+        self.elements.input_keyword_search.fill("code")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.elements.input_keyword_search.fill("")
+
+    @allure.step("搜尋框搜尋姓名已存在範圍")
+    def search_scope_by_name(self):
+        self.elements.input_keyword_search.fill("name")
         expect(self.elements.msg_search_noResult).not_to_be_visible()
         self.elements.input_keyword_search.fill("")
 

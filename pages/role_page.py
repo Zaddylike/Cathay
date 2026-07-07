@@ -67,31 +67,63 @@ class RolePage:
         self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
         self.base_page.sleep(1)
         self.base_page.click_expect(self.elements.btn_dialog_checked)
-
+        
     # read
     @allure.step("Verify role list visible")
     def verify_role_list_visible(self):
-        pass
-
+        self.base_page.click_expect(self.elements.tab_permission_role, self.elements.btn_create_role)
+    
     @allure.step("Search role with no result")
     def search_role_with_no_result(self):
-        pass
+        self.elements.input_keyword_search.fill("xxxxxxxxxxxx")
+        expect(self.elements.msg_search_noResult).to_be_visible()
+        self.elements.btn_filter_clear_noResult.click()
 
     @allure.step("Search role by code")
     def search_role_by_code(self):
-        pass
+        self.elements.input_keyword_search.fill("code")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.elements.input_keyword_search.fill("")
 
     @allure.step("Search role by name")
     def search_role_by_name(self):
-        pass
+        self.elements.input_keyword_search.fill("name")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+        self.elements.input_keyword_search.fill("")
 
     @allure.step("Filter roles by status")
     def filter_roles_by_status(self):
-        pass
+        self.elements.input_keyword_search.click()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition, True)
+        self.elements.btn_filter_status_enable.click()
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+
+        self.base_page.sleep(1)
+        self.elements.input_keyword_search.click()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
+        self.elements.btn_filter_status_disable.click()
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+
+        self.base_page.sleep(1)
+        self.elements.input_keyword_search.click()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
+        self.elements.btn_filter_footer_clearfilter.click()
 
     @allure.step("Sort roles by created time")
     def sort_roles_by_created_time(self):
-        pass
+        self.elements.input_keyword_search.click()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
+        self.elements.btn_filter_date_reyoung.click()
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+
+        self.elements.input_keyword_search.click()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
+        self.elements.btn_filter_date_grewup.click()
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+
+        self.elements.input_keyword_search.click()
+        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition, True)
+        self.elements.btn_filter_footer_clearfilter.click()
 
     # update
     @allure.step("Open update role page")
