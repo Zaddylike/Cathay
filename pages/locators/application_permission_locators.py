@@ -4,57 +4,51 @@ class ApplicationPermissionLocators:
     def __init__(self, page: Page):
         self.page = page
 
-#   Entry / Page
+    # Entry / Page
 
     @property
     # 專案資訊頁面_身分認證按鈕
     def btn_project_info_permission(self):
         return self.page.locator(".sidebar__list", has=self.page.get_by_text(" 身份認證 ", exact=True))
-    
+
     @property
     # 身分驗證頁面_logo
     def page_permission(self):
         return self.page.locator(".text-type--content-title")
 
     @property
-    # 身分驗證頁面_分頁_權限設定
+    # 身分驗證頁面_分頁_權限設定_新增權限按鈕
     def btn_permission_add_permission(self):
         return self.page.get_by_text(" 新增權限 ")
-    
 
-#   Scope
+    # Scope
 
     @property
     # 身分驗證頁面_分頁_新增頁面_範圍
     def btn_permission_add_scope(self):
         return self.page.get_by_text(" 新增範圍")
-    
 
     @property
     # 身分驗證頁面_分頁_新增頁面_範圍_代碼
     def input_permission_init_scope_code(self):
         return self.page.locator('[formcontrolname="code"]')
-    
 
     @property
     # 身分驗證頁面_分頁_新增頁面_範圍_名稱
     def input_permission_init_scope_name(self):
         return self.page.locator('[formcontrolname="name"]')
-    
 
     @property
     # 身分驗證頁面_分頁_新增頁面_範圍_描述
     def input_permission_init_scope_description(self):
         return self.page.locator('[formcontrolname="description"]')
-    
 
     @property
-    #展開範圍新增頁面箭頭
+    # 展開範圍新增頁面箭頭
     def arrow_extend_page(self):
         return self.page.locator('.border-circle')
-    
 
-#   Role
+    # Role
 
     @property
     # 身分驗證頁面_分頁_新增頁面_角色
@@ -62,28 +56,24 @@ class ApplicationPermissionLocators:
         return self.page.get_by_text(" 新增角色 ")
 
     @property
-    # 身分驗證頁面_分頁_新增頁面_範圍_代碼
+    # 身分驗證頁面_分頁_新增頁面_角色_代碼
     def input_permission_init_role_code(self):
         return self.page.locator('[formcontrolname="code"]')
-    
 
     @property
-    # 身分驗證頁面_分頁_新增頁面_範圍_名稱
+    # 身分驗證頁面_分頁_新增頁面_角色_名稱
     def input_permission_init_role_name(self):
         return self.page.locator('[formcontrolname="name"]')
-    
 
     @property
-    # 身分驗證頁面_分頁_新增頁面_範圍_描述
+    # 身分驗證頁面_分頁_新增頁面_角色_描述
     def input_permission_init_role_description(self):
         return self.page.locator('[formcontrolname="description"]')
-    
 
     @property
-    # 展開範圍新增頁面箭頭
+    # 展開角色新增頁面箭頭
     def arrow_extend_role_page(self):
         return self.page.locator('.border-circle')
-    
 
     @property
     # 角色新增頁面_範圍清單_展開
@@ -94,39 +84,33 @@ class ApplicationPermissionLocators:
     # 角色新增頁面_範圍清單
     def opt_permission_scope_list(self):
         return self.page.locator('[role="option"]')
-    
 
     @property
     # 角色新增頁面_新增設定範圍筆數的按鈕
     def btn_permission_role_more_scope(self):
         return self.page.locator('[tooltipposition="bottom"] p', has=self.page.get_by_text(" 新增 ", exact=True))
-    
 
     @property
     # 角色新增頁面_範圍選擇清單_新增範圍按鈕
     def btn_dialog_permission_add_scope(self):
         return self.page.get_by_text(" 新增範圍 ")
-    
 
-#   Group
+    # Group
 
     @property
     # 身分驗證頁面_分頁_新增頁面_群組
     def btn_permission_add_group(self):
         return self.page.locator("app-permission-group button")
-    
 
     @property
     # 身分驗證頁面_分頁_新增頁面_群組_名稱
     def input_permission_init_group_name(self):
         return self.page.locator('[formcontrolname="name"]')
-    
 
     @property
     # 身分驗證頁面_分頁_新增頁面_群組_描述
     def input_permission_init_group_description(self):
         return self.page.locator('[formcontrolname="description"]')
-    
 
     @property
     # 身分驗證頁面_分頁_新增頁面_群組_新增成員按鈕
@@ -141,6 +125,6 @@ class ApplicationPermissionLocators:
         return self.page.locator('[formcontrolname="id"]')
 
     @property
-    # 身分驗證頁面_分頁_新增頁面_預設權限_
+    # 身分驗證頁面_分頁_新增頁面_預設權限_備註
     def input_permission_remark(self):
         return self.page.locator('[formcontrolname="remark"]')

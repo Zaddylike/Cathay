@@ -4,31 +4,29 @@ class CommonLocators:
     def __init__(self, page: Page):
         self.page = page
 
-
-#   未登入頁面、登入頁、Omni Logo
+    # Login / Logo
 
     @property
     # 登入按鈕, 撈重複多再篩內部有符合的抓
     def btn_login(self):
         return self.page.locator('.header__feature-item', has=self.page.get_by_role("button", name="登入", exact=True))
-    
+
     @property
-    # 登入頁: 登入按鈕, 先抓指定區域再從中有符合的抓
+    # 登入頁_登入按鈕, 先抓指定區域再從中有符合的抓
     def btn_login_welcome(self):
         return self.page.locator('[method="post"]').get_by_role("button", name="登入", exact=True)
-    
+
     @property
-    # Entra登入頁面: 下一步按鈕
+    # Entra登入頁面_下一步按鈕
     def btn_login_nextStep(self):
         return self.page.locator("#idSIButton9")
-    
+
     @property
     # 登入後頁面_使用者頭像
     def btn_user_avatar(self):
         return self.page.locator(".header__feature p-splitbutton button.p-splitbutton-dropdown")
-    
 
-#   常用欄位、按鈕
+    # Common Fields / Buttons
 
     @property
     # 下一步按鈕
@@ -54,7 +52,7 @@ class CommonLocators:
     # 專案總覽_列表模式
     def btn_projet_type_list(self):
         return self.page.locator('.function-bar .btn div').nth(1)
-    
+
     @property
     # 專案總覽_卡片模式
     def btn_projet_type_card(self):
@@ -65,22 +63,19 @@ class CommonLocators:
     def img_planets(self):
         return self.page.locator(".planets-icon-box")
 
-<<<<<<< HEAD
-#   Create btn / Create more btn
+    # Create Buttons
 
     @property
     # 新增設定筆數的按鈕
     def btn_create_more(self):
         return self.page.locator('[tooltipposition="bottom"] p', has=self.page.get_by_text(" 新增 ", exact=True))
 
-=======
->>>>>>> 80fa955 (update)
-#   Search / Filter
+    # Search / Filter
 
     @property
     # 篩選面板_共用[請輸入關鍵字]的搜尋欄
     def input_keyword_search(self):
-        return self.page.get_by_placeholder("請輸入關鍵字", exact=True)   
+        return self.page.get_by_placeholder("請輸入關鍵字", exact=True)
 
     @property
     # 篩選面板_篩選條件設定按鈕
@@ -137,13 +132,13 @@ class CommonLocators:
     def btn_filter_clear_search(self):
         return self.page.locator(".function-bar .relative p-inputicon.cursor-pointer img").first
 
-#   Dialog / Confirm
+    # Dialog / Confirm
 
     @property
     # 對話視窗_彈窗頁面
     def page_dialog(self):
         return self.page.locator('[role="dialog"]')
-    
+
     @property
     # 對話視窗_確認按鈕
     def btn_dialog_checked(self):
@@ -155,16 +150,16 @@ class CommonLocators:
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 確認 ")
 
     @property
-    # 刪除對話視窗_確認按鈕
-    def btn_dialog_delete_cancel(self):    
+    # 刪除對話視窗_取消按鈕
+    def btn_dialog_delete_cancel(self):
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
-    
+
     @property
     # S2S, SSO 新增視窗的權限設定按鈕
     def btn_dialog_permission_confirm(self):
         return self.page.locator('[role="dialog"] .prompt-dialog__footer', has=self.page.get_by_role("button", name=" 權限設定 ", exact=True))
 
-#   Date Picker
+    # Date Picker
 
     @property
     # 日期選擇視窗面板
@@ -180,33 +175,30 @@ class CommonLocators:
     # 到期日期選擇欄位
     def date_picker_endDate(self):
         return self.page.locator('p-datepicker[formcontrolname="endDate"]')
-    
+
     @property
     # 日期選擇視窗面板_上一個月箭頭
     def dete_picker_arrow_previous(self):
         return self.page.locator('.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-header [severity="secondary"]').nth(0)
-    
+
     @property
     # 日期選擇視窗面板_下一個月箭頭
     def dete_picker_arrow_next(self):
         return self.page.locator('.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-header [severity="secondary"]').nth(1)
-    
+
     @property
     # 日期選擇視窗面板_日期按鈕
     def date_picker_day(self):
         return self.page.locator(f'.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-calendar [data-pc-section="tablebody"] [data-pc-section="tablebodyrow"] .p-datepicker-day-cell')
-    
-#   Cards / Options
+
+    # Cards / Options
 
     @property
-<<<<<<< HEAD
-    #  ALL_清單
+    # All_清單
     def list_dropdown(self):
         return self.page.locator('[role="combobox"]')
 
     @property
-=======
->>>>>>> 80fa955 (update)
     # All_下拉選單內的選項
     def option_dropdown_list(self):
         return self.page.locator('[role="option"]')
@@ -216,7 +208,7 @@ class CommonLocators:
     def option_cards(self):
         return self.page.locator(".data-card")
 
-#   Member Common
+    # Member Common
 
     @property
     # 專案成員頁面內的項目
@@ -251,86 +243,9 @@ class CommonLocators:
     @property
     # 成員搜尋頁面_篩選成員彈窗_篩選欄位
     def input_memberadd_advanced_search(self):
-        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)    
-    
+        return self.page.get_by_placeholder("請輸入部門/姓名", exact=True)
+
     @property
     # 成員搜尋頁面_checkbox最後一個
     def checkbox_add_member(self):
         return self.page.locator('[role="treeitem"] p-checkbox .p-checkbox-input').last
-
-    @property
-    # 成員搜尋頁面_底部_取消
-    def btn_memberadd_footer_cancel(self):
-        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 取消 ")
-
-    @property
-    # 成員搜尋頁面_底部_確認
-    def btn_memberadd_footer_confirm(self):
-        return self.page.locator('[role="dialog"] .justify-content-center').get_by_text(" 確認 ")
-
-#   Permission Common
-
-    @property
-    # 身分驗證頁面_分頁_權限設定
-    def tab_permission(self):
-        return self.page.locator('[role="tablist"] p-tab', has_text=" 權限設定 ")
-    
-    @property
-    # 身分驗證頁面_logo
-    def page_permission(self):
-        return self.page.locator(".text-type--content-title")
-
-#   專案三點清單
-
-    @property
-    # 專案_三點清單按鈕
-    def btn_card_threepoint_menu(self):
-        return self.page.locator('app-permission-card  .p-splitbutton-dropdown')
-    
-    @property
-    # 專案_三點清單頁面
-    def page_card_threepoint_menu(self):
-        return self.page.locator('[role="menu"]')
-
-    @property
-    # 專案_三點清單按鈕_編輯
-    def btn_card_menu_update(self):
-        return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('編輯', exact=True)
-
-    @property
-    # 專案_三點清單按鈕_複製
-    def btn_card_menu_copy(self):
-        return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('複製', exact=True)
-    
-    @property
-    # 專案_三點清單按鈕_刪除
-    def btn_card_menu_delete(self):
-        return self.page.locator('[role="menu"] [role="menuitem"]').get_by_text('刪除', exact=True)
-
-#   Status Controls
-
-    @property
-    # 新增專案頁面_狀態_停用
-    def radio_status_disable(self):
-        return self.page.get_by_text("停用")
-
-    @property
-    # 新增專案頁面_狀態_啟用
-    def radio_status_enable(self):
-        return self.page.get_by_text("啟用")
-    
-#   Messages
-
-    @property
-    # 欄位錯誤訊息
-    def msg_field_error(self):
-        return self.page.locator('app-error-message.ng-star-inserted div span')
-
-    @property
-    # 查無資訊文字元素
-    def msg_search_noResult(self):
-<<<<<<< HEAD
-        return self.page.locator("app-data-empty .text-type--secondary-title").last
-=======
-        return self.page.locator(".text-type--secondary-title")
->>>>>>> 80fa955 (update)

@@ -4,7 +4,7 @@ class ProjectMemberLocators:
     def __init__(self, page: Page):
         self.page = page
 
-#   Member Page Navigation
+    # Member Page Navigation
 
     @property
     # 專案頁面_編輯成員按鈕
@@ -16,7 +16,7 @@ class ProjectMemberLocators:
     def btn_member_edit_member(self):
         return self.page.locator("div.main-container--wrapper.ng-star-inserted > app-share-project > div > button")
 
-#   Add Member
+    # Add Member
 
     @property
     # 專案成員新增頁面_新增成員按鈕
@@ -24,19 +24,16 @@ class ProjectMemberLocators:
         return self.page.locator('div.main-container--wrapper app-share-project-edit div button.btn', has=self.page.get_by_text(" 新增成員 ", exact=True))
 
     @property
-<<<<<<< HEAD
-=======
     # 專案成員新增頁面_新增篩選欄位_篩選條件按鈕
     def btn_memberadd_filter_add_search(self):
         return self.page.locator('p-iconfield p-inputicon.cursor-pointer').first
 
     @property
->>>>>>> 80fa955 (update)
     # 專案成員新增頁面_篩選成員欄位
     def input_search_member_field(self):
         return self.page.locator(".w-full .w-full p-multiselect .p-multiselect-label-container .p-multiselect-label").first
 
-#   Member Level
+    # Member Level
 
     @property
     # 專案成員新增頁面_新增篩選欄位_權限清單_編輯者
@@ -46,21 +43,21 @@ class ProjectMemberLocators:
     @property
     # 專案成員新增頁面_成員名單_篩選清單_編輯者
     def btn_memberadd_filter_level_editor(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 編輯者 ",exact=True))
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 編輯者 ", exact=True))
 
     @property
     # 專案成員新增頁面_成員名單_篩選清單_擁有者
     def btn_memberadd_filter_level_owner(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 擁有者 ",exact=True))
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 擁有者 ", exact=True))
 
     @property
     # 專案成員新增頁面_成員名單_篩選清單_檢視者
     def btn_memberadd_filter_level_viewer(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 檢視者 ",exact=True))
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option div button', has=self.page.get_by_text(" 檢視者 ", exact=True))
 
-#   Existing Member
+    # Existing Member
 
     @property
     # 專案成員新增頁面_成員名單_測試資料
     def list_editmember_tester3(self):
-        return self.page.locator('[datakey="memberId"] tbody tr', has_text = " 測試人員3 ")
+        return self.page.locator('[datakey="memberId"] tbody tr', has_text=" 測試人員3 ")

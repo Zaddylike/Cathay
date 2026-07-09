@@ -19,5 +19,6 @@ class OperationLocators:
     # Delete Dialog
 
     @property
+    # 刪除對話視窗_刪除確認輸入欄位
     def dialog_input_delete(self):
         return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__body input')

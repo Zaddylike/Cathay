@@ -20,13 +20,11 @@ class ApplicationSsoLocators:
     # 身分驗證頁面_分頁_單一登入
     def tab_signon(self):
         return self.page.locator('[role="tablist"] p-tab', has_text=" 單一登入 ")
-    
 
     @property
     # 身分驗證頁面_單一登入分頁_新增應用端按鈕
     def btn_permission_add_sso(self):
         return self.page.locator('[data-p-active="true"] button', has_text=" 新增應用端 ")
-    
 
     # Provider Selection
 
@@ -34,21 +32,19 @@ class ApplicationSsoLocators:
     # 單一登入新增頁面_step.2_供應商清單
     def list_providers(self):
         return self.page.locator('[formcontrolname="providerId"] p-select')
-    
 
     @property
-    # 單一登入新增頁面_step.2_供應商清單選項
+    # 單一登入新增頁面_step.2_供應商清單選項_Microsoft Entra ID
     def opt_providers_entraId(self):
         return self.page.locator('[role="listbox"] p-selectitem [aria-label="Microsoft Entra ID"]')
-    
 
     @property
-    # 單一登入新增頁面_step.2_供應商清單選項
+    # 單一登入新增頁面_step.2_供應商清單選項_GOOGLE
     def opt_providers_google(self):
         return self.page.locator('[role="listbox"] p-selectitem [aria-label="GOOGLE"]')
 
     @property
-    # 單一登入新增頁面_step.2_供應商清單選項
+    # 單一登入新增頁面_step.2_供應商清單選項_OIDC
     def opt_providers_oidc(self):
         return self.page.locator('[role="listbox"] p-selectitem [aria-label="OIDC"]')
 
@@ -105,126 +101,112 @@ class ApplicationSsoLocators:
     # 新增第三方應用程式按鈕
     def btn_sso_create_more_provider(self):
         return self.page.get_by_role("button", name=" 新增第三方應用程式 ", exact=True)
-    
 
     @property
-    # 單一登入新增頁面_step.2_用戶端ID
+    # 單一登入新增頁面_step.2_Google用戶端ID
     def input_google_clientId(self):
         return self.page.locator('[formcontrolname="clientId"]').last
 
     @property
-    # 單一登入新增頁面_step.2_用戶端密鑰
+    # 單一登入新增頁面_step.2_Google用戶端密鑰
     def input_google_client_secret(self):
         return self.page.locator('[formcontrolname="clientSecret"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_Google白名單開關
     def switch_google_whitelist_active(self):
         return self.page.locator('[formcontrolname="whitelistEnabled"]').nth(2)
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_Google識別欄位
     def input_google_identify_field(self):
         return self.page.locator('[formcontrolname="whitelistKey"]').last
-    
 
     # OIDC Provider
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC按鈕名稱
     def input_oidc_buttonName(self):
         return self.page.locator('[formcontrolname="buttonName"]').last
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC用戶端ID
     def input_oidc_clientId(self):
         return self.page.locator('[formcontrolname="clientId"]').last
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC用戶端密鑰
     def input_oidc_clientSecret(self):
         return self.page.locator('[formcontrolname="clientSecret"]').last
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC白名單欄位
     def input_oidc_whitelistKey(self):
         return self.page.locator('[formcontrolname="whitelistKey"]').last
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC授權類型
     def input_oidc_authorizationGrantTypes(self):
         return self.page.locator('[formcontrolname="authorizationGrantTypes"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC名稱
     def input_oidc_name(self):
         return self.page.locator('[formcontrolname="name"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC Authorization URI
     def input_oidc_authorizationUri(self):
         return self.page.locator('[formcontrolname="authorizationUri"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC Token URI
     def input_oidc_tokenUri(self):
         return self.page.locator('[formcontrolname="tokenUri"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC User Info URI
     def input_oidc_userInfoUri(self):
         return self.page.locator('[formcontrolname="userInfoUri"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC JWK Set URI
     def input_oidc_jwkSetUri(self):
         return self.page.locator('[formcontrolname="jwkSetUri"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_step.2_OIDC User Name Attribute Name
     def input_oidc_userNameAttributeName(self):
         return self.page.locator('[formcontrolname="userNameAttributeName"]').last
-    
 
     # Application Setting
 
     @property
-    #
+    # 單一登入新增頁面_應用名稱
     def input_application_name(self):
         return self.page.locator('[formcontrolname="name"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_租戶清單
     def list_tenants(self):
         return self.page.locator('[formcontrolname="tenantId"]').last
 
     @property
-    #
+    # 單一登入新增頁面_租戶選項
     def opt_tenant(self):
         return self.page.locator('[role="option"]')
 
     @property
-    #
+    # 單一登入新增頁面_Redirect URL
     def input_application_redirectUrl(self):
         return self.page.locator('[formcontrolname="redirectUri"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_Logout URL
     def input_application_logoutUrl(self):
         return self.page.locator('[formcontrolname="logoutRedirectUri"]').last
-    
 
     @property
-    #
+    # 單一登入新增頁面_描述
     def input_application_description(self):
         return self.page.locator('[formcontrolname="description"]').last

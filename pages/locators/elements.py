@@ -3,14 +3,10 @@ from playwright.sync_api import Page
 from pages.locators.application_permission_locators import ApplicationPermissionLocators
 from pages.locators.application_s2s_locators import ApplicationS2sLocators
 from pages.locators.application_sso_locators import ApplicationSsoLocators
-<<<<<<< HEAD
 from pages.locators.assign_permission_locators import AssignPermissionLocators
 from pages.locators.common_locators import CommonLocators
 from pages.locators.default_permission_locators import DefaultPermissionLocators
 from pages.locators.group_locators import GroupLocators
-=======
-from pages.locators.common_locators import CommonLocators
->>>>>>> 80fa955 (update)
 from pages.locators.login_locators import LoginLocators
 from pages.locators.operation_locators import OperationLocators
 from pages.locators.project_locators import ProjectLocators
@@ -49,7 +45,6 @@ class RoleElements(CommonLocators, RoleLocators):
         self.page = page
 
 
-<<<<<<< HEAD
 class GroupElements(CommonLocators, GroupLocators):
     def __init__(self, page: Page):
         self.page = page
@@ -65,19 +60,20 @@ class DefaultPermissionElements(CommonLocators, DefaultPermissionLocators):
         self.page = page
 
 
-=======
->>>>>>> 80fa955 (update)
 class ApplicationPermissionElements(CommonLocators, ApplicationPermissionLocators):
     def __init__(self, page: Page):
         self.page = page
+
 
 class ApplicationS2sElements(CommonLocators, ApplicationS2sLocators):
     def __init__(self, page: Page):
         self.page = page
 
+
 class ApplicationSsoElements(CommonLocators, ApplicationSsoLocators):
     def __init__(self, page: Page):
         self.page = page
+
 
 class OperationElements(CommonLocators, OperationLocators):
     def __init__(self, page: Page):
@@ -91,12 +87,9 @@ class AllElements(
     ProjectMemberLocators,
     ScopeLocators,
     RoleLocators,
-<<<<<<< HEAD
     GroupLocators,
     AssignPermissionLocators,
     DefaultPermissionLocators,
-=======
->>>>>>> 80fa955 (update)
     ApplicationPermissionLocators,
     ApplicationS2sLocators,
     ApplicationSsoLocators,
