@@ -14,12 +14,17 @@ class ProjectMemberPage:
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self):
         expect(self.elements.option_cards.first).to_be_visible()
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-project-abbr",
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_project_edit_member.first, self.elements.btn_member_edit_member)
 
@@ -29,6 +34,7 @@ class ProjectMemberPage:
     
     @allure.step("搜索新增成員")
     def search_member_to_list(self):
+<<<<<<< HEAD
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
             self.elements.input_memberadd_advanced_search,
@@ -36,6 +42,12 @@ class ProjectMemberPage:
             self.elements.btn_memberadd_footer_confirm,
             "測試人員3",
         )
+=======
+        self.elements.btn_memberadd_filter_add_search.click()
+        self.elements.input_memberadd_advanced_search.fill("測試人員3")
+        self.elements.checkbox_add_member.click()
+        self.elements.btn_memberadd_footer_confirm.click()
+>>>>>>> 80fa955 (update)
         
     @allure.step("調整新增成員權限")
     def adjust_member_level(self):
@@ -45,6 +57,7 @@ class ProjectMemberPage:
 
     @allure.step("搜尋新增成員")
     def search_member_add(self):
+<<<<<<< HEAD
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
@@ -52,6 +65,12 @@ class ProjectMemberPage:
             self.elements.btn_filter_clear_noResult,
             should_exist=False,
         )
+=======
+        self.elements.btn_submit.click()
+        self.elements.btn_dialog_checked.click()
+        self.elements.input_keyword_search.fill("測試人員3")
+        expect(self.elements.btn_filter_clear_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
     
     #read
     @allure.step("搜尋成員")
@@ -63,7 +82,12 @@ class ProjectMemberPage:
         expectElement = self.elements.option_cards_members
         try:
             for input_value in cases:
+<<<<<<< HEAD
                 self.operate_page.search_keyword(inputElement, input_value, expectElement)
+=======
+                inputElement.fill(input_value)
+                expect(expectElement).to_be_visible()
+>>>>>>> 80fa955 (update)
                 inputElement.fill("")
         except Exception as e:
             raise Exception(f"Failed to verify input : {e}")
@@ -95,6 +119,7 @@ class ProjectMemberPage:
     #update
     @allure.step("新增第二個成員")
     def add_another_member(self):
+<<<<<<< HEAD
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
             self.elements.input_memberadd_advanced_search,
@@ -102,6 +127,12 @@ class ProjectMemberPage:
             self.elements.btn_memberadd_footer_confirm,
             "測試人員2",
         )
+=======
+        self.elements.btn_memberadd_filter_add_search.click()
+        self.elements.input_memberadd_advanced_search.fill("測試人員2")
+        self.elements.checkbox_add_member.click()
+        self.elements.btn_memberadd_footer_confirm.click()
+>>>>>>> 80fa955 (update)
         self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.page_members_level_list_select)
         self.elements.option_members_level_list_viewer.click()
         self.elements.btn_memberadd_add_member.click()
@@ -111,11 +142,21 @@ class ProjectMemberPage:
         self.elements.list_editmember_tester3.locator("app-select p-select").click()
         expect(self.elements.page_members_level_list_select).to_be_visible()
         self.elements.option_cards_member_as_editor.click()
+<<<<<<< HEAD
         self.operate_page.submit_and_confirm()
+=======
+        self.elements.btn_submit.click()
+        self.elements.btn_dialog_checked.click()
+>>>>>>> 80fa955 (update)
 
     #delete
     @allure.step("刪除成員")
     def delete_member(self):
         self.elements.list_editmember_tester3.locator("app-icon img").click()
         expect(self.elements.list_editmember_tester3).not_to_be_visible()
+<<<<<<< HEAD
         self.operate_page.submit_and_confirm()
+=======
+        self.elements.btn_submit.click()
+        self.elements.btn_dialog_checked.click()
+>>>>>>> 80fa955 (update)

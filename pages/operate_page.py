@@ -52,6 +52,7 @@ class OperatePage:
     def verify_input_text(self, inputElement, value):
         # 驗證input類型欄位內容預期
         try:
+<<<<<<< HEAD
             expect(inputElement).to_be_visible()
 
             actual_value = inputElement.input_value()
@@ -60,6 +61,11 @@ class OperatePage:
                 raise AssertionError(
                     f"Expected input value to contain '{value}', but got '{actual_value}'"
                 )
+=======
+            expect(inputElement).to_have_value(
+                re.compile(rf".*{re.escape(value)}.*")
+            )
+>>>>>>> 80fa955 (update)
         except Exception as e :
             raise Exception(f"Failed to verify input value contains : {e}")
     
@@ -77,6 +83,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to select list : {e}")
 
+<<<<<<< HEAD
     @allure.step("Submit form and confirm dialog")
     def submit_and_confirm(self, submit_button=None, dialog=None, confirm_button=None, enabled_timeout=None):
         try:
@@ -134,6 +141,9 @@ class OperatePage:
             raise Exception(f"Failed to select member [{keyword}]: {e}")
 
     @allure.step("Open project permission page")
+=======
+    @allure.step("進入專案身分驗證頁面")
+>>>>>>> 80fa955 (update)
     def go_to_permission_page(self):
         expect(self.elements.option_cards.first).to_be_visible()
         self.elements.input_keyword_search.fill("e2e-project-abbr")
@@ -148,6 +158,10 @@ class OperatePage:
         self.base_page.click_expect(self.elements.tab_permission)
         expect(self.elements.tab_permission).to_have_attribute("aria-selected", "true")
 
+<<<<<<< HEAD
     @allure.step("點擊下一步")    
     def click_to_next_step(self):
         self.elements.btn_next_step.click()
+=======
+    
+>>>>>>> 80fa955 (update)

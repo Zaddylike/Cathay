@@ -81,6 +81,7 @@ class ProjectPage:
 
     @allure.step("送出成功後搜尋專案")
     def submit_project_and_verify_created(self):
+<<<<<<< HEAD
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
@@ -88,6 +89,12 @@ class ProjectPage:
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
+        self.elements.btn_dialog_checked.click()
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
 
     #read
     @allure.step("檢視專案總覽")
@@ -106,31 +113,46 @@ class ProjectPage:
 
     @allure.step("搜尋框搜尋不存在專案縮寫")
     def search_project_with_no_result(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "xxxxxxxxxxxx",
             self.elements.msg_search_noResult,
         )
+=======
+        self.elements.input_keyword_search.fill("xxxxxxxxxxxx")
+        expect(self.elements.msg_search_noResult).to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.btn_filter_clear_noResult.click()
 
     @allure.step("搜尋框搜尋已存在專案縮寫")
     def search_project_by_abbreviation(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-project-abbr",
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.btn_filter_clear_search.click()
 
     @allure.step("搜尋框搜尋已存在專案中文")
     def search_project_by_zh_name(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-testing-zh",
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-testing-zh")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.btn_filter_clear_search.click(force=True)
         
     @allure.step("進階篩選面板篩選狀態")
@@ -169,12 +191,17 @@ class ProjectPage:
 
     @allure.step("檢視專案詳細資訊頁面")
     def open_project_detail_from_search(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-project-abbr",
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.option_cards.first.click()
 
     @allure.step("檢視專案成員頁面")
@@ -190,7 +217,12 @@ class ProjectPage:
         expectElement = self.elements.option_cards_members
         try:
             for input_value in cases:
+<<<<<<< HEAD
                 self.operate_page.search_keyword(inputElement, input_value, expectElement)
+=======
+                inputElement.fill(input_value)
+                expect(expectElement).to_be_visible()
+>>>>>>> 80fa955 (update)
                 inputElement.fill("")
         except Exception as e:
             raise Exception(f"Failed to verify input : {e}")
@@ -222,12 +254,17 @@ class ProjectPage:
     #update
     @allure.step("依照縮寫搜尋成功後點擊")
     def open_project_edit_form(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-project-abbr",
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_edit_project, self.elements.btn_submit)
         
@@ -270,6 +307,7 @@ class ProjectPage:
 
     @allure.step("提交專案編輯及驗證")
     def submit_project_update_and_verify(self):
+<<<<<<< HEAD
         self.operate_page.submit_and_confirm()
         self.elements.btn_back_to_overview.click()
         self.operate_page.search_keyword(
@@ -278,16 +316,28 @@ class ProjectPage:
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.base_page.click_expect(self.elements.btn_submit, self.elements.page_dialog)
+        self.elements.btn_dialog_checked.click()
+        self.elements.btn_back_to_overview.click()
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
 
     #delete
     @allure.step("開啟刪除視窗")
     def open_project_delete_dialog(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-project-abbr",
             self.elements.msg_search_noResult,
             should_exist=False,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).not_to_be_visible()
+>>>>>>> 80fa955 (update)
         self.elements.option_cards.first.click()
         self.base_page.click_expect(self.elements.btn_delete_project, self.elements.page_dialog)
 
@@ -306,8 +356,13 @@ class ProjectPage:
 
     @allure.step("驗證刪除成功")
     def verify_project_deleted(self):
+<<<<<<< HEAD
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-project-abbr",
             self.elements.msg_search_noResult,
         )
+=======
+        self.elements.input_keyword_search.fill("e2e-project-abbr")
+        expect(self.elements.msg_search_noResult).to_be_visible()
+>>>>>>> 80fa955 (update)

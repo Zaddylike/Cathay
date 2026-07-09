@@ -4,6 +4,7 @@ from playwright.sync_api import Page
 class RoleLocators:
     def __init__(self, page: Page):
         self.page = page
+<<<<<<< HEAD
 
 #   Create
 
@@ -43,3 +44,5 @@ class RoleLocators:
     # 身分驗證頁面_分頁_新增頁面_角色
     def btn_role_add_more_role(self):
         return self.page.locator("app-permission-role").get_by_text(" 新增角色")
+=======
+>>>>>>> 80fa955 (update)

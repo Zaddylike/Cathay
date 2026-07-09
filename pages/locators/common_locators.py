@@ -65,6 +65,7 @@ class CommonLocators:
     def img_planets(self):
         return self.page.locator(".planets-icon-box")
 
+<<<<<<< HEAD
 #   Create btn / Create more btn
 
     @property
@@ -72,6 +73,8 @@ class CommonLocators:
     def btn_create_more(self):
         return self.page.locator('[tooltipposition="bottom"] p', has=self.page.get_by_text(" 新增 ", exact=True))
 
+=======
+>>>>>>> 80fa955 (update)
 #   Search / Filter
 
     @property
@@ -196,11 +199,14 @@ class CommonLocators:
 #   Cards / Options
 
     @property
+<<<<<<< HEAD
     #  ALL_清單
     def list_dropdown(self):
         return self.page.locator('[role="combobox"]')
 
     @property
+=======
+>>>>>>> 80fa955 (update)
     # All_下拉選單內的選項
     def option_dropdown_list(self):
         return self.page.locator('[role="option"]')
@@ -323,4 +329,8 @@ class CommonLocators:
     @property
     # 查無資訊文字元素
     def msg_search_noResult(self):
+<<<<<<< HEAD
         return self.page.locator("app-data-empty .text-type--secondary-title").last
+=======
+        return self.page.locator(".text-type--secondary-title")
+>>>>>>> 80fa955 (update)

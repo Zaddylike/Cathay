@@ -24,6 +24,14 @@ class ProjectMemberLocators:
         return self.page.locator('div.main-container--wrapper app-share-project-edit div button.btn', has=self.page.get_by_text(" 新增成員 ", exact=True))
 
     @property
+<<<<<<< HEAD
+=======
+    # 專案成員新增頁面_新增篩選欄位_篩選條件按鈕
+    def btn_memberadd_filter_add_search(self):
+        return self.page.locator('p-iconfield p-inputicon.cursor-pointer').first
+
+    @property
+>>>>>>> 80fa955 (update)
     # 專案成員新增頁面_篩選成員欄位
     def input_search_member_field(self):
         return self.page.locator(".w-full .w-full p-multiselect .p-multiselect-label-container .p-multiselect-label").first
