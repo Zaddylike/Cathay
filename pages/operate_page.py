@@ -98,6 +98,7 @@ class OperatePage:
         try:
             result_locator = self.elements.option_cards.first if result_locator is None else result_locator
             search_input.fill(keyword)
+            self.base_page.wait_loading_disapper()
             if should_exist:
                 expect(result_locator).to_be_visible()
             else:

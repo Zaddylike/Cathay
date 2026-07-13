@@ -65,6 +65,11 @@ class RolePage:
     @allure.step("確認送出並驗證成功")
     def submit_and_verify_created(self):
         self.operate_page.submit_and_confirm()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            ROLE_CODE,
+            self.elements.option_cards.last,
+        )
 
     #  copy
     
