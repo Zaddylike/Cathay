@@ -7,7 +7,7 @@ from playwright.sync_api import (
     Page
 )
 from app.omni_app import OmniApp
-from config.settings import ACCOUNT_PASSWORD, ACCOUNT_USERNAME, HEADLESS
+from config.settings import ACCOUNT_PASSWORD, ACCOUNT_USERNAME, HEADLESS, DEFAULT_TIMEOUT
 
 """
 fixture
@@ -51,7 +51,7 @@ def browser(playwright_instance: Playwright):
     try:
         browser = playwright_instance.chromium.launch(
             channel="chrome",
-            headless=HEADLESS,
+            headless= HEADLESS,
             args=[
                 "--window-position=0,0",
                 "--disable-features=Translate,TranslateUI",

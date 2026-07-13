@@ -113,6 +113,7 @@ class OperatePage:
             self.base_page.sleep(1)
             self.base_page.click_expect(menu_button.last, menu_page)
             self.base_page.click_expect(action_button, reclick=action_reclick)
+            self.base_page.sleep(1)
         except Exception as e:
             raise Exception(f"Failed to open card action for [{keyword}]: {e}")
 

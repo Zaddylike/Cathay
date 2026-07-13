@@ -1,18 +1,44 @@
 import os
+import sys
+
+print(sys.argv)
+print("lksjdflksdjflskdjflakrsjf;lkrg;")
+
 # Testing Basic Parameters
-BASE_URL_DEV = os.getenv("OMNI_BASE_URL", "https://dev.omnihubs.cloud/")
-DEFAULT_TIMEOUT = int(os.getenv("OMNI_DEFAULT_TIMEOUT", "20000"))
-HEADLESS = os.getenv("OMNI_HEADLESS", False)
+
+BASE_URL_DEV = "https://dev.omnihubs.cloud/"
+DEFAULT_TIMEOUT = 20000
+DEFAULT_NAVIGATION_TIMEOUT = 60000
+HEADLESS = False
 
 
-# Testing Data
-ACCOUNT_USERNAME = os.getenv("OMNI_ACCOUNT_USERNAME", "testuser01")
-ACCOUNT_PASSWORD = os.getenv("OMNI_ACCOUNT_PASSWORD", "testuser01")
 
-ENTRA_USERNAME = os.getenv("OMNI_ENTRA_USERNAME", "omnitest3@cathlife.symphox.com")
-ENTRA_PASSWORD = os.getenv("OMNI_ENTRA_PASSWORD", "Omni168168168")
 
-GOOGLE_USERNAME = os.getenv("OMNI_GOOGLE_USERNAME", "")
-GOOGLE_PASSWORD = os.getenv("OMNI_GOOGLE_PASSWORD", "")
+# Acc & Pwd
 
-PROJECT_ABBR = os.getenv("OMNI_PROJECT_NAME", "e2e-project-abbr")
+ACCOUNT_USERNAME = "testuser01"
+ACCOUNT_PASSWORD = "testuser01"
+
+ENTRA_USERNAME = "omnitest3@cathlife.symphox.com"
+ENTRA_PASSWORD = "Omni168168168"
+
+GOOGLE_USERNAME = ""
+GOOGLE_PASSWORD = ""
+
+# Testing data
+
+PROJECT_ABBR = "e2e-project-abbr"
+SCOPE_CODE = "e2e-scope-code"
+ROLE_CODE = "e2e-role-code"
+GROUP_NAME = "e2e-group-name"
+
+# 輸入驗證顆粒度類型
+
+INPUT_BASIC_FIELD_CASES = [
+    ("#" * 41, "輸入字數超過限制長度40"),
+    ("", "必填欄位"),
+]
+
+INPUT_BASIC_DESC_CASES = [
+    ("#" * 201, "輸入字數超過限制長度200"),
+]

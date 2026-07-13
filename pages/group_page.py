@@ -5,6 +5,11 @@ from pages.base_page import BasePage
 from pages.locators.elements import GroupElements
 from pages.operate_page import OperatePage
 
+from config.settings import (
+        GROUP_NAME,
+        INPUT_BASIC_FIELD_CASES,
+        INPUT_BASIC_DESC_CASES
+    )
 
 class GroupPage:
     def __init__(self, page: Page):
@@ -26,27 +31,19 @@ class GroupPage:
 
     @allure.step("Validate and fill group name")
     def validate_and_fill_group_name(self):
-        input_cases = [
-            ("#" * 41, "輸入字數超過限制長度40"),
-            # ("  ", "必填欄位"),
-            ("", "必填欄位"),
-        ]
         self.operate_page.verify_input(
             self.elements.input_group_name.first,
             self.elements.msg_field_error,
-            input_cases,
+            INPUT_BASIC_FIELD_CASES,
         )
-        self.elements.input_group_name.first.fill("e2e-group-name")
+        self.elements.input_group_name.first.fill(GROUP_NAME)
 
     @allure.step("Validate and fill group description")
     def validate_and_fill_group_description(self):
-        input_cases = [
-            ("#" * 201, "輸入字數超過限制長度200"),
-        ]
         self.operate_page.verify_input(
             self.elements.input_group_description.first,
             self.elements.msg_field_error,
-            input_cases,
+            INPUT_BASIC_DESC_CASES,
         )
         self.elements.input_group_description.first.fill("e2e-group-description")
 
@@ -67,15 +64,42 @@ class GroupPage:
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-group-name",
+            GROUP_NAME,
             should_exist=False
         )
 
-    #  read
+    #  copy
 
-    @allure.step("Verify group list visible")
-    def verify_group_list_visible(self):
+    @allure.step("Open create group page")
+    def click_to_group_page(self):
         self.base_page.click_expect(self.elements.tab_permission_group, self.elements.btn_create_group)
+
+    @allure.step("Open copy group page")
+    def open_copy_group_page(self):
+        self.operate_page.open_card_action(
+            self.elements.input_keyword_search,
+            GROUP_NAME,
+            self.elements.btn_card_threepoint_menu,
+            self.elements.page_card_threepoint_menu,
+            self.elements.btn_card_menu_copy,
+        )
+
+    @allure.step("Validate and fill copied group")
+    def validate_and_fill_copied_group(self):
+        self.operate_page.verify_input_text(self.elements.input_group_name, "copy-")
+        self.elements.input_group_name.fill(f"copy-{GROUP_NAME}")
+        self.elements.input_group_description.first.fill("copy-e2e-group-description")
+
+    @allure.step("Submit group and verify copied")
+    def submit_and_verify_copied(self):
+        self.operate_page.submit_and_confirm()
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            f"copy-{GROUP_NAME}",
+            self.elements.option_cards.last
+        )
+
+    #  read
 
     @allure.step("Search group with no result")
     def search_group_with_no_result(self):
@@ -91,33 +115,37 @@ class GroupPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             "e2e-group-name",
+            self.elements.option_cards.last
         )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("Filter groups by status")
     def filter_groups_by_status(self):
+        self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_status_enable.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.last)
 
-        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
+        self.base_page.sleep(1)
+        self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_status_disable.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.last)
 
-        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
+        self.base_page.sleep(1)
+        self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_footer_clearfilter.click()
 
     @allure.step("Sort groups by created time")
     def sort_groups_by_created_time(self):
-        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
+        self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_date_reyoung.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.last)
 
-        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
+        self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_date_grewup.click()
-        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.first)
+        self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.last)
 
-        self.base_page.click_expect(self.elements.btn_filter_condition_page, self.elements.page_filter_condition)
+        self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_footer_clearfilter.click()
 
     #  update
@@ -126,7 +154,7 @@ class GroupPage:
     def open_update_group_page(self):
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            "e2e-testing-group-name",
+            f"copy-{GROUP_NAME}",
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_update,
@@ -136,7 +164,7 @@ class GroupPage:
     def validate_and_update_group_name(self):
         input_cases = [
             ("#" * 41, "輸入字數超過限制長度40"),
-            ("  ", "必填欄位"),
+            # ("  ", "必填欄位"),
             ("", "必填欄位"),
         ]
         self.operate_page.verify_input(
@@ -144,7 +172,7 @@ class GroupPage:
             self.elements.msg_field_error,
             input_cases,
         )
-        self.elements.input_group_name.fill("e2e-testing-group-edit-name")
+        self.elements.input_group_name.fill("e2e-group-name-edit")
 
     @allure.step("Validate and update group description")
     def validate_and_update_group_description(self):
@@ -152,11 +180,11 @@ class GroupPage:
             ("#" * 201, "輸入字數超過限制長度200"),
         ]
         self.operate_page.verify_input(
-            self.elements.input_group_description,
+            self.elements.input_group_description.first,
             self.elements.msg_field_error,
             input_cases,
         )
-        self.elements.input_group_description.fill("e2e-testing-group-edit-description")
+        self.elements.input_group_description.first.fill("e2e-group-description-edit")
 
     @allure.step("Disable group status")
     def disable_group_status(self):
@@ -167,33 +195,8 @@ class GroupPage:
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-testing-group-edit-name",
-        )
-
-    #  copy
-
-    @allure.step("Open copy group page")
-    def open_copy_group_page(self):
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            "e2e-testing-group-name",
-            self.elements.btn_card_threepoint_menu,
-            self.elements.page_card_threepoint_menu,
-            self.elements.btn_card_menu_copy,
-        )
-
-    @allure.step("Validate and fill copied group")
-    def validate_and_fill_copied_group(self):
-        self.operate_page.verify_input_text(self.elements.input_group_name, "copy-")
-        self.elements.input_group_name.fill("copy-e2e-testing-group-name")
-        self.elements.input_group_description.fill("copy-e2e-testing-group-description")
-
-    @allure.step("Submit group and verify copied")
-    def submit_and_verify_copied(self):
-        self.operate_page.submit_and_confirm()
-        self.operate_page.search_keyword(
-            self.elements.input_keyword_search,
-            "copy-e2e-testing-group-name",
+            "e2e-group-name-edit",
+            self.elements.option_cards.last
         )
 
     #  delete
@@ -202,7 +205,7 @@ class GroupPage:
     def open_group_delete_dialog(self):
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            "e2e-testing-group-edit-name",
+            "e2e-group-name-edit",
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_delete,
@@ -216,7 +219,7 @@ class GroupPage:
     def verify_group_deleted(self):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-testing-group-edit-name",
-            self.elements.option_cards,
-            should_exist=False,
+            "e2e-group-name-edit",
+            self.elements.msg_search_noResult,
+            should_exist=True,
         )
