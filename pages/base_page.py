@@ -1,12 +1,14 @@
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
 from config.settings import DEFAULT_TIMEOUT
+from pages.locators.elements import BaseElements
 import random
 import allure
 
 class BasePage:
     def __init__(self, page: Page):
         self.page = page
-        
+        self.elements = BaseElements(page)
+
     def sleep(self, seconds: int):
         try:
             self.page.wait_for_timeout(seconds * 1000)
@@ -22,9 +24,11 @@ class BasePage:
 
     def click_expect(self, locator, expected_value=None, reclick=False):
         try:
+            locator.scroll_into_view_if_needed()
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
             locator.click()
-            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.elements.icon_loading.wait_for(state="hidden", timeout=DEFAULT_TIMEOUT)
+
         except PlaywrightTimeoutError as e:
             raise AssertionError(f"Failed to find this element: {e}")
         except Exception as e:
@@ -37,9 +41,9 @@ class BasePage:
                 if reclick:
                     self.click_expect(locator, expected_value, False)
                 else:
-                    raise AssertionError(f"Failed to find expected element: {e}")
+                    raise AssertionError(f"Failed to find expected element {expected_value}: {e}")
             except Exception as e:
-                raise Exception(f"Click passed, but expected element is not visible: {e}")
+                raise Exception(f"Click passed, but expected element {expected_value} is not visible: {e}")
 
     def wait_fill(self, locator, value: str):
         try:
@@ -51,6 +55,7 @@ class BasePage:
     def wait_loading_disapper(self):
         try:
             self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.sleep(1)
         except PlaywrightTimeoutError as e:
             raise AssertionError(f"Timeout while waiting for loading to disappear: {e}")
         except Exception as e:

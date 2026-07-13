@@ -26,7 +26,14 @@ class CommonLocators:
     # 登入後頁面_使用者頭像
     def btn_user_avatar(self):
         return self.page.locator(".header__feature p-splitbutton button.p-splitbutton-dropdown")
-    
+
+#   極常出現
+
+    @property
+    #  loading icon
+    def icon_loading(self):
+        return self.page.locator('.loading__main')
+
 
 #   常用欄位、按鈕
 
@@ -82,7 +89,7 @@ class CommonLocators:
     @property
     # 篩選面板_篩選條件設定按鈕
     def btn_filter_condition_page(self):
-        return self.page.locator('p-iconfield p-inputicon.cursor-pointer')
+        return self.page.locator('p-iconfield p-inputicon.cursor-pointer [tooltipstyleclass="custom-form-field-tooltip"]')
 
     @property
     # 篩選面板_設定篩選條件頁面
@@ -102,7 +109,8 @@ class CommonLocators:
     @property
     # 篩選面板_狀態_啟用
     def btn_filter_status_enable(self):
-        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="啟用", exact=True)
+        return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option .flex', has=self.page.get_by_role("button", name="啟用", exact=True))
+        # return self.page.locator('[role="dialog"] .p-popover-content .search-popover__option').first.get_by_role("button", name="啟用", exact=True)
 
     @property
     # 篩選面板_日期排序_由新至舊
@@ -204,6 +212,16 @@ class CommonLocators:
     # All_下拉選單內的選項
     def option_dropdown_list(self):
         return self.page.locator('[role="option"]')
+
+    @property
+    # All_下拉選單內的選項
+    def option_dropdown_list_checked(self):
+        return self.page.locator('[role="option"][data-p-disabled="true"]')
+    
+    @property
+    # All_下拉選單內的選項
+    def option_dropdown_list_avail(self):
+        return self.page.locator('[role="option"][data-p-disabled="false"]')
 
     @property
     # 專案, 權限設定內的項目
