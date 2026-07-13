@@ -1,5 +1,5 @@
 @echo off
-chcp 65001 > nul
+chcp 65001 > 
 
 echo ==============================
 echo Cleaning __pycache__ folders...
