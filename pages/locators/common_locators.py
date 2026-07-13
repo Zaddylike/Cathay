@@ -227,6 +227,14 @@ class CommonLocators:
     # 專案, 權限設定內的項目
     def option_cards(self):
         return self.page.locator(".data-card")
+    @property
+    # 權限設定_預設權限的項目
+    def option_assign(self):
+        return self.page.locator('.data-card--permission')
+    @property
+    # 權限設定_預設權限的項目
+    def option_permissions(self):
+        return self.page.locator('[role="rowgroup"][data-pc-section="tbody"] tr')
 
 #   Member Common
 

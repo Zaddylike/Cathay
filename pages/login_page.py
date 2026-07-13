@@ -39,6 +39,8 @@ class LoginPage:
 
     @allure.step("點擊登入按鈕/輸入帳號密碼: {account}")
     def user_login(self, account: str, password: str):
+
+        #####################  要新增 語系不同情境
         try:
             self.base_page.click_expect(self.elements.btn_login, self.elements.input_account)
             self.elements.input_account.fill(account)

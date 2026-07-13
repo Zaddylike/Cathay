@@ -2,7 +2,6 @@ import os
 import sys
 
 print(sys.argv)
-print("lksjdflksdjflskdjflakrsjf;lkrg;")
 
 # Testing Basic Parameters
 
