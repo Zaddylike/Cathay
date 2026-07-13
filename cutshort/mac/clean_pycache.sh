@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 #!/bin/sh
 set -eu
+=======
+@echo off
+chcp 65001 > 
+>>>>>>> origin/temp
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PROJECT_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/../.." && pwd)

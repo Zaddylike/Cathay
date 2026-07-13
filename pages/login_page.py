@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect
-from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
+from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT, DEFAULT_NAVIGATION_TIMEOUT
 from pages.locators.elements import LoginElements
 from pages.base_page import BasePage
 import allure
@@ -13,11 +13,11 @@ class LoginPage:
     @allure.step("開啟瀏覽器")
     def open_browser(self):
         try:
-            self.page.set_default_timeout(DEFAULT_TIMEOUT)
+            # self.page.set_default_timeout(DEFAULT_TIMEOUT)
             self.page.goto(
                 BASE_URL_DEV,
                 wait_until="load", # "load", "domcontentloaded" 用這兩就好
-                timeout=DEFAULT_TIMEOUT,
+                timeout=DEFAULT_NAVIGATION_TIMEOUT,
             )
         except Exception as e:
             raise Exception(f"Failed to open browser: {e}")
@@ -25,7 +25,7 @@ class LoginPage:
     @allure.step("驗證目標頁面是否正確")
     def verify_title(self):
         try:
-            expect(self.page).to_have_title("Omni")
+            expect(self.page).to_have_title("Omni", timeout=DEFAULT_TIMEOUT)
         except Exception as e:
             raise AssertionError(f"Failed to verify page title: {e}")
     
@@ -39,6 +39,8 @@ class LoginPage:
 
     @allure.step("點擊登入按鈕/輸入帳號密碼: {account}")
     def user_login(self, account: str, password: str):
+
+        #####################  要新增 語系不同情境
         try:
             self.base_page.click_expect(self.elements.btn_login, self.elements.input_account)
             self.elements.input_account.fill(account)

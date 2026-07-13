@@ -105,6 +105,7 @@ class OperatePage:
         try:
             result_locator = self.elements.option_cards.first if result_locator is None else result_locator
             search_input.fill(keyword)
+            self.base_page.wait_loading_disapper()
             if should_exist:
                 expect(result_locator).to_be_visible()
             else:
@@ -120,6 +121,7 @@ class OperatePage:
             self.base_page.sleep(1)
             self.base_page.click_expect(menu_button.last, menu_page)
             self.base_page.click_expect(action_button, reclick=action_reclick)
+            self.base_page.sleep(1)
         except Exception as e:
             raise Exception(f"Failed to open card action for [{keyword}]: {e}")
 
