@@ -1,5 +1,5 @@
 @echo off
-chcp 65001 > 
+chcp 65001 >nul
 
 echo ==============================
 echo Cleaning __pycache__ folders...
@@ -9,6 +9,10 @@ for /d /r %%d in (__pycache__) do (
     if exist "%%d" (
         echo Delete: %%d
         rmdir /s /q "%%d"
+
+        if errorlevel 1 (
+            echo Failed to delete: %%d
+        )
     )
 )
 
@@ -21,6 +25,10 @@ for /r %%f in (*.pyc) do (
     if exist "%%f" (
         echo Delete: %%f
         del /f /q "%%f"
+
+        if errorlevel 1 (
+            echo Failed to delete: %%f
+        )
     )
 )
 
