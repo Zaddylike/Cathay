@@ -1,142 +1,71 @@
 import pytest
-from playwright.sync_api import (
-    sync_playwright,
-    Playwright,
-    Browser,
-    BrowserContext,
-    Page
-)
-from app.omni_app import OmniApp
-from config.settings import ACCOUNT_PASSWORD, ACCOUNT_USERNAME, HEADLESS, DEFAULT_TIMEOUT
+from playwright.sync_api import Page
 
-"""
-fixture
-測試前置動作
-測試後置動作
-Page Object 初始化
-測試失敗截圖
-登入狀態
-瀏覽器 context 設定
-"""
+from app.omni_app import OmniApp
+from config.settings import ACCOUNT_PASSWORD, ACCOUNT_USERNAME, HEADLESS, BROWSER_ARGS
+
+
 
 @pytest.fixture
 def app(page: Page):
     try:
         return OmniApp(page)
-    except Exception as e:
-        raise Exception(f"Failed to initialize OmniApp: {e}")
+    except Exception as error:
+        raise Exception(f"Failed to initialize OmniApp: {error}")
 
 
 @pytest.fixture
 def logged_app(page: Page):
     try:
-        omni_app  = OmniApp(page)
+        omni_app = OmniApp(page)
         omni_app.login_by_account(ACCOUNT_USERNAME, ACCOUNT_PASSWORD)
         return omni_app
-    except Exception as e:
-        raise Exception(f"Failed to log in: {e}")
+    except Exception as error:
+        raise Exception(f"Failed to log in: {error}")
+
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    return {
+        **browser_type_launch_args,
+        "headless": browser_type_launch_args.get("headless", HEADLESS),
+        "args": [
+            *browser_type_launch_args.get("args", []),
+            *BROWSER_ARGS,
+        ],
+    }
+
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "java_script_enabled": True,
+        "locale": "zh-TW",
+        "no_viewport": True,
+        "extra_http_headers": {
+            **browser_context_args.get("extra_http_headers", {}),
+            "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+        },
+    }
+
+
+@pytest.fixture
+def page(page: Page, browser_name: str, browser_type_launch_args):
+    is_headless = browser_type_launch_args.get("headless", True)
     
+    if browser_name == "chromium" and not is_headless:
+        cdp_session = page.context.new_cdp_session(page)
+        try:
+            window = cdp_session.send("Browser.getWindowForTarget")
+            cdp_session.send(
+                "Browser.setWindowBounds",
+                {
+                    "windowId": window["windowId"],
+                    "bounds": {"windowState": "maximized"},
+                },
+            )
+        finally:
+            cdp_session.detach()
 
-@pytest.fixture(scope="session")
-def playwright_instance():
-    try:
-        with sync_playwright() as playwright:
-            yield playwright
-    except Exception as e:
-        raise Exception(f"Failed to start Playwright: {e}")
-
-
-@pytest.fixture(scope="session")
-def browser(playwright_instance: Playwright):
-    try:
-        browser = playwright_instance.chromium.launch(
-            channel="chrome",
-            headless= HEADLESS,
-            args=[
-                "--window-position=0,0",
-                "--disable-features=Translate,TranslateUI",
-                "--disable-translate",
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-blink-features=AutomationControlled",
-            ],
-        )
-
-        yield browser
-
-        browser.close()
-
-    except Exception as e:
-        raise Exception(f"Failed to launch browser: {e}")
-
-
-@pytest.fixture
-def context(browser: Browser):
-    try:
-        context = browser.new_context(
-            java_script_enabled=True,
-            locale="zh-TW",
-            viewport= {
-                "width": 1536,
-                "height": 824,
-            },
-            screen= {
-                "width": 1536,
-                "height": 824,
-            },
-            extra_http_headers={
-                "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7"
-            },
-        )
-
-        yield context
-
-        context.close()
-
-    except Exception as e:
-        raise Exception(f"Failed to create browser context: {e}")
-
-
-@pytest.fixture
-def page(context: BrowserContext):
-    try:
-        page = context.new_page()
-
-        yield page
-
-        page.close()
-
-    except Exception as e:
-        raise Exception(f"Failed to create page: {e}")
-
-# @pytest.fixture(scope="session")
-# def browser_type_launch_args(browser_type_launch_args):
-#     try:
-#         return {
-#             **browser_type_launch_args,
-#             "headless": False,
-#             "args": [
-#                 "--disable-blink-features=AutomationControlled",
-#                 "--no-sandbox",
-#                 "--disable-setuid-sandbox",
-#                 "--disable-dev-shm-usage",
-#             ],
-#         }
-#     except Exception as e:
-#         raise Exception(f"Set browser launch args failed: {e}")
-
-
-# @pytest.fixture(scope="session")
-# def browser_context_args(browser_context_args):
-#     try:
-#         return {
-#             **browser_context_args,
-#             "java_script_enabled": True,
-#             "viewport": {
-#                 "width": 1500,
-#                 "height": 768,
-#             },
-#         }
-#     except Exception as e:
-#         raise Exception(f"Set browser context args failed: {e}")
+    return page
