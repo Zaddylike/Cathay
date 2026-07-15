@@ -77,6 +77,16 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to select list : {e}")
 
+    @allure.step("Select list option [{option_text}]")
+    def select_list_by_text(self, list_element, option_element, option_text: str):
+        try:
+            list_element.click()
+            option = option_element.filter(has_text=option_text).first
+            expect(option).to_be_visible()
+            option.click()
+        except Exception as e:
+            raise Exception(f"Failed to select list option [{option_text}]: {e}")
+
     @allure.step("Submit form and confirm dialog")
     def submit_and_confirm(self, submit_button=None, dialog=None, confirm_button=None, enabled_timeout=None):
         try:

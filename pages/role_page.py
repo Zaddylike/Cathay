@@ -3,7 +3,6 @@ from pages.locators.elements import RoleElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
 import allure, re
-from config.settings import ROLE_CODE
 
 class RolePage:
     def __init__(self, page: Page):
@@ -11,6 +10,22 @@ class RolePage:
         self.elements = RoleElements(page)
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
+
+    @allure.step("Create role [{role_code}]")
+    def create_role(
+        self,
+        role_code: str,
+        role_name: str,
+        role_description: str,
+        scope_code: str,
+    ):
+        self.click_to_create_role_page()
+        self.elements.input_role_code.fill(role_code)
+        self.elements.input_role_name.fill(role_name)
+        self.elements.input_role_description.fill(role_description)
+        self.select_role_scopes(scope_code)
+        self.operate_page.submit_and_confirm()
+        self.search_role_by_code(role_code)
 
     #  create
 
@@ -21,7 +36,7 @@ class RolePage:
         expect(self.elements.input_role_code).to_be_visible()
 
     @allure.step("Validate and fill role code")
-    def validate_and_fill_role_code(self):
+    def validate_and_fill_role_code(self, role_code: str):
         self.input_code_cases = [
             ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
@@ -33,10 +48,10 @@ class RolePage:
         element_input = self.elements.input_role_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
-        self.elements.input_role_code.fill(ROLE_CODE)
+        self.elements.input_role_code.fill(role_code)
 
     @allure.step("Validate and fill role name")
-    def validate_and_fill_role_name(self):
+    def validate_and_fill_role_name(self, role_name: str):
         self.input_name_cases = [
             ("#" * 41, "輸入字數超過限制長度40"),
             ("  ", "必填欄位"),
@@ -45,47 +60,50 @@ class RolePage:
         element_input = self.elements.input_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
-        self.elements.input_role_name.fill("e2e-role-name")
+        self.elements.input_role_name.fill(role_name)
 
     @allure.step("Validate and fill role description")
-    def validate_and_fill_role_description(self):
+    def validate_and_fill_role_description(self, role_description: str):
         self.input_description_cases = [
             ("#" * 201, "輸入字數超過限制長度200")
         ]
         element_input = self.elements.input_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
-        self.elements.input_role_description.fill("e2e-role-description")
+        self.elements.input_role_description.fill(role_description)
 
     @allure.step("Select scope in roles")
-    def select_role_scopes(self):
-        self.base_page.click_expect(self.elements.list_dropdown.last, self.elements.option_dropdown_list.first)
-        self.elements.option_dropdown_list.first.click()
+    def select_role_scopes(self, scope_code: str):
+        self.operate_page.select_list_by_text(
+            self.elements.list_dropdown.last,
+            self.elements.option_dropdown_list_avail,
+            scope_code,
+        )
 
     @allure.step("確認送出並驗證成功")
-    def submit_and_verify_created(self):
+    def submit_and_verify_created(self, role_code: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            ROLE_CODE,
+            role_code,
             self.elements.option_cards.last,
         )
 
     #  copy
     
     @allure.step("Open copy role page")
-    def click_to_copy_role_page(self):
+    def click_to_copy_role_page(self, source_role_code: str):
         self.base_page.click_expect(self.elements.tab_permission_role)
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            ROLE_CODE,
+            source_role_code,
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_copy,
         )
 
     @allure.step("Validate and fill copied role code")
-    def validate_copy_and_fill_code(self):
+    def validate_copy_and_fill_code(self, copied_role_code: str):
         expect(self.elements.input_role_code).to_have_value(re.compile("copy-"),timeout=5000)
 
         self.input_code_cases = [
@@ -99,10 +117,10 @@ class RolePage:
         element_input = self.elements.input_role_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
-        self.elements.input_role_code.fill("copy-e2e-role-code")
+        self.elements.input_role_code.fill(copied_role_code)
 
     @allure.step("Validate and fill copied role name")
-    def validate_copy_and_fill_name(self):
+    def validate_copy_and_fill_name(self, copied_role_name: str):
         expect(self.elements.input_role_name).to_have_value(re.compile("copy-"),timeout=5000)
 
         self.input_name_cases = [
@@ -113,25 +131,25 @@ class RolePage:
         element_input = self.elements.input_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
-        self.elements.input_role_name.fill("copy-e2e-role-name")
+        self.elements.input_role_name.fill(copied_role_name)
 
     @allure.step("Validate and fill copied role description")
-    def validate_and_copy_role_description(self):
+    def validate_and_copy_role_description(self, copied_role_description: str):
         self.input_description_cases = [
             ("#" * 201, "輸入字數超過限制長度200")
         ]
         element_input = self.elements.input_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
-        self.elements.input_role_description.fill("copy-e2e-role-description")
+        self.elements.input_role_description.fill(copied_role_description)
 
     @allure.step("Submit role and verify updated")
-    def submit_and_verify_copied(self):
+    def submit_and_verify_copied(self, copied_role_code: str):
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "copy-",
+            copied_role_code,
             self.elements.option_cards.last,
         )
 
@@ -151,20 +169,20 @@ class RolePage:
         self.elements.btn_filter_clear_noResult.click()
 
     @allure.step("Search role by code")
-    def search_role_by_code(self):
+    def search_role_by_code(self, role_code: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "code",
+            role_code,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("Search role by name")
-    def search_role_by_name(self):
+    def search_role_by_name(self, role_name: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "name",
+            role_name,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -207,11 +225,11 @@ class RolePage:
     #  update
 
     @allure.step("Open update role page")
-    def click_to_update_role_page(self):
+    def click_to_update_role_page(self, role_code: str):
         self.base_page.click_expect(self.elements.tab_permission_role)
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            f"copy-{ROLE_CODE}",
+            role_code,
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_update,
@@ -219,7 +237,7 @@ class RolePage:
         )
 
     @allure.step("Validate and update role name")
-    def validate_and_update_role_name(self):
+    def validate_and_update_role_name(self, updated_role_name: str):
         self.input_name_cases = [
             ("  ", "必填欄位"),
             ("#" * 41, "輸入字數超過限制長度40"),
@@ -228,45 +246,50 @@ class RolePage:
         element_input = self.elements.input_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
-        self.elements.input_role_name.fill("e2e-role-name-edit")
+        self.elements.input_role_name.fill(updated_role_name)
 
     @allure.step("Validate and update role description")
-    def validate_and_update_role_description(self):
+    def validate_and_update_role_description(self, updated_role_description: str):
         self.input_description_cases = [
             ("#" * 201, "輸入字數超過限制長度200")
         ]
         element_input = self.elements.input_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
-        self.elements.input_role_description.fill("e2e-role-description-edit")
+        self.elements.input_role_description.fill(updated_role_description)
 
     @allure.step("Update role roles")
-    def update_role_scopes(self):
+    def update_role_scopes(self, updated_scope_code: str, second_scope_code: str):
         self.elements.btn_create_more.click()
-        self.base_page.click_expect(self.elements.list_dropdown.first, self.elements.option_dropdown_list.first)
-        self.base_page.click_expect(self.elements.option_dropdown_list_avail.nth(2))
-
-        self.base_page.click_expect(self.elements.list_dropdown.last, self.elements.option_dropdown_list.first)
-        self.base_page.click_expect(self.elements.option_dropdown_list_avail.nth(0))
+        self.operate_page.select_list_by_text(
+            self.elements.list_dropdown.first,
+            self.elements.option_dropdown_list_avail,
+            updated_scope_code,
+        )
+        self.operate_page.select_list_by_text(
+            self.elements.list_dropdown.last,
+            self.elements.option_dropdown_list_avail,
+            second_scope_code,
+        )
 
     @allure.step("Submit role and verify updated")
-    def submit_and_verify_updated(self):
+    def submit_and_verify_updated(self, updated_role_name: str):
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-role-name-edit",
+            updated_role_name,
             self.elements.option_cards.last
         )
 
     #  delete
 
     @allure.step("Open role delete dialog")
-    def open_role_delete_dialog(self):
+    def open_role_delete_dialog(self, role_code: str):
         self.base_page.click_expect(self.elements.tab_permission_role)
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            f"copy-{ROLE_CODE}",
+            role_code,
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_delete,
@@ -277,11 +300,27 @@ class RolePage:
     def verify_deleted_input(self):
         self.operate_page.verify_delete()
 
+    @allure.step("Delete role [{role_code}]")
+    def delete_role(self, role_code: str):
+        self.open_role_delete_dialog(role_code)
+        self.verify_deleted_input()
+
+    @allure.step("Delete role if it exists [{role_code}]")
+    def delete_role_if_exists(self, role_code: str) -> bool:
+        self.base_page.click_expect(self.elements.tab_permission_role)
+        self.elements.input_keyword_search.fill(role_code)
+        self.base_page.wait_loading_disapper()
+        if self.elements.msg_search_noResult.is_visible():
+            self.elements.input_keyword_search.fill("")
+            return False
+        self.delete_role(role_code)
+        return True
+
     @allure.step("Verify deleted role if exist")
-    def verify_role_deleted(self):
+    def verify_role_deleted(self, role_code: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            f"copy-{ROLE_CODE}",
+            role_code,
             self.elements.msg_search_noResult,
             should_exist=True,
         )

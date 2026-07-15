@@ -12,11 +12,11 @@ class ProjectMemberPage:
         self.operate_page = OperatePage(page)
     #create
     @allure.step("進入專案成員頁面")
-    def open_to_member_page(self):
+    def open_to_member_page(self, project_abbreviation: str):
         expect(self.elements.option_cards.first).to_be_visible()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -28,13 +28,13 @@ class ProjectMemberPage:
         self.base_page.click_expect(self.elements.btn_member_edit_member, self.elements.btn_memberadd_add_member)
     
     @allure.step("搜索新增成員")
-    def search_member_to_list(self):
+    def search_member_to_list(self, member_keyword: str):
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
             self.elements.input_memberadd_advanced_search,
             self.elements.checkbox_add_member,
             self.elements.btn_memberadd_footer_confirm,
-            "測試人員3",
+            member_keyword,
         )
         
     @allure.step("調整新增成員權限")
@@ -44,21 +44,18 @@ class ProjectMemberPage:
         self.elements.btn_memberadd_add_member.click()
 
     @allure.step("搜尋新增成員")
-    def search_member_add(self):
+    def search_member_add(self, member_keyword: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "測試人員3",
+            member_keyword,
             self.elements.btn_filter_clear_noResult,
             should_exist=False,
         )
     
     #read
     @allure.step("搜尋成員")
-    def search_members(self):
-        cases = [
-            "testuser01","OmniHub","數位數據","omnitest3"
-        ]
+    def search_members(self, cases: tuple[str, ...]):
         inputElement = self.elements.input_keyword_search
         expectElement = self.elements.option_cards_members
         try:
@@ -94,13 +91,13 @@ class ProjectMemberPage:
 
     #update
     @allure.step("新增第二個成員")
-    def add_another_member(self):
+    def add_another_member(self, member_keyword: str):
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
             self.elements.input_memberadd_advanced_search,
             self.elements.checkbox_add_member,
             self.elements.btn_memberadd_footer_confirm,
-            "測試人員2",
+            member_keyword,
         )
         self.base_page.click_expect(self.elements.btn_memberadd_add_member_levellist, self.elements.page_members_level_list_select)
         self.elements.option_members_level_list_viewer.click()

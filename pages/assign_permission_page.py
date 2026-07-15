@@ -13,6 +13,21 @@ class AssignPermissionPage:
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
 
+    @allure.step("Create assign permission [{role_code}]")
+    def create_assign_permission(
+        self,
+        member_keyword: str,
+        role_code: str,
+        scope_code: str,
+        description: str,
+    ):
+        self.open_create_assign_permission_page()
+        self.select_assign_permission_member(member_keyword)
+        self.select_assign_role_permission(role_code)
+        self.select_assign_scope_permission(scope_code)
+        self.elements.input_assign_permission_description.fill(description)
+        self.submit_and_verify_created(role_code)
+
     @allure.step("Open assign permission list")
     def open_assign_permission_list(self):
         self.base_page.click_expect(
@@ -32,33 +47,33 @@ class AssignPermissionPage:
         )
 
     @allure.step("Select assign permission member")
-    def select_assign_permission_member(self):
+    def select_assign_permission_member(self, member_keyword: str):
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
             self.elements.input_memberadd_advanced_search,
             self.elements.checkbox_add_member,
             self.elements.btn_memberadd_footer_confirm,
-            "testuser01",
+            member_keyword,
         )
 
     @allure.step("Select assign role permission")
-    def select_assign_role_permission(self):
-        self.operate_page.select_list(
+    def select_assign_role_permission(self, role_code: str):
+        self.operate_page.select_list_by_text(
             self.elements.list_assign_permission_role.first,
             self.elements.option_dropdown_list_avail,
-            0,
+            role_code,
         )
 
     @allure.step("Select assign scope permission")
-    def select_assign_scope_permission(self):
-        self.operate_page.select_list(
+    def select_assign_scope_permission(self, scope_code: str):
+        self.operate_page.select_list_by_text(
             self.elements.list_assign_permission_scope.nth(1),
             self.elements.option_dropdown_list_avail,
-            0,
+            scope_code,
         )
 
     @allure.step("Validate and fill assign permission description")
-    def validate_and_fill_description(self):
+    def validate_and_fill_description(self, description: str):
         input_cases = [
             ("#" * 201, "輸入字數超過限制長度200"),
         ]
@@ -67,40 +82,50 @@ class AssignPermissionPage:
             self.elements.msg_field_error,
             input_cases,
         )
-        self.elements.input_assign_permission_description.fill("e2e-assign-description")
+        self.elements.input_assign_permission_description.fill(description)
 
     @allure.step("Create another assign permission")
-    def create_another_assign_permission(self):
+    def create_another_assign_permission(
+        self,
+        member_keyword: str,
+        role_code: str,
+        scope_code: str,
+        description: str,
+    ):
         self.base_page.click_expect(self.elements.btn_assign_create_more_assign)
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.last,
             self.elements.input_memberadd_advanced_search,
             self.elements.checkbox_add_member,
             self.elements.btn_memberadd_footer_confirm,
-            "testuser02",
+            member_keyword,
         )
 
-        self.operate_page.select_list(
+        self.operate_page.select_list_by_text(
             self.elements.list_assign_permission_role.nth(2),
             self.elements.option_dropdown_list_avail,
-            0,
+            role_code,
         )
 
         self.base_page.click_expect(self.elements.btn_more_permission.last)
-        self.operate_page.select_list(
+        self.operate_page.select_list_by_text(
             self.elements.list_assign_permission_scope.nth(3),
             self.elements.option_dropdown_list_avail,
-            0,
+            scope_code,
         )
 
         self.elements.input_assign_permission_description.last.fill(
-            "e2e-assign-description2"
+            description
         )
 
     @allure.step("Submit assign permission and verify created")
-    def submit_and_verify_created(self):
+    def submit_and_verify_created(self, assignment_key: str):
         self.operate_page.submit_and_confirm()
-        self.operate_page.search_keyword(self.elements.input_keyword_search, "testuser01", self.elements.option_assign)
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            assignment_key,
+            self.elements.option_assign,
+        )
 
 
     #  read
@@ -111,8 +136,12 @@ class AssignPermissionPage:
         expect(self.elements.btn_create_assign_permission).to_be_visible()
 
     @allure.step("Search assign permission by member")
-    def search_assign_permission_by_member(self):
-        self.operate_page.search_keyword(self.elements.input_keyword_search, "testuser02", self.elements.option_assign)
+    def search_assign_permission_by_member(self, member_keyword: str):
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            member_keyword,
+            self.elements.option_assign,
+        )
         self.elements.input_keyword_search.fill("")
 
     @allure.step("Search assign permission with no result")
@@ -141,35 +170,35 @@ class AssignPermissionPage:
     #  update
 
     @allure.step("Open update assign permission page")
-    def open_update_assign_permission_page(self):
+    def open_update_assign_permission_page(self, assignment_key: str):
         self.open_assign_permission_list()
         expect(self.elements.btn_create_assign_permission).to_be_visible()
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            "testuser02",
+            assignment_key,
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_update,
         )
 
     @allure.step("Replace assign role permission")
-    def replace_assign_role_permission(self):
-        self.operate_page.select_list(
+    def replace_assign_role_permission(self, role_code: str):
+        self.operate_page.select_list_by_text(
             self.elements.list_assign_edit_permission_role.first,
             self.elements.option_dropdown_list_avail,
-            1,
+            role_code,
         )
 
     @allure.step("Replace assign scope permission")
-    def replace_assign_scope_permission(self):
-        self.operate_page.select_list(
+    def replace_assign_scope_permission(self, scope_code: str):
+        self.operate_page.select_list_by_text(
             self.elements.list_assign_edit_permission_scope.last,
             self.elements.option_dropdown_list_avail,
-            1,
+            scope_code,
         )
 
     @allure.step("Validate and update assign permission description")
-    def validate_and_update_description(self):
+    def validate_and_update_description(self, updated_description: str):
         input_cases = [
             ("#" * 201, "輸入字數超過限制長度200"),
         ]
@@ -178,22 +207,26 @@ class AssignPermissionPage:
             self.elements.msg_field_error,
             input_cases,
         )
-        self.elements.input_assign_permission_description.fill("e2e-assign-description-edit")
+        self.elements.input_assign_permission_description.fill(updated_description)
 
     @allure.step("Submit assign permission and verify updated")
-    def submit_and_verify_updated(self):
+    def submit_and_verify_updated(self, assignment_key: str):
         self.operate_page.submit_and_confirm()
-        self.operate_page.search_keyword(self.elements.input_keyword_search, "testuser02", self.elements.option_assign)
+        self.operate_page.search_keyword(
+            self.elements.input_keyword_search,
+            assignment_key,
+            self.elements.option_assign,
+        )
 
     #  delete
 
     @allure.step("Open assign permission delete dialog")
-    def open_assign_permission_delete_dialog(self):
+    def open_assign_permission_delete_dialog(self, assignment_key: str):
         self.open_assign_permission_list()
         expect(self.elements.btn_create_assign_permission).to_be_visible()
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
-            "testuser02",
+            assignment_key,
             self.elements.btn_card_threepoint_menu,
             self.elements.page_card_threepoint_menu,
             self.elements.btn_card_menu_delete,
@@ -203,11 +236,27 @@ class AssignPermissionPage:
     def verify_deleted_input(self):
         self.operate_page.verify_delete()
 
+    @allure.step("Delete assign permission [{assignment_key}]")
+    def delete_assign_permission(self, assignment_key: str):
+        self.open_assign_permission_delete_dialog(assignment_key)
+        self.verify_deleted_input()
+
+    @allure.step("Delete assign permission if it exists [{assignment_key}]")
+    def delete_assign_permission_if_exists(self, assignment_key: str) -> bool:
+        self.open_assign_permission_list()
+        self.elements.input_keyword_search.fill(assignment_key)
+        self.base_page.wait_loading_disapper()
+        if self.elements.msg_search_noResult.is_visible():
+            self.elements.input_keyword_search.fill("")
+            return False
+        self.delete_assign_permission(assignment_key)
+        return True
+
     @allure.step("Verify deleted assign permission")
-    def verify_assign_permission_deleted(self):
+    def verify_assign_permission_deleted(self, assignment_key: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "testuser02",
+            assignment_key,
             self.elements.option_assign,
             should_exist=False,
         )
