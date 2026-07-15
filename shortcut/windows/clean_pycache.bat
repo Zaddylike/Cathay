@@ -1,5 +1,8 @@
 @echo off
+setlocal
 chcp 65001 >nul
+
+pushd "%~dp0\..\.."
 
 echo ==============================
 echo Cleaning __pycache__ folders...
@@ -37,4 +40,4 @@ echo ==============================
 echo Clean completed.
 echo ==============================
 
-pause
+popd

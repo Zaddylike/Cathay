@@ -199,7 +199,7 @@ class CommonLocators:
     @property
     # 日期選擇視窗面板_日期按鈕
     def date_picker_day(self):
-        return self.page.locator(f'.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-calendar [data-pc-section="tablebody"] [data-pc-section="tablebodyrow"] .p-datepicker-day-cell')
+        return self.page.locator('.p-datepicker-panel [data-pc-section="calendarcontainer"] .p-datepicker-calendar [data-pc-section="tablebody"] [data-pc-section="tablebodyrow"] .p-datepicker-day-cell')
     
 #   Cards / Options
 

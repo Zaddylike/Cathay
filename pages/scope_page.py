@@ -1,8 +1,10 @@
+import re
+
+import allure
 from playwright.sync_api import Page, expect
 from pages.locators.elements import ScopeElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
-import allure, re
 
 class ScopePage:
     def __init__(self, page: Page):

@@ -1,21 +1,35 @@
 # Omni Autotest
-OmniHub UI 自動化測試專案，使用 Python、Pytest、Playwright 和 Allure。
 
+OmniHub UI 自動化測試專案，使用 Python、Pytest、Playwright 與 Allure。
 
 ## 環境準備
-1. 啟用虛擬環境 or 自行安裝 Python 套件： 
-Windows -> .\venv_dev\Scripts\activate
-Mac     -> source .venv/bin/activate
 
-2. 安裝 Python 套件： 
-pip install -r requirements.txt
+### Windows
 
-3. 如果要產生 Allure HTML 報表，需安裝 Allure CLI：
-npm i allure-commandline
+```powershell
+python -m venv venv_dev
+.\venv_dev\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m playwright install
+npm ci
+```
 
+### macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m playwright install
+npm ci
+chmod +x shortcut/mac/*.sh
+```
 
 ## 環境變數
-1. 常用設定：
+
+常用設定：
+
+```text
 OMNI_BASE_URL
 OMNI_DEFAULT_TIMEOUT
 OMNI_HEADLESS
@@ -25,42 +39,83 @@ OMNI_ENTRA_USERNAME
 OMNI_ENTRA_PASSWORD
 OMNI_GOOGLE_USERNAME
 OMNI_GOOGLE_PASSWORD
+```
 
-2. `OMNI_HEADLESS=true` 代表不開瀏覽器畫面；`false` 代表顯示瀏覽器。
-
+`OMNI_HEADLESS=true` 代表不顯示瀏覽器；`false` 代表顯示瀏覽器。
 
 ## 執行測試
-1. 執行全部測試： 
+
+```powershell
+# 全部測試
 python -m pytest
 
-2. 執行單一資料夾：
+# 單一資料夾
 python -m pytest tests\scope
-python -m pytest tests\role
-python -m pytest tests\project
 
-3. 執行單一檔案：
+# 單一檔案
 python -m pytest tests\scope\test_scope_create.py
 
-4. 執行單一 case：
+# 單一案例
 python -m pytest tests\scope\test_scope_create.py::test_scope_create_success
+```
 
+macOS 請將路徑分隔符號改為 `/`，例如 `python -m pytest tests/scope`。
 
 ## 測試報表
-測試結果會輸出到：
-reports/
 
-產生並開啟 Allure 報表：
-.\run_allure.bat
+Pytest 產生的結果位於 `reports/`。
 
-只開啟已產生的 Allure 報表：
-.\open_allure.bat
+Windows：
 
+```powershell
+# 產生並開啟 Allure 報表
+.\shortcut\windows\run_allure.bat
+
+# 只開啟既有 Allure 報表
+.\shortcut\windows\open_allure.bat
+```
+
+macOS：
+
+```bash
+# 產生並開啟 Allure 報表
+./shortcut/mac/run_allure.sh
+
+# 只開啟既有 Allure 報表
+./shortcut/mac/open_allure.sh
+```
+
+## Lint 與 Format
+
+安裝開發工具：
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
+執行檢查：
+
+```bash
+python -m ruff check .
+python -m ruff format --check .
+```
+
+自動修正與格式化：
+
+```bash
+python -m ruff check . --fix
+python -m ruff format .
+```
 
 ## 專案結構
-app/        OmniApp負責整合所有test_與pages之間的互動
-config/     測試設定
-pages/      Page Object 與 locators
-reports/    測試報表輸出
-tests/      測試案例
-utils/      放置外掛plugings
-conftest.py 瀏覽器設定, 測試案例Class可以透過此檔案呼叫OmniApp(非自動登入, 自動登入)
+
+```text
+app/          OmniApp 與頁面物件整合
+config/       測試與環境設定
+pages/        Page Objects 與 locators
+reports/      測試結果與 Allure 報表
+shortcut/     Windows 與 macOS 工具腳本
+tests/        Pytest 測試案例
+utils/        共用工具
+conftest.py   共用 Pytest fixtures 與瀏覽器設定
+```
