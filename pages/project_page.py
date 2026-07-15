@@ -10,13 +10,30 @@ class ProjectPage:
         self.elements = ProjectElements(page)
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
+
+    @allure.step("Create project [{project_abbreviation}]")
+    def create_project(
+        self,
+        project_abbreviation: str,
+        project_zh_name: str,
+        project_en_name: str,
+        project_description: str,
+    ):
+        self.open_create_project_dialog()
+        self.elements.input_project_abbr.fill(project_abbreviation)
+        self.elements.input_project_nameZh.fill(project_zh_name)
+        self.elements.input_project_nameEn.fill(project_en_name)
+        self.enable_project_status()
+        self.elements.input_project_description.fill(project_description)
+        self.select_project_icon()
+        self.submit_project_and_verify_created(project_abbreviation)
     #create
     @allure.step("點擊「新增專案」按鈕")
     def open_create_project_dialog(self):
         self.base_page.click_expect(self.elements.btn_create_project)
         
     @allure.step("驗證「專案縮寫」欄位輸入")
-    def validate_and_fill_project_abbreviation(self):
+    def validate_and_fill_project_abbreviation(self, project_abbreviation: str):
         self.input_abbr_cases = [
             ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
@@ -28,10 +45,10 @@ class ProjectPage:
         element_input = self.elements.input_project_abbr
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_abbr_cases)
-        self.elements.input_project_abbr.fill("e2e-project-abbr")
+        self.elements.input_project_abbr.fill(project_abbreviation)
 
     @allure.step("驗證「專案中文」欄位輸入")
-    def validate_and_fill_project_zh_name(self):
+    def validate_and_fill_project_zh_name(self, project_zh_name: str):
         self.input_zh_cases = [
             ("#" * 41, "輸入字數超過限制長度40"),
             ("", "必填欄位"),
@@ -40,11 +57,11 @@ class ProjectPage:
         element_input = self.elements.input_project_nameZh
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_zh_cases)
-        self.elements.input_project_nameZh.fill("e2e-testing-zh")
+        self.elements.input_project_nameZh.fill(project_zh_name)
 
     @allure.step("輸入「專案英文」欄位")
-    def fill_project_en_name(self):
-        self.elements.input_project_nameEn.fill("e2e-testing-en")
+    def fill_project_en_name(self, project_en_name: str):
+        self.elements.input_project_nameEn.fill(project_en_name)
 
     @allure.step("驗證「標籤」欄位新增")
     def validate_and_add_project_tags(self):
@@ -65,14 +82,14 @@ class ProjectPage:
         self.elements.radio_status_enable.click()
     
     @allure.step("驗證「專案描述」欄位輸入")
-    def validate_and_fill_project_description(self):
+    def validate_and_fill_project_description(self, project_description: str):
         self.input_project_description_cases = [
             "中文","$$$","ＡＢＣ"
         ]
 
         self.elements.input_project_description.fill("*"*201)
         expect(self.elements.msg_field_error, f"輸入字數超過限制長度200").to_be_visible()    
-        self.elements.input_project_description.fill("input testing description")
+        self.elements.input_project_description.fill(project_description)
 
     @allure.step("驗證「專案圖示」欄位選擇")
     def select_project_icon(self):
@@ -80,11 +97,11 @@ class ProjectPage:
         expect(self.elements.msg_field_error, f"錯誤訊息").not_to_be_visible()    
 
     @allure.step("送出成功後搜尋專案")
-    def submit_project_and_verify_created(self):
+    def submit_project_and_verify_created(self, project_abbreviation: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -114,20 +131,20 @@ class ProjectPage:
         self.elements.btn_filter_clear_noResult.click()
 
     @allure.step("搜尋框搜尋已存在專案縮寫")
-    def search_project_by_abbreviation(self):
+    def search_project_by_abbreviation(self, project_abbreviation: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
         self.elements.btn_filter_clear_search.click()
 
     @allure.step("搜尋框搜尋已存在專案中文")
-    def search_project_by_zh_name(self):
+    def search_project_by_zh_name(self, project_zh_name: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-testing-zh",
+            project_zh_name,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -168,10 +185,10 @@ class ProjectPage:
         self.elements.btn_filter_footer_clearfilter.click()
 
     @allure.step("檢視專案詳細資訊頁面")
-    def open_project_detail_from_search(self):
+    def open_project_detail_from_search(self, project_abbreviation: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -221,10 +238,10 @@ class ProjectPage:
 
     #update
     @allure.step("依照縮寫搜尋成功後點擊")
-    def open_project_edit_form(self):
+    def open_project_edit_form(self, project_abbreviation: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -232,7 +249,7 @@ class ProjectPage:
         self.base_page.click_expect(self.elements.btn_edit_project, self.elements.btn_submit)
         
     @allure.step("編輯並驗證專案中文欄位")
-    def validate_and_update_project_zh_name(self):
+    def validate_and_update_project_zh_name(self, updated_project_zh_name: str):
         self.input_zh_cases = [
             ("#" * 41, "輸入字數超過限制長度40"),
             ("", "必填欄位"),
@@ -241,11 +258,11 @@ class ProjectPage:
         element_input = self.elements.input_project_nameZh
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_zh_cases)
-        self.elements.input_project_nameZh.fill("e2e-edited-zh")
+        self.elements.input_project_nameZh.fill(updated_project_zh_name)
 
     @allure.step("編輯並驗證專案英文欄位")
-    def update_project_en_name(self):
-        self.elements.input_project_nameEn.fill("e2e-edited-en")
+    def update_project_en_name(self, updated_project_en_name: str):
+        self.elements.input_project_nameEn.fill(updated_project_en_name)
 
     @allure.step("編輯並驗證專案標籤")
     def update_project_tag(self):
@@ -259,8 +276,8 @@ class ProjectPage:
         self.elements.radio_status_disable.click()
 
     @allure.step("編輯專案描述")
-    def update_project_description(self):
-        self.elements.input_project_description.fill("edited testing description")
+    def update_project_description(self, updated_project_description: str):
+        self.elements.input_project_description.fill(updated_project_description)
         expect(self.elements.msg_field_error, f"錯誤訊息").not_to_be_visible()    
     
     @allure.step("編輯專案圖示")
@@ -269,22 +286,22 @@ class ProjectPage:
         expect(self.elements.msg_field_error, f"錯誤訊息").not_to_be_visible()    
 
     @allure.step("提交專案編輯及驗證")
-    def submit_project_update_and_verify(self):
+    def submit_project_update_and_verify(self, project_abbreviation: str):
         self.operate_page.submit_and_confirm()
         self.elements.btn_back_to_overview.click()
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
 
     #delete
     @allure.step("開啟刪除視窗")
-    def open_project_delete_dialog(self):
+    def open_project_delete_dialog(self, project_abbreviation: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
             should_exist=False,
         )
@@ -304,10 +321,25 @@ class ProjectPage:
     def confirm_project_delete(self):
         self.operate_page.verify_delete()
 
+    @allure.step("Delete project [{project_abbreviation}]")
+    def delete_project(self, project_abbreviation: str):
+        self.open_project_delete_dialog(project_abbreviation)
+        self.confirm_project_delete()
+
+    @allure.step("Delete project if it exists [{project_abbreviation}]")
+    def delete_project_if_exists(self, project_abbreviation: str) -> bool:
+        self.elements.input_keyword_search.fill(project_abbreviation)
+        self.base_page.wait_loading_disapper()
+        if self.elements.msg_search_noResult.is_visible():
+            self.elements.input_keyword_search.fill("")
+            return False
+        self.delete_project(project_abbreviation)
+        return True
+
     @allure.step("驗證刪除成功")
-    def verify_project_deleted(self):
+    def verify_project_deleted(self, project_abbreviation: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
-            "e2e-project-abbr",
+            project_abbreviation,
             self.elements.msg_search_noResult,
         )

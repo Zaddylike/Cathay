@@ -12,6 +12,7 @@ def test_scope_copy_success(
 
     scope_app.scope_page.click_to_copy_scope_page(created_scope_data.code)
     scope_app.scope_page.validate_copy_and_fill_code(created_scope_data.copied_code)
+    scope_app.scope_page.validate_copy_and_fill_name(created_scope_data.copied_name)
     scope_app.scope_page.validate_and_copy_scope_description(
         created_scope_data.copied_description
     )

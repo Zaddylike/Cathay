@@ -29,6 +29,7 @@ def browser_type_launch_args(browser_type_launch_args):
     return {
         **browser_type_launch_args,
         "headless": browser_type_launch_args.get("headless", HEADLESS),
+        # "slow_mo": 500,
         "args": [
             *browser_type_launch_args.get("args", []),
             *BROWSER_ARGS,

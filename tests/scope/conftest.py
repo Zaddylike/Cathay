@@ -21,6 +21,7 @@ class ScopeTestData:
     second_name: str
     second_description: str
     copied_code: str
+    copied_name: str
     copied_description: str
     updated_name: str
     updated_description: str
@@ -30,18 +31,21 @@ class ScopeTestData:
 def scope_data() -> ScopeTestData:
     suffix = uuid4().hex[:4]
     code = f"{SCOPE_CODE_PREFIX}{suffix}"
+    name = f"{SCOPE_NAME_PREFIX}{suffix}"
+    description=f"{SCOPE_DESCRIPTION_PREFIX}{suffix}"
 
     return ScopeTestData(
         code=code,
-        name=f"{SCOPE_NAME_PREFIX}{suffix}",
-        description=f"{SCOPE_DESCRIPTION_PREFIX}{suffix}",
+        name=name,
+        description=description,
         second_code=f"{SCOPE_CODE_PREFIX}{uuid4().hex[:4]}",
-        second_name=f"{SCOPE_NAME_PREFIX}2-{suffix}",
-        second_description=f"{SCOPE_DESCRIPTION_PREFIX}2-{suffix}",
+        second_name=f"{SCOPE_NAME_PREFIX}{uuid4().hex[:4]}",
+        second_description=f"{SCOPE_DESCRIPTION_PREFIX}{uuid4().hex[:4]}",
         copied_code=f"copy-{code}",
-        copied_description=f"copy-{SCOPE_DESCRIPTION_PREFIX}{suffix}",
-        updated_name=f"updated-{SCOPE_NAME_PREFIX}{suffix}",
-        updated_description=f"updated-{SCOPE_DESCRIPTION_PREFIX}{suffix}",
+        copied_name=f"copy-{name}",
+        copied_description=f"copy-{description}",
+        updated_name=f"updated-{name}",
+        updated_description=f"updated-{description}",
     )
 
 
