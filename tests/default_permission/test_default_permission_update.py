@@ -6,7 +6,12 @@ import allure
 def test_default_permission_update_success(
     default_permission_app: OmniApp,
     created_default_permission,
+    default_permission_cleanup,
 ):
+    default_permission_cleanup(
+        "permission",
+        created_default_permission.updated_role_code,
+    )
     default_permission_app.default_permission_page.open_update_default_permission_page()
     default_permission_app.default_permission_page.replace_default_role_permission(
         created_default_permission.updated_role_code

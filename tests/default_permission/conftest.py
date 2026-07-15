@@ -33,8 +33,8 @@ class DefaultPermissionTestData:
 
 @pytest.fixture
 def default_permission_data() -> DefaultPermissionTestData:
-    suffix = uuid4().hex[:8]
-    updated_suffix = uuid4().hex[:8]
+    suffix = uuid4().hex[:4]
+    updated_suffix = uuid4().hex[:4]
     role_code = f"{ROLE_CODE}{suffix}"
     role_name = f"{ROLE_NAME_PREFIX}{suffix}"
     role_description = f"{ROLE_DESCRIPTION_PREFIX}{suffix}"
@@ -165,7 +165,6 @@ def created_default_permission(
 ) -> DefaultPermissionTestData:
     data = default_permission_prerequisites
     default_permission_cleanup("permission", data.role_code)
-    default_permission_cleanup("permission", data.updated_role_code)
     default_permission_app.default_permission_page.create_default_permission(
         data.role_code,
         data.scope_code,

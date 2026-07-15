@@ -34,12 +34,17 @@ class DefaultPermissionPage:
         self.open_default_permission_list()
         self.base_page.click_expect(
             self.elements.btn_create_default_permission,
-            self.elements.btn_default_more_role,
+            self.elements.btn_submit,
         )
+        self.base_page.wait_loading_disapper()
 
     @allure.step("Select default role permission")
     def select_default_role_permission(self, role_code: str):
-        self.base_page.click_expect(self.elements.btn_default_more_role, self.elements.list_default_role.last)
+        if self.elements.btn_add_default_role.is_visible():
+            self.base_page.click_expect(self.elements.btn_add_default_role, self.elements.list_default_role.last)
+        else:
+            self.base_page.click_expect(self.elements.btn_more_default_role, self.elements.list_default_role.last)
+
         self.operate_page.select_list_by_text(
             self.elements.list_default_role.last,
             self.elements.option_dropdown_list_avail,
@@ -48,9 +53,13 @@ class DefaultPermissionPage:
 
     @allure.step("Select default scope permission")
     def select_default_scope_permission(self, scope_code: str):
-        self.base_page.click_expect(self.elements.btn_more_default_scope, self.elements.list_default_permission_scope.last)
+        if self.elements.btn_add_default_scope.is_visible():
+            self.base_page.click_expect(self.elements.btn_add_default_scope, self.elements.list_default_scope.last)
+        else:
+            self.base_page.click_expect(self.elements.btn_more_default_scope, self.elements.list_default_scope.last)
+
         self.operate_page.select_list_by_text(
-            self.elements.list_default_permission_scope.last,
+            self.elements.list_default_scope.last,
             self.elements.option_dropdown_list_avail,
             scope_code,
         )
@@ -121,7 +130,7 @@ class DefaultPermissionPage:
     @allure.step("Replace default scope permission")
     def replace_default_scope_permission(self, scope_code: str):
         self.operate_page.select_list_by_text(
-            self.elements.list_default_permission_scope.last,
+            self.elements.list_default_scope.last,
             self.elements.option_dropdown_list_avail,
             scope_code,
         )
@@ -137,16 +146,23 @@ class DefaultPermissionPage:
 
     #  delete
 
+    def get_default_permission_row(self, role_code: str):
+        return self.elements.option_permissions.filter(has_text=role_code)
+
+    def click_default_permission_delete(self, role_code: str):
+        row = self.get_default_permission_row(role_code)
+        self.base_page.click_expect(
+            row.locator('app-icon[class="cursor-pointer"]')
+        )
+
     @allure.step("Open default permission delete dialog")
     def open_default_permission_delete_dialog(self, role_code: str):
         self.open_default_permission_list()
-        self.operate_page.search_keyword(
-            self.elements.input_keyword_search,
-            role_code,
-            self.elements.option_permissions.first,
-        )
-        self.base_page.sleep(1)
-        self.base_page.click_expect(self.elements.bin_default_permission.first)
+        self.elements.input_keyword_search.fill(role_code)
+        self.base_page.wait_loading_disapper()
+        row = self.get_default_permission_row(role_code)
+        expect(row).to_be_visible()
+        self.click_default_permission_delete(role_code)
 
     @allure.step("Verify default permission delete input")
     def verify_deleted_input(self):
@@ -162,10 +178,12 @@ class DefaultPermissionPage:
         self.open_default_permission_list()
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
-        if self.elements.msg_search_noResult.is_visible():
+        row = self.get_default_permission_row(role_code)
+        expect(row.or_(self.elements.msg_search_noResult).first).to_be_visible()
+        if not row.is_visible():
             self.elements.input_keyword_search.fill("")
             return False
-        self.base_page.click_expect(self.elements.bin_default_permission.first)
+        self.click_default_permission_delete(role_code)
         self.verify_deleted_input()
         return True
 
