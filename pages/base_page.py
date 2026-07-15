@@ -24,9 +24,9 @@ class BasePage:
 
     def click_expect(self, locator, expected_value=None, reclick=False):
         try:
-            locator.scroll_into_view_if_needed()
+            locator.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
-            locator.click()
+            locator.click(timeout=DEFAULT_TIMEOUT)
             self.elements.icon_loading.wait_for(state="hidden", timeout=DEFAULT_TIMEOUT)
 
         except PlaywrightTimeoutError as e:

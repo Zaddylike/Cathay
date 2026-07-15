@@ -3,11 +3,7 @@ import allure
 
 
 @allure.title("[ROLE-CRUD] Create role successfully")
-def test_role_create_success(
-    role_app: OmniApp,
-    prepared_role_scopes,
-    role_cleanup,
-):
+def test_role_create_success(role_app: OmniApp, prepared_role_scopes, role_cleanup):
     role_data = prepared_role_scopes
     role_cleanup("role", role_data.code)
     role_app.role_page.click_to_create_role_page()

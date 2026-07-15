@@ -19,11 +19,13 @@ HEADLESS = False
 
 # Testing basic settings
 BASE_URL_DEV = "https://dev.omnihubs.cloud/"
-DEFAULT_TIMEOUT = 20000
+DEFAULT_TIMEOUT = 8000
 DEFAULT_NAVIGATION_TIMEOUT = 60000
 
 
 # Acc & Pwd
+# 測試permission相關功能腳本(Scope,Role..)時-> 需確認測試帳號是否有已存在且有application資料的專案, testuser01現已有資料可直接使用
+# 如非permission相關功能(Scope,Role..)腳本-> 可任意切換測試帳號
 ACCOUNT_USERNAME = "testuser01"
 ACCOUNT_PASSWORD = "testuser01"
 ENTRA_USERNAME = "omnitest3@cathlife.symphox.com"

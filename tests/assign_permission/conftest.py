@@ -41,8 +41,8 @@ class AssignPermissionTestData:
 
 @pytest.fixture
 def assign_permission_data() -> AssignPermissionTestData:
-    suffix = uuid4().hex[:8]
-    updated_suffix = uuid4().hex[:8]
+    suffix = uuid4().hex[:4]
+    updated_suffix = uuid4().hex[:4]
     description = f"{ASSIGN_PERMISSION_DESCRIPTION_PREFIX}{suffix}"
     second_description = f"{ASSIGN_PERMISSION_DESCRIPTION_PREFIX}{updated_suffix}"
     role_code = f"{ROLE_CODE}{suffix}"
