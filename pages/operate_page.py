@@ -1,6 +1,5 @@
 import allure
 from playwright.sync_api import Page, expect
-from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT
 from pages.locators.elements import OperationElements
 from pages.base_page import BasePage
 import re

@@ -1,32 +1,12 @@
-@echo off
-chcp 65001 > 
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo ==============================
-echo Cleaning __pycache__ folders...
-echo ==============================
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+project_root="$(cd "${script_dir}/../.." && pwd)"
 
-for /d /r %%d in (__pycache__) do (
-    if exist "%%d" (
-        echo Delete: %%d
-        rmdir /s /q "%%d"
-    )
-)
+cd "${project_root}"
 
-echo.
-echo ==============================
-echo Cleaning .pyc files...
-echo ==============================
-
-for /r %%f in (*.pyc) do (
-    if exist "%%f" (
-        echo Delete: %%f
-        del /f /q "%%f"
-    )
-)
-
-echo.
-echo ==============================
-echo Clean completed.
-echo ==============================
-
-pause
+echo "Cleaning __pycache__ directories and Python bytecode..."
+find . -type d -name __pycache__ -prune -exec rm -rf {} +
+find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+echo "Python cache cleanup completed."

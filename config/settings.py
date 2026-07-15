@@ -1,4 +1,3 @@
-import os
 import sys
 
 print(f"Testing Area -> {sys.argv}")

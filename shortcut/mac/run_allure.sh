@@ -1,11 +1,20 @@
-@echo off
+#!/usr/bin/env bash
+set -euo pipefail
 
-call clean_pycache.bat
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+project_root="$(cd "${script_dir}/../.." && pwd)"
+allure_bin="${project_root}/node_modules/.bin/allure"
 
-echo Generating Allure HTML report...
-allure generate reports/allure-results -o reports/allure-report --clean
+cd "${project_root}"
+"${script_dir}/clean_pycache.sh"
 
-echo Opening Allure report...
-allure open reports/allure-report
+if [[ ! -x "${allure_bin}" ]]; then
+    echo "Allure CLI not found. Run 'npm ci' first." >&2
+    exit 1
+fi
 
-pause
+echo "Generating Allure HTML report..."
+"${allure_bin}" generate reports/allure-results -o reports/allure-report --clean
+
+echo "Opening Allure report..."
+"${allure_bin}" open reports/allure-report
