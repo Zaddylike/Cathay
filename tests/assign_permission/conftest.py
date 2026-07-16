@@ -16,6 +16,7 @@ from config.settings import (
     SCOPE_DESCRIPTION_PREFIX,
     SCOPE_NAME_PREFIX,
 )
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
@@ -80,14 +81,14 @@ def assign_permission_data() -> AssignPermissionTestData:
 
 
 @pytest.fixture
-def assign_permission_app(logged_app: OmniApp) -> OmniApp:
-    logged_app.operate_page.go_to_permission_page()
-    logged_app.operate_page.open_to_permissions_page()
-    return logged_app
+def assign_permission_app(permission_project_app: OmniApp) -> OmniApp:
+    permission_project_app.operate_page.open_to_permissions_page()
+    return permission_project_app
 
 
 @pytest.fixture
-def assign_permission_cleanup(assign_permission_app: OmniApp):
+def assign_permission_cleanup(assign_permission_app: OmniApp, data_mode: str):
+    """登記 Assignment／Role／Scope；isolated 依相依順序清除，keep 保留。"""
     tracked = {"assignment": [], "role": [], "scope": []}
 
     def track(resource_type: str, identifier: str):
@@ -95,6 +96,9 @@ def assign_permission_cleanup(assign_permission_app: OmniApp):
             tracked[resource_type].append(identifier)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for assignment_key in reversed(tracked["assignment"]):
         try:

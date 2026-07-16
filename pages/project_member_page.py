@@ -13,15 +13,24 @@ class ProjectMemberPage:
     #create
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self, project_abbreviation: str):
-        expect(self.elements.option_cards.first).to_be_visible()
-        self.operate_page.search_keyword(
-            self.elements.input_keyword_search,
-            project_abbreviation,
-            self.elements.msg_search_noResult,
-            should_exist=False,
+        self.elements.input_keyword_search.fill(project_abbreviation)
+        self.base_page.wait_loading_disapper()
+        project_card = self.elements.option_cards.filter(
+            has=self.page.get_by_text(project_abbreviation, exact=True)
         )
-        self.elements.option_cards.first.click()
+        expect(project_card).to_have_count(1)
+        project_card.click()
         self.base_page.click_expect(self.elements.btn_project_edit_member.first, self.elements.btn_member_edit_member)
+
+    def member_exists(self, member_keyword: str) -> bool:
+        """只查成員表格，不使用頁首登入者名稱判斷成員是否已加入。"""
+        self.elements.input_keyword_search.fill(member_keyword)
+        self.base_page.wait_loading_disapper()
+        member = self.elements.option_cards_members.get_by_text(
+            member_keyword,
+            exact=True,
+        )
+        return member.is_visible()
 
     @allure.step("進入編輯頁面")
     def go_to_member_edit_page(self):

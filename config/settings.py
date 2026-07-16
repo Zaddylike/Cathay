@@ -13,7 +13,7 @@ BROWSER_ARGS = [
     "--disable-dev-shm-usage",
     "--disable-blink-features=AutomationControlled",
 ]
-HEADLESS = False
+HEADLESS = True
 
 
 # Testing basic settings
@@ -34,10 +34,59 @@ GOOGLE_PASSWORD = ""
 
 
 # Testing prefix - project
-PROJECT_ABBR = "project-abbr-"
+# PROJECT_ABBR -> 權限功能相關腳本會進入此專案
+PROJECT_ABBR_PREFIX = "project-abbr-"
 PROJECT_ZH_NAME_PREFIX = "project-zh-"
 PROJECT_EN_NAME_PREFIX = "project-en-"
 PROJECT_DESCRIPTION_PREFIX = "project-description-"
+
+
+# Shared permission project used by Scope / Role / Group / Permission tests
+PERMISSION_PROJECT_ABBR = "project-abbr-main"
+PERMISSION_PROJECT_ZH_NAME = "project-zh-main"
+PERMISSION_PROJECT_EN_NAME = "project-en-main"
+PERMISSION_PROJECT_DESCRIPTION = "project-description-main"
+
+
+# Stable Application baseline used by permission feature tests
+PERMISSION_SSO_APPLICATION_NAME = "permission-sso-main"
+PERMISSION_S2S_APPLICATION_NAME = "permission-s2s-main"
+PERMISSION_S2S_DESCRIPTION = "permission-s2s-description-main"
+PERMISSION_S2S_SCOPE_DESCRIPTION = "s2s-scope-main"
+
+
+# Stable Permission Init data for the shared permission project
+PERMISSION_SCOPE_CODE = "perm-scope-main"
+PERMISSION_SCOPE_NAME = "permission-scope-name-main"
+PERMISSION_SCOPE_DESCRIPTION = "permission-scope-description-main"
+PERMISSION_SECOND_SCOPE_CODE = "perm-scope-2-main"
+PERMISSION_SECOND_SCOPE_NAME = "permission-scope-second-name-main"
+PERMISSION_SECOND_SCOPE_DESCRIPTION = "permission-scope-second-description-main"
+PERMISSION_THIRD_SCOPE_CODE = "perm-scope-3-main"
+PERMISSION_THIRD_SCOPE_NAME = "permission-scope-third-name-main"
+PERMISSION_ROLE_CODE = "perm-role-main"
+PERMISSION_ROLE_NAME = "permission-role-name-main"
+PERMISSION_ROLE_DESCRIPTION = "permission-role-description-main"
+PERMISSION_SECOND_ROLE_CODE = "perm-role-2-main"
+PERMISSION_SECOND_ROLE_NAME = "permission-role-second-name-main"
+PERMISSION_SECOND_ROLE_DESCRIPTION = "permission-role-second-description-main"
+PERMISSION_GROUP_NAME = "permission-group-main"
+PERMISSION_GROUP_DESCRIPTION = "permission-group-description-main"
+PERMISSION_GROUP_MEMBER_DESCRIPTION = "permission-group-member-description-main"
+PERMISSION_ASSIGNMENT_DESCRIPTION = "permission-assignment-description-main"
+
+
+# Stable SSO provider data for the shared permission project
+PERMISSION_ENTRA_CLIENT_ID = "entra-client-main"
+PERMISSION_ENTRA_SECRET = "entra-secret-main"
+PERMISSION_ENTRA_TENANT = "entra-tenant-main"
+PERMISSION_ENTRA_ATTRIBUTE = "entra-attr-main"
+PERMISSION_GOOGLE_CLIENT_ID = "google-client-main"
+PERMISSION_GOOGLE_SECRET = "google-secret-main"
+PERMISSION_GOOGLE_IDENTIFY_FIELD = "google-id-main"
+PERMISSION_OIDC_VALUE = "oidc-main"
+PERMISSION_SSO_REDIRECT_URL = "https://e2e/testing/omni/permission-main"
+PERMISSION_SSO_LOGOUT_URL = "https://e2e/testing/logout/permission-main"
 
 
 # Testing prefix - Scope

@@ -3,6 +3,7 @@ from playwright.sync_api import Page, expect
 from pages.locators.elements import OperationElements
 from pages.base_page import BasePage
 import re
+from config.settings import PERMISSION_PROJECT_ABBR
 
 class OperatePage:
     def __init__(self, page: Page):
@@ -127,6 +128,36 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to open card action for [{keyword}]: {e}")
 
+    @allure.step("Delete application [{application_name}] if it exists")
+    def delete_application_card_if_exists(self, application_name: str) -> bool:
+        search_input = self.elements.input_keyword_search_id
+        search_input.fill(application_name)
+        self.base_page.wait_loading_disapper()
+
+        application_card = self.elements.option_cards.filter(
+            has=self.page.get_by_text(application_name, exact=True)
+        )
+        if application_card.count() == 0:
+            search_input.fill("")
+            return False
+
+        expect(application_card).to_have_count(1)
+        menu_button = application_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
+            self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
+            self.elements.btn_card_menu_delete,
+            self.elements.page_dialog,
+        )
+        self.verify_delete()
+        self.base_page.wait_loading_disapper()
+        expect(application_card).to_have_count(0)
+        search_input.fill("")
+        return True
+
     @allure.step("Select member from advanced search")
     def select_member_from_advanced_search(
         self,
@@ -145,11 +176,18 @@ class OperatePage:
             raise Exception(f"Failed to select member [{keyword}]: {e}")
 
     @allure.step("Open project permission page")
-    def go_to_permission_page(self):
-        expect(self.elements.option_cards.first).to_be_visible()
-        self.elements.input_keyword_search.fill("e2e-project-abbr")
+    def go_to_permission_page(
+        self,
+        project_abbreviation: str = PERMISSION_PROJECT_ABBR,
+    ):
+        self.elements.input_keyword_search.fill(project_abbreviation)
+        self.base_page.wait_loading_disapper()
         expect(self.elements.msg_search_noResult).not_to_be_visible()
-        self.elements.option_cards.first.click()
+        project_card = self.elements.option_cards.filter(
+            has=self.page.get_by_text(project_abbreviation, exact=True)
+        )
+        expect(project_card).to_have_count(1)
+        project_card.click()
         self.elements.btn_project_info_permission.click()
         expect(self.elements.page_permission).to_be_visible()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
