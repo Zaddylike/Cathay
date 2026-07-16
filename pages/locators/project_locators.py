@@ -68,12 +68,16 @@ class ProjectLocators:
     @property
     # 專案頁面_編輯成員按鈕
     def btn_project_edit_member(self):
-        return self.page.get_by_text("編輯成員")
+        return self.page.get_by_role("button", name="編輯成員", exact=True)
 
     @property
     # 專案成員頁面_編輯成員按鈕
     def btn_member_edit_member(self):
-        return self.page.locator("div.main-container--wrapper.ng-star-inserted > app-share-project > div > button")
+        return (
+            self.page.locator("app-share-project")
+            .get_by_role("button", name="編輯成員", exact=True)
+            .first
+        )
 
 #   Member Page
 

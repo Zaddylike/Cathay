@@ -10,7 +10,9 @@ from pages.scope_page import ScopePage
 from pages.group_page import GroupPage
 from pages.assign_permission_page import AssignPermissionPage
 from pages.default_permission_page import DefaultPermissionPage
-from pages.application_page import ApplicationPermissionPage, ApplicationSingleSignOnPage, ApplicationServerToServerPage
+from pages.application_permission_page import ApplicationPermissionPage
+from pages.application_s2s_page import ApplicationServerToServerPage
+from pages.application_sso_page import ApplicationSingleSignOnPage
 
 
 class OmniApp:
@@ -26,11 +28,14 @@ class OmniApp:
         self.group_page = GroupPage(page)
         self.assign_permission_page = AssignPermissionPage(page)
         self.default_permission_page = DefaultPermissionPage(page)
-        self.permission_page = ApplicationPermissionPage(page)
-        self.single_signon_page = ApplicationSingleSignOnPage(page)
-        self.server_to_servser_page = ApplicationServerToServerPage(page)
+        self.application_permission_page = ApplicationPermissionPage(page)
+        self.single_sign_on_page = ApplicationSingleSignOnPage(page)
+        self.server_to_server_page = ApplicationServerToServerPage(page)
+        self.permission_page = self.application_permission_page
+        self.single_signon_page = self.single_sign_on_page
+        self.server_to_servser_page = self.server_to_server_page
 
-    @allure.step("開啟瀏覽器&確認目標網站&登入作業")
+    @allure.step("Open browser& Valid correct web& Log in")
     def login_by_account(self, account: str, password: str):
         try:
             self.login_page.open_browser()

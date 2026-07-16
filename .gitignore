@@ -11,3 +11,4 @@ venv/
 .codex
 .example
 .zip
+.ruff_cache/

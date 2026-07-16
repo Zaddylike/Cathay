@@ -13,6 +13,7 @@ from config.settings import (
     SCOPE_DESCRIPTION_PREFIX,
     SCOPE_NAME_PREFIX,
 )
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
@@ -74,14 +75,14 @@ def role_data() -> RoleTestData:
 
 
 @pytest.fixture
-def role_app(logged_app: OmniApp) -> OmniApp:
-    logged_app.operate_page.go_to_permission_page()
-    logged_app.operate_page.open_to_permissions_page()
-    return logged_app
+def role_app(permission_project_app: OmniApp) -> OmniApp:
+    permission_project_app.operate_page.open_to_permissions_page()
+    return permission_project_app
 
 
 @pytest.fixture
-def role_cleanup(role_app: OmniApp):
+def role_cleanup(role_app: OmniApp, data_mode: str):
+    """分別登記 UUID Role／Scope；isolated 依相依順序刪除，keep 保留。"""
     tracked_codes = {
         "role": [], 
         "scope": []
@@ -92,6 +93,9 @@ def role_cleanup(role_app: OmniApp):
             tracked_codes[resource_type].append(resource_code)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for role_code in reversed(tracked_codes["role"]):
         try:

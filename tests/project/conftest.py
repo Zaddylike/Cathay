@@ -7,16 +7,17 @@ import pytest
 from app.omni_app import OmniApp
 from config.settings import (
     BASE_URL_DEV,
-    PROJECT_ABBR,
+    PROJECT_ABBR_PREFIX,
     PROJECT_DESCRIPTION_PREFIX,
     PROJECT_EN_NAME_PREFIX,
     PROJECT_ZH_NAME_PREFIX,
 )
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
 class ProjectTestData:
-    abbreviation: str
+    project_abbreviation: str
     zh_name: str
     en_name: str
     description: str
@@ -27,14 +28,14 @@ class ProjectTestData:
 
 @pytest.fixture
 def project_data() -> ProjectTestData:
-    suffix = uuid4().hex[:8]
-    abbreviation = f"{PROJECT_ABBR}{suffix}"
+    suffix = uuid4().hex[:4]
+    project_abbreviation = f"{PROJECT_ABBR_PREFIX}{suffix}"
     zh_name = f"{PROJECT_ZH_NAME_PREFIX}{suffix}"
     en_name = f"{PROJECT_EN_NAME_PREFIX}{suffix}"
     description = f"{PROJECT_DESCRIPTION_PREFIX}{suffix}"
 
     return ProjectTestData(
-        abbreviation=abbreviation,
+        project_abbreviation=project_abbreviation,
         zh_name=zh_name,
         en_name=en_name,
         description=description,
@@ -50,7 +51,8 @@ def project_app(logged_app: OmniApp) -> OmniApp:
 
 
 @pytest.fixture
-def project_cleanup(project_app: OmniApp):
+def project_cleanup(project_app: OmniApp, data_mode: str):
+    """登記測試建立的專案；isolated teardown 刪除，keep teardown 保留。"""
     tracked_abbreviations = []
 
     def track(project_abbreviation: str):
@@ -58,6 +60,9 @@ def project_cleanup(project_app: OmniApp):
             tracked_abbreviations.append(project_abbreviation)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for project_abbreviation in reversed(tracked_abbreviations):
         try:
@@ -78,9 +83,9 @@ def created_project(
     project_data: ProjectTestData,
     project_cleanup,
 ) -> ProjectTestData:
-    project_cleanup(project_data.abbreviation)
+    project_cleanup(project_data.project_abbreviation)
     project_app.project_page.create_project(
-        project_data.abbreviation,
+        project_data.project_abbreviation,
         project_data.zh_name,
         project_data.en_name,
         project_data.description,

@@ -2,6 +2,7 @@ from playwright.sync_api import Page, expect
 from pages.locators.elements import ProjectElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
+from config.settings import BASE_URL_DEV, PERMISSION_PROJECT_ABBR
 import allure
 
 class ProjectPage:
@@ -11,7 +12,41 @@ class ProjectPage:
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
 
-    @allure.step("Create project [{project_abbreviation}]")
+    def project_card(self, project_abbreviation: str):
+        """以完整 abbreviation 精準取得單一專案卡片，不依賴 first／last。"""
+        return self.elements.option_cards.filter(
+            has=self.page.get_by_text(project_abbreviation, exact=True)
+        )
+
+    def search_project(self, project_abbreviation: str):
+        """輸入完整 abbreviation 並等待專案列表搜尋完成。"""
+        self.elements.input_keyword_search.fill(project_abbreviation)
+        self.base_page.wait_loading_disapper()
+
+    def project_exists(self, project_abbreviation: str) -> bool:
+        """搜尋後確認精準專案卡片是否剛好存在一筆。"""
+        self.search_project(project_abbreviation)
+        return self.project_card(project_abbreviation).count() == 1
+
+    def create_project_if_missing(
+        self,
+        project_abbreviation: str,
+        project_zh_name: str,
+        project_en_name: str,
+        project_description: str,
+    ) -> bool:
+        """專案不存在時才建立；回傳 True 代表本次有執行建立。"""
+        if self.project_exists(project_abbreviation):
+            return False
+        self.create_project(
+            project_abbreviation,
+            project_zh_name,
+            project_en_name,
+            project_description,
+        )
+        return True
+
+    @allure.step("新增專案名稱[ {project_abbreviation} ]")
     def create_project(
         self,
         project_abbreviation: str,
@@ -27,7 +62,10 @@ class ProjectPage:
         self.elements.input_project_description.fill(project_description)
         self.select_project_icon()
         self.submit_project_and_verify_created(project_abbreviation)
-    #create
+
+
+    # create
+
     @allure.step("點擊「新增專案」按鈕")
     def open_create_project_dialog(self):
         self.base_page.click_expect(self.elements.btn_create_project)
@@ -77,7 +115,7 @@ class ProjectPage:
             expect(self.elements.msg_field_error, f"Failed to fill {input_msg} to tag").not_to_be_visible()
             self.elements.btn_project_tag.click()
 
-    @allure.step("驗證「狀態」欄位選擇")
+    @allure.step("驗證「狀態」欄位設定")
     def enable_project_status(self):
         self.elements.radio_status_enable.click()
     
@@ -96,7 +134,7 @@ class ProjectPage:
         self.elements.img_planets.nth(self.base_page.get_random_number(5)).click()
         expect(self.elements.msg_field_error, f"錯誤訊息").not_to_be_visible()    
 
-    @allure.step("送出成功後搜尋專案")
+    @allure.step("送出成功後驗證專案存在")
     def submit_project_and_verify_created(self, project_abbreviation: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
@@ -296,16 +334,15 @@ class ProjectPage:
             should_exist=False,
         )
 
-    #delete
+
+    # delete
+
     @allure.step("開啟刪除視窗")
     def open_project_delete_dialog(self, project_abbreviation: str):
-        self.operate_page.search_keyword(
-            self.elements.input_keyword_search,
-            project_abbreviation,
-            self.elements.msg_search_noResult,
-            should_exist=False,
-        )
-        self.elements.option_cards.first.click()
+        self.search_project(project_abbreviation)
+        project_card = self.project_card(project_abbreviation)
+        expect(project_card).to_have_count(1)
+        project_card.click()
         self.base_page.click_expect(self.elements.btn_delete_project, self.elements.page_dialog)
 
     @allure.step("驗證無內容時不可點確認")
@@ -321,19 +358,39 @@ class ProjectPage:
     def confirm_project_delete(self):
         self.operate_page.verify_delete()
 
-    @allure.step("Delete project [{project_abbreviation}]")
+    @allure.step("刪除專案[ {project_abbreviation} ]")
     def delete_project(self, project_abbreviation: str):
         self.open_project_delete_dialog(project_abbreviation)
         self.confirm_project_delete()
 
     @allure.step("Delete project if it exists [{project_abbreviation}]")
     def delete_project_if_exists(self, project_abbreviation: str) -> bool:
-        self.elements.input_keyword_search.fill(project_abbreviation)
-        self.base_page.wait_loading_disapper()
-        if self.elements.msg_search_noResult.is_visible():
+        """
+        用途：提供 fixture cleanup 安全刪除測試專案。
+
+        保護規則：
+            1. 禁止透過 cleanup helper 刪除 project-abbr-main。
+            2. 專案不存在時視為已清理，回傳 False。
+            3. 刪除後再次精準搜尋，仍存在時直接 fail。
+        """
+        if project_abbreviation == PERMISSION_PROJECT_ABBR:
+            raise AssertionError(
+                f"Cleanup is not allowed to delete baseline project: {project_abbreviation}"
+            )
+
+        if not self.project_exists(project_abbreviation):
             self.elements.input_keyword_search.fill("")
             return False
+
         self.delete_project(project_abbreviation)
+
+        self.page.goto(BASE_URL_DEV)
+        if self.project_exists(project_abbreviation):
+            raise AssertionError(
+                f"Project still exists after cleanup: {project_abbreviation}"
+            )
+
+        self.elements.input_keyword_search.fill("")
         return True
 
     @allure.step("驗證刪除成功")

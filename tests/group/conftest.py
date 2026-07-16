@@ -6,6 +6,7 @@ import pytest
 
 from app.omni_app import OmniApp
 from config.settings import GROUP_DESCRIPTION_PREFIX, GROUP_MEMBER_KEYWORD, GROUP_NAME
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
@@ -37,14 +38,14 @@ def group_data() -> GroupTestData:
 
 
 @pytest.fixture
-def group_app(logged_app: OmniApp) -> OmniApp:
-    logged_app.operate_page.go_to_permission_page()
-    logged_app.operate_page.open_to_permissions_page()
-    return logged_app
+def group_app(permission_project_app: OmniApp) -> OmniApp:
+    permission_project_app.operate_page.open_to_permissions_page()
+    return permission_project_app
 
 
 @pytest.fixture
-def group_cleanup(group_app: OmniApp):
+def group_cleanup(group_app: OmniApp, data_mode: str):
+    """登記 UUID Group；yield 後 isolated 刪除，keep 保留。"""
     tracked_names = []
 
     def track(group_name: str):
@@ -52,6 +53,9 @@ def group_cleanup(group_app: OmniApp):
             tracked_names.append(group_name)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for group_name in reversed(tracked_names):
         try:

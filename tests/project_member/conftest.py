@@ -7,7 +7,7 @@ import pytest
 from app.omni_app import OmniApp
 from config.settings import (
     BASE_URL_DEV,
-    PROJECT_ABBR,
+    PROJECT_ABBR_PREFIX,
     PROJECT_DESCRIPTION_PREFIX,
     PROJECT_EN_NAME_PREFIX,
     PROJECT_MEMBER_PRIMARY_KEYWORD,
@@ -15,6 +15,7 @@ from config.settings import (
     PROJECT_MEMBER_SECONDARY_KEYWORD,
     PROJECT_ZH_NAME_PREFIX,
 )
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
@@ -31,7 +32,7 @@ class ProjectMemberTestData:
 @pytest.fixture
 def project_member_data() -> ProjectMemberTestData:
     suffix = uuid4().hex[:8]
-    project_abbreviation = f"{PROJECT_ABBR}{suffix}"
+    project_abbreviation = f"{PROJECT_ABBR_PREFIX}{suffix}"
     project_zh_name = f"{PROJECT_ZH_NAME_PREFIX}{suffix}"
     project_en_name = f"{PROJECT_EN_NAME_PREFIX}{suffix}"
     project_description = f"{PROJECT_DESCRIPTION_PREFIX}{suffix}"
@@ -53,7 +54,8 @@ def project_member_app(logged_app: OmniApp) -> OmniApp:
 
 
 @pytest.fixture
-def member_project_cleanup(project_member_app: OmniApp):
+def member_project_cleanup(project_member_app: OmniApp, data_mode: str):
+    """登記 Project Member 測試專案；isolated 刪除，keep 保留。"""
     tracked_abbreviations = []
 
     def track(project_abbreviation: str):
@@ -61,6 +63,9 @@ def member_project_cleanup(project_member_app: OmniApp):
             tracked_abbreviations.append(project_abbreviation)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for project_abbreviation in reversed(tracked_abbreviations):
         try:

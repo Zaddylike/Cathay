@@ -10,6 +10,7 @@ from config.settings import (
     SCOPE_DESCRIPTION_PREFIX,
     SCOPE_NAME_PREFIX,
 )
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
@@ -50,14 +51,14 @@ def scope_data() -> ScopeTestData:
 
 
 @pytest.fixture
-def scope_app(logged_app: OmniApp) -> OmniApp:
-    logged_app.operate_page.go_to_permission_page()
-    logged_app.operate_page.open_to_permissions_page()
-    return logged_app
+def scope_app(permission_project_app: OmniApp) -> OmniApp:
+    permission_project_app.operate_page.open_to_permissions_page()
+    return permission_project_app
 
 
 @pytest.fixture
-def scope_cleanup(scope_app: OmniApp):
+def scope_cleanup(scope_app: OmniApp, data_mode: str):
+    """登記 UUID Scope；yield 後 isolated 刪除，keep 保留。"""
     tracked_codes = []
 
     def track(scope_code: str):
@@ -65,6 +66,9 @@ def scope_cleanup(scope_app: OmniApp):
             tracked_codes.append(scope_code)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for scope_code in reversed(tracked_codes):
         try:

@@ -13,6 +13,7 @@ from config.settings import (
     SCOPE_DESCRIPTION_PREFIX,
     SCOPE_NAME_PREFIX,
 )
+from utils.data_mode import should_cleanup
 
 
 @dataclass(frozen=True)
@@ -65,14 +66,14 @@ def default_permission_data() -> DefaultPermissionTestData:
 
 
 @pytest.fixture
-def default_permission_app(logged_app: OmniApp) -> OmniApp:
-    logged_app.operate_page.go_to_permission_page()
-    logged_app.operate_page.open_to_permissions_page()
-    return logged_app
+def default_permission_app(permission_project_app: OmniApp) -> OmniApp:
+    permission_project_app.operate_page.open_to_permissions_page()
+    return permission_project_app
 
 
 @pytest.fixture
-def default_permission_cleanup(default_permission_app: OmniApp):
+def default_permission_cleanup(default_permission_app: OmniApp, data_mode: str):
+    """登記 Default Permission／Role／Scope；isolated 清除，keep 保留。"""
     tracked = {"permission": [], "role": [], "scope": []}
 
     def track(resource_type: str, identifier: str):
@@ -80,6 +81,9 @@ def default_permission_cleanup(default_permission_app: OmniApp):
             tracked[resource_type].append(identifier)
 
     yield track
+
+    if not should_cleanup(data_mode):
+        return
 
     for role_code in reversed(tracked["permission"]):
         try:
