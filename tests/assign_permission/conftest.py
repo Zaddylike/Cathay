@@ -9,6 +9,7 @@ from config.settings import (
     ASSIGN_PERMISSION_DESCRIPTION_PREFIX,
     ASSIGN_PERMISSION_MEMBER,
     ASSIGN_PERMISSION_SECOND_MEMBER,
+    BASE_URL_DEV,
     ROLE_CODE,
     ROLE_DESCRIPTION_PREFIX,
     ROLE_NAME_PREFIX,
@@ -81,13 +82,17 @@ def assign_permission_data() -> AssignPermissionTestData:
 
 
 @pytest.fixture
-def assign_permission_app(permission_project_app: OmniApp) -> OmniApp:
-    permission_project_app.operate_page.open_to_permissions_page()
-    return permission_project_app
+def assign_permission_app(assign_permission_project_app: OmniApp) -> OmniApp:
+    assign_permission_project_app.operate_page.open_to_permissions_page()
+    return assign_permission_project_app
 
 
 @pytest.fixture
-def assign_permission_cleanup(assign_permission_app: OmniApp, data_mode: str):
+def assign_permission_cleanup(
+    assign_permission_app: OmniApp,
+    data_mode: str,
+    permission_project,
+):
     """登記 Assignment／Role／Scope；isolated 依相依順序清除，keep 保留。"""
     tracked = {"assignment": [], "role": [], "scope": []}
 
@@ -100,9 +105,17 @@ def assign_permission_cleanup(assign_permission_app: OmniApp, data_mode: str):
     if not should_cleanup(data_mode):
         return
 
+    def return_to_permission_settings():
+        assign_permission_app.page.keyboard.press("Escape")
+        assign_permission_app.page.goto(BASE_URL_DEV)
+        assign_permission_app.operate_page.go_to_permission_page(
+            permission_project.abbreviation
+        )
+        assign_permission_app.operate_page.open_to_permissions_page()
+
     for assignment_key in reversed(tracked["assignment"]):
         try:
-            assign_permission_app.page.keyboard.press("Escape")
+            return_to_permission_settings()
             assign_permission_app.assign_permission_page.delete_assign_permission_if_exists(
                 assignment_key
             )
@@ -115,12 +128,14 @@ def assign_permission_cleanup(assign_permission_app: OmniApp, data_mode: str):
 
     for role_code in reversed(tracked["role"]):
         try:
+            return_to_permission_settings()
             assign_permission_app.role_page.delete_role_if_exists(role_code)
         except Exception as error:
             allure.attach(str(error), name=f"Role cleanup failed: {role_code}")
 
     for scope_code in reversed(tracked["scope"]):
         try:
+            return_to_permission_settings()
             assign_permission_app.scope_page.delete_scope_if_exists(scope_code)
         except Exception as error:
             allure.attach(str(error), name=f"Scope cleanup failed: {scope_code}")

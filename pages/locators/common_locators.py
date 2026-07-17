@@ -349,7 +349,7 @@ class CommonLocators:
     @property
     # 欄位錯誤訊息
     def msg_field_error(self):
-        return self.page.locator('app-error-message.ng-star-inserted div span')
+        return self.page.locator('app-error-message div span')
 
     @property
     # 查無資訊文字元素

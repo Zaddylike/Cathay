@@ -13,8 +13,8 @@ BROWSER_ARGS = [
     "--disable-dev-shm-usage",
     "--disable-blink-features=AutomationControlled",
 ]
-HEADLESS = True
-
+HEADLESS = False
+DELAY_TIME = 0
 
 # Testing basic settings
 BASE_URL_DEV = "https://dev.omnihubs.cloud/"
