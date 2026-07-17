@@ -18,9 +18,9 @@ class ApplicationPermissionPage:
         self.operate_page.go_to_permission_page(project_abbreviation)
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
     
+    """新增按鈕仍存在代表尚未執行一次性的 Permission Init。"""
     @allure.step("進入權限新增頁面")
     def permission_initialization_available(self) -> bool:
-        """新增按鈕仍存在代表尚未執行一次性的 Permission Init。"""
         self.elements.tab_permission.click()
         expect(self.elements.tab_permission).to_have_attribute("aria-selected", "true")
         self.base_page.wait_loading_disapper()

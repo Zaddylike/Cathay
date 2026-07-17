@@ -179,8 +179,7 @@ class DefaultPermissionPage:
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
         row = self.get_default_permission_row(role_code)
-        expect(row.or_(self.elements.msg_search_noResult).first).to_be_visible()
-        if not row.is_visible():
+        if row.count() == 0 or not row.is_visible():
             self.elements.input_keyword_search.fill("")
             return False
         self.click_default_permission_delete(role_code)

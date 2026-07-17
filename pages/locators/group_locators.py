@@ -11,7 +11,11 @@ class GroupLocators:
 
     @property
     def btn_create_group(self):
-        return self.page.locator('[role="tabpanel"]:nth-child(3) .function-bar .function-bar__item:nth-child(3) button')
+        return (
+            self.page.locator('[role="tabpanel"]:visible')
+            .get_by_role("button", name="新增群組", exact=True)
+            .first
+        )
     
     @property
     def btn_create_more_group(self):

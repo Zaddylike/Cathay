@@ -23,8 +23,8 @@ class ProjectPage:
         self.elements.input_keyword_search.fill(project_abbreviation)
         self.base_page.wait_loading_disapper()
 
+    """搜尋後確認精準專案卡片是否剛好存在一筆。"""
     def project_exists(self, project_abbreviation: str) -> bool:
-        """搜尋後確認精準專案卡片是否剛好存在一筆。"""
         self.search_project(project_abbreviation)
         return self.project_card(project_abbreviation).count() == 1
 

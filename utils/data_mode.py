@@ -10,13 +10,13 @@ KEEP = "keep"
 DATA_MODES = (ISOLATED, KEEP)
 
 
-def should_cleanup(data_mode: str) -> bool:
-    """
-    用途：判斷 fixture teardown 是否需要清除測試資料。
+"""
+用途：判斷 fixture teardown 是否需要清除測試資料。
 
-    isolated 回傳 True；keep 回傳 False。
-    Delete 測試本身的刪除步驟不受此函式影響。
-    """
+isolated 回傳 True；keep 回傳 False。
+Delete 測試本身的刪除步驟不受此函式影響。
+"""
+def should_cleanup(data_mode: str) -> bool:
     return data_mode == ISOLATED
 
 

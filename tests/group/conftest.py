@@ -38,9 +38,9 @@ def group_data() -> GroupTestData:
 
 
 @pytest.fixture
-def group_app(permission_project_app: OmniApp) -> OmniApp:
-    permission_project_app.operate_page.open_to_permissions_page()
-    return permission_project_app
+def group_app(group_permission_project_app: OmniApp) -> OmniApp:
+    group_permission_project_app.operate_page.open_to_permissions_page()
+    return group_permission_project_app
 
 
 @pytest.fixture

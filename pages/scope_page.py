@@ -13,8 +13,10 @@ class ScopePage:
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
 
+
+
+    """以完整 Scope code 搜尋並確認是否存在唯一資料。"""
     def scope_exists(self, scope_code: str) -> bool:
-        """以完整 Scope code 搜尋並確認是否存在唯一資料。"""
         self.base_page.click_expect(self.elements.tab_permission_scope)
         self.elements.input_keyword_search.fill(scope_code)
         self.base_page.wait_loading_disapper()
@@ -24,6 +26,8 @@ class ScopePage:
         exists = scope_card.count() == 1
         self.elements.input_keyword_search.fill("")
         return exists
+
+
 
     @allure.step("Create scope [{scope_code}]")
     def create_scope(self, scope_code: str, scope_name: str, scope_description: str):
