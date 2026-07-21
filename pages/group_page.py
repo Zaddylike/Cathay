@@ -65,7 +65,7 @@ class GroupPage:
             self.elements.btn_memberadd_footer_confirm,
             member_keyword,
         )
-        self.base_page.click_expect(self.elements.btn_group_header_add_member)
+        self.base_page.click_expect(self.elements.btn_group_add_member)
         self.base_page.wait_fill(self.elements.input_group_description.last, group_description)
 
     @allure.step("Submit group and verify created")

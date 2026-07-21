@@ -98,8 +98,6 @@ def logged_app(page: Page):
     1. isolated 每個測試使用不同 UUID Project，不共用測試資料。
     2. keep 透過跨程序鎖補建固定 baseline，避免多個 worker 同時建立。
 """
-
-
 @pytest.fixture
 def permission_project(
     logged_app: OmniApp,
@@ -196,16 +194,15 @@ def permission_project_app(
 
 
 """
-用途：提供 Assign Permission 額外需要的第二位專案成員。
+用途：提供 Assign Permission 額外需要的專案成員與固定 SSO Application。
 
 執行流程：
     1. permission_project 先準備 keep 主專案或 isolated UUID Project。
     2. 將固定第二位測試成員加入「本次 context 指定的專案」。
-    3. keep 使用跨程序鎖；isolated 因 Project 不共用，不需要鎖。
-    4. 最後回到該專案的身份驗證首頁，交給 Assign Permission 測試。
+    3. 確認／建立 Assign Permission 成員清單需要的固定 SSO。
+    4. keep 使用跨程序鎖；isolated 因 Project 不共用，不需要鎖。
+    5. 最後回到該專案的身份驗證首頁，交給 Assign Permission 測試。
 """
-
-
 @pytest.fixture
 def assign_permission_project_app(
     permission_project: PermissionProjectContext,
@@ -213,7 +210,7 @@ def assign_permission_project_app(
 ) -> OmniApp:
     context = permission_project
 
-    def prepare_member() -> None:
+    def prepare_prerequisites() -> None:
         ensure_permission_project_member(
             context.app,
             context.abbreviation,
@@ -221,12 +218,15 @@ def assign_permission_project_app(
         )
         context.app.page.goto(BASE_URL_DEV)
         context.app.operate_page.go_to_permission_page(context.abbreviation)
+        ensure_sso_application(context.app, create_missing=True)
+        context.app.page.goto(BASE_URL_DEV)
+        context.app.operate_page.go_to_permission_page(context.abbreviation)
 
     if data_mode == KEEP:
         with permission_project_lock():
-            prepare_member()
+            prepare_prerequisites()
     else:
-        prepare_member()
+        prepare_prerequisites()
 
     return context.app
 

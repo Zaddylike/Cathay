@@ -4,25 +4,20 @@ class ApplicationPermissionLocators:
     def __init__(self, page: Page):
         self.page = page
 
-#   Entry / Page
-
-    @property
-    # 專案資訊頁面_身分認證按鈕
-    def btn_project_info_permission(self):
-        return self.page.locator(".sidebar__list", has=self.page.get_by_text(" 身份認證 ", exact=True))
-    
-    @property
-    # 身分驗證頁面_logo
-    def page_permission(self):
-        return self.page.locator(".text-type--content-title")
+# Entry / Page
 
     @property
     # 身分驗證頁面_分頁_權限設定
+    def tab_permission(self):
+        return self.page.locator('[role="tablist"] p-tab', has=self.page.get_by_text("權限設定"))
+    
+    @property
+    # 身分驗證頁面_權限設定頁面
     def btn_permission_add_permission(self):
-        return self.page.get_by_text(" 新增權限 ")
+        return self.page.locator("app-applications p-tabs p-tabpanel app-data-empty button", has=self.page.get_by_text("新增權限"))
     
 
-#   Scope
+# Scope
 
     @property
     # 身分驗證頁面_分頁_新增頁面_範圍
@@ -54,7 +49,7 @@ class ApplicationPermissionLocators:
         return self.page.locator('.border-circle')
     
 
-#   Role
+# Role
 
     @property
     # 身分驗證頁面_分頁_新增頁面_角色
@@ -108,7 +103,7 @@ class ApplicationPermissionLocators:
         return self.page.get_by_text(" 新增範圍 ")
     
 
-#   Group
+# Group
 
     @property
     # 身分驗證頁面_分頁_新增頁面_群組
@@ -133,7 +128,7 @@ class ApplicationPermissionLocators:
     def btn_group_add_member(self):
         return self.page.locator('[formarrayname="members"] button', has=self.page.get_by_text(" 新增成員 ", exact=True))
 
-    # Permission Assignment
+# Permission Assignment
 
     @property
     # 身分驗證頁面_分頁_新增頁面_預設權限_成員清單

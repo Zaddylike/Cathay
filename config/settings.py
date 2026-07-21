@@ -13,7 +13,7 @@ BROWSER_ARGS = [
     "--disable-dev-shm-usage",
     "--disable-blink-features=AutomationControlled",
 ]
-HEADLESS = False
+HEADLESS = True
 DELAY_TIME = 0
 
 # Testing basic settings

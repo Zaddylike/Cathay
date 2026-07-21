@@ -34,8 +34,6 @@ from config.settings import (
     3. 不存在且 create_missing=False 時立即 fail,符合 isolated 規則。
     4. 不存在且 create_missing=True 時建立固定共用專案,符合 keep 規則。
 """
-
-
 def ensure_shared_project(app: OmniApp, create_missing: bool) -> None:
     app.page.goto(BASE_URL_DEV)
     if app.project_page.project_exists(PERMISSION_PROJECT_ABBR):
@@ -61,23 +59,25 @@ def open_shared_permission_project(app: OmniApp) -> None:
     app.operate_page.go_to_permission_page(PERMISSION_PROJECT_ABBR)
 
 
+
+"""
+用途：確認 Permission Init 需要使用的測試成員已加入專案。
+
+執行流程：
+    1. 進入指定專案的成員頁。
+    2. 成員已存在就直接結束。
+    3. isolated 不可修改 baseline,因此缺少時 fail。
+    4. keep 可補資料,因此將固定測試成員加入專案。
+"""
 def ensure_permission_project_member(
     app: OmniApp,
     project_abbreviation: str,
     create_missing: bool,
 ) -> None:
-    """
-    用途：確認 Permission Init 需要使用的測試成員已加入專案。
-
-    執行流程：
-        1. 進入指定專案的成員頁。
-        2. 成員已存在就直接結束。
-        3. isolated 不可修改 baseline,因此缺少時 fail。
-        4. keep 可補資料,因此將固定測試成員加入專案。
-    """
     app.page.goto(BASE_URL_DEV)
     app.project_member_page.open_to_member_page(project_abbreviation)
     if app.project_member_page.member_exists(PROJECT_MEMBER_SECONDARY_KEYWORD):
+        app.page.goto(BASE_URL_DEV)
         return
     if not create_missing:
         raise AssertionError(
@@ -176,6 +176,7 @@ def ensure_permission_scope(app: OmniApp, create_missing: bool) -> None:
         PERMISSION_SCOPE_NAME,
         PERMISSION_SCOPE_DESCRIPTION,
     )
+
 
 """
 用途：建立 Scope/Role/Group/Permission 測試依賴的固定 SSO Application。

@@ -101,7 +101,7 @@ class ScopePage:
         scope_description: str,
     ):
         self.elements.input_scope_code.last.fill(scope_code)
-        if ( self.elements.input_permission_init_scope_name.last.is_hidden() ): 
+        if ( self.elements.input_scope_name.last.is_hidden() ): 
             self.elements.arrow_extend_page.last.click()
         self.elements.input_scope_name.last.fill(scope_name)
         self.elements.input_scope_description.last.fill(scope_description)
