@@ -64,7 +64,7 @@ class ProjectPage:
         self.submit_project_and_verify_created(project_abbreviation)
 
 
-    # create
+# create
 
     @allure.step("點擊「新增專案」按鈕")
     def open_create_project_dialog(self):
@@ -126,13 +126,13 @@ class ProjectPage:
         ]
 
         self.elements.input_project_description.fill("*"*201)
-        expect(self.elements.msg_field_error, f"輸入字數超過限制長度200").to_be_visible()    
+        expect(self.elements.msg_field_error, f"輸入字數超過限制長度200").to_be_visible()
         self.elements.input_project_description.fill(project_description)
 
     @allure.step("驗證「專案圖示」欄位選擇")
     def select_project_icon(self):
         self.elements.img_planets.nth(self.base_page.get_random_number(5)).click()
-        expect(self.elements.msg_field_error, f"錯誤訊息").not_to_be_visible()    
+        expect(self.elements.msg_field_error, f"錯誤訊息").not_to_be_visible()
 
     @allure.step("送出成功後驗證專案存在")
     def submit_project_and_verify_created(self, project_abbreviation: str):
