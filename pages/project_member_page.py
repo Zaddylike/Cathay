@@ -22,8 +22,8 @@ class ProjectMemberPage:
         project_card.click()
         self.base_page.click_expect(self.elements.btn_project_edit_member.first, self.elements.btn_member_edit_member)
 
+    """只查成員表格，不使用頁首登入者名稱判斷成員是否已加入。"""
     def member_exists(self, member_keyword: str) -> bool:
-        """只查成員表格，不使用頁首登入者名稱判斷成員是否已加入。"""
         self.elements.input_keyword_search.fill(member_keyword)
         self.base_page.wait_loading_disapper()
         member = self.elements.option_cards_members.get_by_text(

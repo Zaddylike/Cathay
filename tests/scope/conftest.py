@@ -56,9 +56,9 @@ def scope_app(permission_project_app: OmniApp) -> OmniApp:
     return permission_project_app
 
 
+"""登記 UUID Scope; yield 後 isolated 刪除,keep 保留。"""
 @pytest.fixture
 def scope_cleanup(scope_app: OmniApp, data_mode: str):
-    """登記 UUID Scope; yield 後 isolated 刪除,keep 保留。"""
     tracked_codes = []
 
     def track(scope_code: str):

@@ -296,10 +296,15 @@ class CommonLocators:
 #   Permission Common
 
     @property
+    # 專案資訊頁面_身分認證按鈕
+    def btn_project_info_permission(self):
+        return self.page.locator(".sidebar__list", has=self.page.get_by_text("身份認證"))
+
+    @property
     # 身分驗證頁面_分頁_權限設定
     def tab_permission(self):
-        return self.page.locator('[role="tablist"] p-tab', has_text=" 權限設定 ")
-    
+        return self.page.locator('[role="tablist"] p-tab', has=self.page.get_by_text("權限設定"))
+
     @property
     # 身分驗證頁面_logo
     def page_permission(self):

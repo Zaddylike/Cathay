@@ -4,31 +4,20 @@ class ApplicationSsoLocators:
     def __init__(self, page: Page):
         self.page = page
 
-    # Entry / Page
-
-    @property
-    # 專案資訊頁面_身分認證按鈕
-    def btn_project_info_permission(self):
-        return self.page.locator(".sidebar__list", has=self.page.get_by_text(" 身份認證 ", exact=True))
-
-    @property
-    # 身分驗證頁面_logo
-    def page_permission(self):
-        return self.page.locator(".text-type--content-title")
+# Entry / Page
 
     @property
     # 身分驗證頁面_分頁_單一登入
     def tab_signon(self):
-        return self.page.locator('[role="tablist"] p-tab', has_text=" 單一登入 ")
-    
+        return self.page.locator('[role="tablist"] p-tab', has=self.page.get_by_text("單一登入"))
 
     @property
     # 身分驗證頁面_單一登入分頁_新增應用端按鈕
     def btn_permission_add_sso(self):
-        return self.page.locator('[data-p-active="true"] button', has_text=" 新增應用端 ")
+        return self.page.locator('[data-p-active="true"] button', has_text="新增應用端")
     
 
-    # Provider Selection
+# Provider Selection
 
     @property
     # 單一登入新增頁面_step.2_供應商清單
@@ -57,17 +46,21 @@ class ApplicationSsoLocators:
     @property
     # 單一登入新增頁面_step.2_用戶端ID
     def input_entra_clientId(self):
-        return self.page.locator('[formcontrolname="clientId"]')
-
+        # return self.page.locator('[formcontrolname="clientId"]')
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('entra')).locator('[formcontrolname="clientId"]')
+    
     @property
     # 單一登入新增頁面_step.2_用戶端密鑰
     def input_entra_client_secret(self):
-        return self.page.locator('[formcontrolname="clientSecret"]')
+        # return self.page.locator('[formcontrolname="clientSecret"]')
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('entra')).locator('[formcontrolname="clientSecret"]')
+
 
     @property
     # 單一登入新增頁面_step.2_租用戶ID
     def input_entra_tenant_id(self):
-        return self.page.locator('[formcontrolname="tenantId"]')
+        # return self.page.locator('[formcontrolname="tenantId"]')
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('entra')).locator('[formcontrolname="tenantId"]')
 
     @property
     # 單一登入新增頁面_step.2_進階設定
@@ -106,31 +99,34 @@ class ApplicationSsoLocators:
     def btn_sso_create_more_provider(self):
         return self.page.get_by_role("button", name=" 新增第三方應用程式 ", exact=True)
     
-
     @property
     # 單一登入新增頁面_step.2_用戶端ID
     def input_google_clientId(self):
-        return self.page.locator('[formcontrolname="clientId"]').last
+        # return self.page.locator('[formcontrolname="clientId"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('google')).locator('[formcontrolname="clientId"]')
 
     @property
     # 單一登入新增頁面_step.2_用戶端密鑰
     def input_google_client_secret(self):
-        return self.page.locator('[formcontrolname="clientSecret"]').last
+        # return self.page.locator('[formcontrolname="clientSecret"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('google')).locator('[formcontrolname="clientSecret"]')
     
-
     @property
     #
     def switch_google_whitelist_active(self):
-        return self.page.locator('[formcontrolname="whitelistEnabled"]').nth(2)
-    
+        # return self.page.locator('[formcontrolname="whitelistEnabled"]').nth(2)
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('google')).locator('[formcontrolname="whitelistEnabled"]').nth(0)
+
 
     @property
     #
     def input_google_identify_field(self):
-        return self.page.locator('[formcontrolname="whitelistKey"]').last
+        # return self.page.locator('[formcontrolname="whitelistKey"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('google')).locator('[formcontrolname="whitelistKey"]')
+
     
 
-    # OIDC Provider
+# OIDC Provider
 
     @property
     #
@@ -140,58 +136,64 @@ class ApplicationSsoLocators:
     @property
     #
     def input_oidc_clientId(self):
-        return self.page.locator('[formcontrolname="clientId"]').last
+        # return self.page.locator('[formcontrolname="clientId"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="clientId"]')
 
     @property
     #
     def input_oidc_clientSecret(self):
-        return self.page.locator('[formcontrolname="clientSecret"]').last
+        # return self.page.locator('[formcontrolname="clientSecret"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="clientSecret"]')
 
     @property
     #
     def input_oidc_whitelistKey(self):
-        return self.page.locator('[formcontrolname="whitelistKey"]').last
-
+        # return self.page.locator('[formcontrolname="whitelistKey"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="whitelistKey"]')
+    
     @property
     #
     def input_oidc_authorizationGrantTypes(self):
-        return self.page.locator('[formcontrolname="authorizationGrantTypes"]').last
-    
+        # return self.page.locator('[formcontrolname="authorizationGrantTypes"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="authorizationGrantTypes"]')
 
     @property
     #
     def input_oidc_name(self):
-        return self.page.locator('[formcontrolname="name"]').last
-    
+        # return self.page.locator('[formcontrolname="name"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="name"]')
 
     @property
     #
     def input_oidc_authorizationUri(self):
-        return self.page.locator('[formcontrolname="authorizationUri"]').last
-    
+        # return self.page.locator('[formcontrolname="authorizationUri"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="authorizationUri"]')
 
     @property
     #
     def input_oidc_tokenUri(self):
-        return self.page.locator('[formcontrolname="tokenUri"]').last
+        # return self.page.locator('[formcontrolname="tokenUri"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="tokenUri"]')
     
 
     @property
     #
     def input_oidc_userInfoUri(self):
-        return self.page.locator('[formcontrolname="userInfoUri"]').last
+        # return self.page.locator('[formcontrolname="userInfoUri"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="userInfoUri"]')
     
 
     @property
     #
     def input_oidc_jwkSetUri(self):
-        return self.page.locator('[formcontrolname="jwkSetUri"]').last
-    
+        # return self.page.locator('[formcontrolname="jwkSetUri"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="jwkSetUri"]')
 
     @property
     #
     def input_oidc_userNameAttributeName(self):
-        return self.page.locator('[formcontrolname="userNameAttributeName"]').last
+        # return self.page.locator('[formcontrolname="userNameAttributeName"]').last
+        return self.page.locator('app-application-single-sign-on p-accordion-panel app-oauth2-registration', has=self.page.get_by_text('自訂設定')).locator('[formcontrolname="userNameAttributeName"]')
     
 
     # Application Setting
@@ -228,3 +230,9 @@ class ApplicationSsoLocators:
     #
     def input_application_description(self):
         return self.page.locator('[formcontrolname="description"]').last
+
+
+    @property
+    #
+    def dialog_sso_success(self):
+        return self.page.locator('[role="dialog"] prompt-dialog__body')
