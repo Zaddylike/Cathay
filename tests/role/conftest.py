@@ -82,7 +82,7 @@ def role_app(permission_project_app: OmniApp) -> OmniApp:
 
 @pytest.fixture
 def role_cleanup(role_app: OmniApp, data_mode: str):
-    """分別登記 UUID Role／Scope；isolated 依相依順序刪除，keep 保留。"""
+    """分別登記 UUID Role/Scope;isolated 依相依順序刪除，keep 保留。"""
     tracked_codes = {
         "role": [], 
         "scope": []

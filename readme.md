@@ -25,7 +25,7 @@ Cathay OmniHub UI 自動化測試專案，使用 **Python、Pytest、Playwright*
 
 ### UUID 測試資料
 
-測試資料會以 `settings.py` 的 prefix 加上 UUID，例如：
+測試資料會以 `settings.py` 的 prefix 加上 UUID，例如:
 
 ```text
 project-abbr-a12b
@@ -35,7 +35,7 @@ role-code-e56f
 
 ### Permission Baseline
 
-Scope、Role、Group、Assign Permission 與 Default Permission 使用固定專案：
+Scope、Role、Group、Assign Permission 與 Default Permission 使用固定專案:
 
 ```text
 project-abbr-main
@@ -43,7 +43,7 @@ project-abbr-main
 
 此專案需要具備 Permission Init、固定 Scope、SSO 與 S2S Application。
 
-`keep` 模式會補建缺少的 baseline；`isolated` 模式只檢查，缺少時直接失敗。
+`keep` 模式會補建缺少的 baseline;`isolated` 模式只檢查，缺少時直接失敗。
 
 建立 baseline 時會使用跨程序鎖，避免多個 pytest process 同時建立相同資料。
 
@@ -78,7 +78,7 @@ chmod +x shortcut/mac/*.sh
 
 ## 測試設定
 
-執行前請確認 `config/settings.py`：
+執行前請確認 `config/settings.py`:
 
 - 測試環境 URL
 - 登入帳號
@@ -142,7 +142,7 @@ python -m pytest tests/application/test_application_s2s_init.py --data-mode=keep
 
 ## 測試報表
 
-每次執行 pytest 會產生：
+每次執行 pytest 會產生:
 
 ```text
 reports/report.html

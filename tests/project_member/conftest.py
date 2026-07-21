@@ -55,7 +55,7 @@ def project_member_app(logged_app: OmniApp) -> OmniApp:
 
 @pytest.fixture
 def member_project_cleanup(project_member_app: OmniApp, data_mode: str):
-    """登記 Project Member 測試專案；isolated 刪除，keep 保留。"""
+    """登記 Project Member 測試專案;isolated 刪除，keep 保留。"""
     tracked_abbreviations = []
 
     def track(project_abbreviation: str):

@@ -13,7 +13,7 @@ class ProjectPage:
         self.operate_page = OperatePage(page)
 
     def project_card(self, project_abbreviation: str):
-        """以完整 abbreviation 精準取得單一專案卡片，不依賴 first／last。"""
+        """以完整 abbreviation 精準取得單一專案卡片，不依賴 first/last。"""
         return self.elements.option_cards.filter(
             has=self.page.get_by_text(project_abbreviation, exact=True)
         )
@@ -35,7 +35,7 @@ class ProjectPage:
         project_en_name: str,
         project_description: str,
     ) -> bool:
-        """專案不存在時才建立；回傳 True 代表本次有執行建立。"""
+        """專案不存在時才建立;回傳 True 代表本次有執行建立。"""
         if self.project_exists(project_abbreviation):
             return False
         self.create_project(
@@ -73,11 +73,11 @@ class ProjectPage:
     @allure.step("驗證「專案縮寫」欄位輸入")
     def validate_and_fill_project_abbreviation(self, project_abbreviation: str):
         self.input_abbr_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
+            ("中文", "只允許半形之英數字及符號:_-."),
             ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
+            ("$$$", "只允許半形之英數字及符號:_-."),
+            ("ＡＢＣ", "只允許半形之英數字及符號:_-."),
+            ("  ", "只允許半形之英數字及符號:_-."),
             ("#" * 41, "輸入字數超過限制長度40"),
         ]
         element_input = self.elements.input_project_abbr
@@ -366,9 +366,9 @@ class ProjectPage:
     @allure.step("Delete project if it exists [{project_abbreviation}]")
     def delete_project_if_exists(self, project_abbreviation: str) -> bool:
         """
-        用途：提供 fixture cleanup 安全刪除測試專案。
+        用途:提供 fixture cleanup 安全刪除測試專案。
 
-        保護規則：
+        保護規則:
             1. 禁止透過 cleanup helper 刪除 project-abbr-main。
             2. 專案不存在時視為已清理，回傳 False。
             3. 刪除後再次精準搜尋，仍存在時直接 fail。

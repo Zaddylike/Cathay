@@ -50,11 +50,11 @@ class ScopePage:
     @allure.step("Validate and fill scope code")
     def validate_and_fill_scope_code(self, scope_code: str):
         self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
+            ("中文", "只允許半形之英數字及符號:_-."),
             ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
+            ("$$$", "只允許半形之英數字及符號:_-."),
+            ("ＡＢＣ", "只允許半形之英數字及符號:_-."),
+            ("  ", "只允許半形之英數字及符號:_-."),
             ("#" * 21, "輸入字數超過限制長度20"),
         ]
         element_input = self.elements.input_scope_code
@@ -136,11 +136,11 @@ class ScopePage:
         self.operate_page.verify_input_text(self.elements.input_scope_code, "copy-")
         
         self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
+            ("中文", "只允許半形之英數字及符號:_-."),
             ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
+            ("$$$", "只允許半形之英數字及符號:_-."),
+            ("ＡＢＣ", "只允許半形之英數字及符號:_-."),
+            ("  ", "只允許半形之英數字及符號:_-."),
             ("#" * 21, "輸入字數超過限制長度20"),
         ]
         element_input = self.elements.input_scope_code

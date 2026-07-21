@@ -26,9 +26,9 @@ from config.settings import (
 
 
 """
-用途：確認固定共用專案 project-abbr-main 是否存在。
+用途:確認固定共用專案 project-abbr-main 是否存在。
 
-執行流程：
+執行流程:
     1. 回到專案列表並用完整 abbreviation 精準搜尋。
     2. 已存在時直接結束,不重複建立。
     3. 不存在且 create_missing=False 時立即 fail,符合 isolated 規則。
@@ -50,7 +50,7 @@ def ensure_shared_project(app: OmniApp, create_missing: bool) -> None:
 
 def open_shared_permission_project(app: OmniApp) -> None:
     """
-    用途：將目前 Page 統一導向 project-abbr-main 的應用程式設定首頁。
+    用途:將目前 Page 統一導向 project-abbr-main 的應用程式設定首頁。
 
     baseline 每完成一段流程後可能回到專案列表或新增頁,因此由此方法
     統一恢復下一個 baseline 檢查所需要的頁面狀態。
@@ -61,9 +61,9 @@ def open_shared_permission_project(app: OmniApp) -> None:
 
 
 """
-用途：確認 Permission Init 需要使用的測試成員已加入專案。
+用途:確認 Permission Init 需要使用的測試成員已加入專案。
 
-執行流程：
+執行流程:
     1. 進入指定專案的成員頁。
     2. 成員已存在就直接結束。
     3. isolated 不可修改 baseline,因此缺少時 fail。
@@ -92,9 +92,9 @@ def ensure_permission_project_member(
 
 
 """
-用途：執行只能做一次的 Permission Init wizard。
+用途:執行只能做一次的 Permission Init wizard。
 
-建立內容：
+建立內容:
     1. 固定 Scope 資料。
     2. 固定 Role 與 Scope 關聯。
     3. 跳過非必要的 Group/Assign Permission 初始資料。
@@ -133,9 +133,9 @@ def create_permission_initialization(app: OmniApp) -> None:
 
 
 """
-用途：判斷目前專案是否已完成 Permission Init。
+用途:判斷目前專案是否已完成 Permission Init。
 
-判斷方式：
+判斷方式:
     1. 新增 Permission Init 按鈕仍存在,代表尚未初始化。
     2. 按鈕不存在,代表已初始化,直接結束。
     3. isolated 發現未初始化時 fail。
@@ -150,18 +150,18 @@ def ensure_permission_initialization(app: OmniApp, create_missing: bool) -> None
 
 
 """
-用途：確認固定 Scope 可供 S2S baseline 選取。
+用途:確認固定 Scope 可供 S2S baseline 選取。
 
-Permission Init 可能已完成但固定 Scope 被人工刪除,因此仍需單獨檢查：
+Permission Init 可能已完成但固定 Scope 被人工刪除,因此仍需單獨檢查:
     1. 固定 Scope 存在時直接結束。
     2. isolated 缺少時 fail。
     3. keep 缺少時補建固定 Scope。
 """
 def ensure_permission_scope(app: OmniApp, create_missing: bool) -> None:
     """
-    用途：確認固定 Scope 可供 S2S baseline 選取。
+    用途:確認固定 Scope 可供 S2S baseline 選取。
 
-    Permission Init 可能已完成但固定 Scope 被人工刪除,因此仍需單獨檢查：
+    Permission Init 可能已完成但固定 Scope 被人工刪除,因此仍需單獨檢查:
         1. 固定 Scope 存在時直接結束。
         2. isolated 缺少時 fail。
         3. keep 缺少時補建固定 Scope。
@@ -179,7 +179,7 @@ def ensure_permission_scope(app: OmniApp, create_missing: bool) -> None:
 
 
 """
-用途：建立 Scope/Role/Group/Permission 測試依賴的固定 SSO Application。
+用途:建立 Scope/Role/Group/Permission 測試依賴的固定 SSO Application。
 
 此流程只建立 Group 測試必要的 Microsoft Entra ID provider,不執行
 Application SSO 測試本身的欄位驗證、重複 provider、Google 與 OIDC 流程。
@@ -208,7 +208,7 @@ def create_sso_application(app: OmniApp) -> None:
 
 
 """
-用途：確認固定 SSO Application 是否存在。
+用途:確認固定 SSO Application 是否存在。
 
 isolated 只檢查,缺少時 fail;keep 缺少時呼叫 create_sso_application 補建。
 """
@@ -224,7 +224,7 @@ def ensure_sso_application(app: OmniApp, create_missing: bool) -> None:
 
 
 """
-用途：建立 Scope/Role/Group/Permission 測試依賴的固定 S2S Application。
+用途:建立 Scope/Role/Group/Permission 測試依賴的固定 S2S Application。
 
 建立時會選取固定 Scope,並相容目前系統可能出現的單頁版與兩步版 S2S UI。
 """
@@ -242,7 +242,7 @@ def create_s2s_application(app: OmniApp) -> None:
 
 
 """
-用途：確認固定 S2S Application 是否存在。
+用途:確認固定 S2S Application 是否存在。
 
 isolated 只檢查,缺少時 fail;keep 缺少時呼叫 create_s2s_application 補建。
 """
@@ -257,9 +257,9 @@ def ensure_s2s_application(app: OmniApp, create_missing: bool) -> None:
 
 
 """
-用途：提供 Scope/Role/Default Permission 共用的核心 baseline 入口。
+用途:提供 Scope/Role/Default Permission 共用的核心 baseline 入口。
 
-執行順序：
+執行順序:
     1. 確認 project-abbr-main。
     2. 確認 Permission Init 已完成。
     3. 最後重新進入主專案,讓呼叫端 fixture 從一致頁面繼續。

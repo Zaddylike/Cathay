@@ -83,12 +83,12 @@ class ApplicationTestData:
 
 
 """
-用途：建立每個 Application 測試專屬的測試資料。
+用途:建立每個 Application 測試專屬的測試資料。
 
-執行流程：
+執行流程:
     1. 每次 fixture 呼叫都產生新的 UUID suffix。
     2. isolated 使用 UUID 專案名稱，測試之間互不共用專案。
-    3. keep 固定使用 project-abbr-main，但 SSO／S2S 名稱仍使用 UUID。
+    3. keep 固定使用 project-abbr-main，但 SSO/S2S 名稱仍使用 UUID。
     4. 回傳 frozen dataclass，避免測試中意外修改資料。
 """
 @pytest.fixture
@@ -149,16 +149,16 @@ def application_data(data_mode: str) -> ApplicationTestData:
 
 
 """
-用途：準備 Application 測試要進入的專案，並管理專案生命週期。
+用途:準備 Application 測試要進入的專案，並管理專案生命週期。
 
-執行流程：
-    1. keep 取得跨程序鎖，確認／建立 project-abbr-main 與固定專案成員。
+執行流程:
+    1. keep 取得跨程序鎖，確認/建立 project-abbr-main 與固定專案成員。
     2. isolated 建立本次測試專屬的 UUID 專案與固定專案成員。
     3. yield 將 ApplicationTestData 交給測試程式使用。
     4. 測試結束後回到 finally。
-    5. keep 直接保留專案；isolated 刪除自己建立的 UUID 專案。
+    5. keep 直接保留專案;isolated 刪除自己建立的 UUID 專案。
 
-注意：
+注意:
     cleanup 只會使用 application_data.project_abbreviation，
     isolated 不會碰到 project-abbr-main。
 """
@@ -247,9 +247,9 @@ def application_project(
 
 
 """
-用途：提供 S2S 測試可選取的 Permission Scope 前置資料。
+用途:提供 S2S 測試可選取的 Permission Scope 前置資料。
 
-執行流程：
+執行流程:
     1. application_project 先準備測試專案。
     2. 確認 Permission Init 已完成。
     3. 確認固定 Scope 存在，讓 S2S 建立頁可以精準選取。
@@ -332,11 +332,11 @@ def application_s2s_project(
 
 
 """
-用途：提供 Permission Init 測試專用的專案狀態。
+用途:提供 Permission Init 測試專用的專案狀態。
 
-執行流程：
+執行流程:
     1. application_project 先準備 isolated UUID 專案或 keep 主專案。
-    2. 確認／建立 Group 需要的固定 SSO 前置資料。
+    2. 確認/建立 Group 需要的固定 SSO 前置資料。
     3. keep 使用鎖檢查主專案是否已完成 Permission Init。
     4. keep 已初始化時 pytest.skip，避免重複執行一次性 wizard。
     5. isolated 的新專案若已初始化，代表環境異常並直接 fail。
