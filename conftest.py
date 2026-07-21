@@ -98,7 +98,7 @@ def logged_app(page: Page):
     2. keep 透過跨程序鎖補建固定 baseline,避免多個 worker 同時建立。
 """
 @pytest.fixture
-def permission_project(logged_app: OmniApp,data_mode: str) -> Iterator["PermissionProjectContext"]:
+def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["PermissionProjectContext"]:
     if data_mode == KEEP:
         with permission_project_lock():
             ensure_permission_baseline(logged_app, create_missing=True)
@@ -108,7 +108,7 @@ def permission_project(logged_app: OmniApp,data_mode: str) -> Iterator["Permissi
         )
         return
 
-    suffix = uuid4().hex[:8]
+    suffix = uuid4().hex[:4]
     project_abbreviation = f"{PROJECT_ABBR_PREFIX}permission-{suffix}"
     context = PermissionProjectContext(
         app=logged_app,
@@ -116,19 +116,17 @@ def permission_project(logged_app: OmniApp,data_mode: str) -> Iterator["Permissi
     )
 
     try:
-        logged_app.page.goto(BASE_URL_DEV)
         logged_app.project_page.create_project(
             project_abbreviation,
             f"{PROJECT_ZH_NAME_PREFIX}permission-{suffix}",
             f"{PROJECT_EN_NAME_PREFIX}permission-{suffix}",
             f"{PROJECT_DESCRIPTION_PREFIX}permission-{suffix}",
         )
-        logged_app.page.goto(BASE_URL_DEV)
         logged_app.operate_page.go_to_permission_page(project_abbreviation)
         create_permission_initialization(logged_app)
-        logged_app.page.goto(BASE_URL_DEV)
-        logged_app.operate_page.go_to_permission_page(project_abbreviation)
+
         yield context
+        
     finally:
         if should_cleanup(data_mode):
             try:
@@ -139,6 +137,7 @@ def permission_project(logged_app: OmniApp,data_mode: str) -> Iterator["Permissi
 
                 logged_app.page.keyboard.press("Escape")
                 logged_app.page.goto(BASE_URL_DEV)
+                
                 if logged_app.project_page.project_exists(project_abbreviation):
                     logged_app.operate_page.go_to_permission_page(project_abbreviation)
                     logged_app.single_sign_on_page.delete_application_if_exists(
@@ -147,14 +146,14 @@ def permission_project(logged_app: OmniApp,data_mode: str) -> Iterator["Permissi
                     logged_app.server_to_server_page.delete_application_if_exists(
                         PERMISSION_S2S_APPLICATION_NAME
                     )
-                    logged_app.page.goto(BASE_URL_DEV)
-                    logged_app.operate_page.go_to_permission_page(project_abbreviation)
+                    
                     if not logged_app.application_permission_page.permission_initialization_available():
                         logged_app.default_permission_page.delete_default_permission_if_exists(
                             PERMISSION_ROLE_CODE
                         )
                         logged_app.role_page.delete_role_if_exists(PERMISSION_ROLE_CODE)
                         logged_app.scope_page.delete_scope_if_exists(PERMISSION_SCOPE_CODE)
+
                     logged_app.page.goto(BASE_URL_DEV)
                     logged_app.project_page.delete_project_if_exists(project_abbreviation)
             except Exception as error:

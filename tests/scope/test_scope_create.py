@@ -19,3 +19,4 @@ def test_scope_create_success(scope_app: OmniApp, scope_data, scope_cleanup):
     )
     scope_app.scope_page.submit_and_verify_created(scope_data.code)
 
+    
