@@ -16,7 +16,7 @@ class ApplicationServerToServerPage:
     
     @allure.step("點擊下一步")    
     def continue_to_scope_step(self):
-        """相容 S2S 兩步版與單頁版：有下一步就點擊，否則確認新增範圍可用。"""
+        """相容 S2S 兩步版與單頁版:有下一步就點擊，否則確認新增範圍可用。"""
         if self.elements.btn_next_step.is_visible():
             self.elements.btn_next_step.click()
             return

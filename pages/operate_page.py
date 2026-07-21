@@ -42,7 +42,7 @@ class OperatePage:
                 inputElement.fill(input_value)
 
                 expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應該出現").to_be_visible()
-                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為：{expected_msg}").to_have_text(expected_msg)
+                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為:{expected_msg}").to_have_text(expected_msg)
 
                 inputElement.fill("")
         except Exception as e:

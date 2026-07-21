@@ -73,7 +73,7 @@ def default_permission_app(permission_project_app: OmniApp) -> OmniApp:
 
 @pytest.fixture
 def default_permission_cleanup(default_permission_app: OmniApp, data_mode: str):
-    """登記 Default Permission／Role／Scope；isolated 清除，keep 保留。"""
+    """登記 Default Permission/Role/Scope;isolated 清除，keep 保留。"""
     tracked = {"permission": [], "role": [], "scope": []}
 
     def track(resource_type: str, identifier: str):

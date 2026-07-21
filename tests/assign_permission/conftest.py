@@ -93,7 +93,7 @@ def assign_permission_cleanup(
     data_mode: str,
     permission_project,
 ):
-    """登記 Assignment／Role／Scope；isolated 依相依順序清除，keep 保留。"""
+    """登記 Assignment/Role/Scope;isolated 依相依順序清除，keep 保留。"""
     tracked = {"assignment": [], "role": [], "scope": []}
 
     def track(resource_type: str, identifier: str):

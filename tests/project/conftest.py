@@ -52,7 +52,7 @@ def project_app(logged_app: OmniApp) -> OmniApp:
 
 @pytest.fixture
 def project_cleanup(project_app: OmniApp, data_mode: str):
-    """登記測試建立的專案；isolated teardown 刪除，keep teardown 保留。"""
+    """登記測試建立的專案;isolated teardown 刪除，keep teardown 保留。"""
     tracked_abbreviations = []
 
     def track(project_abbreviation: str):
