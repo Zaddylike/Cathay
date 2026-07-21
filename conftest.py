@@ -98,10 +98,7 @@ def logged_app(page: Page):
     2. keep 透過跨程序鎖補建固定 baseline,避免多個 worker 同時建立。
 """
 @pytest.fixture
-def permission_project(
-    logged_app: OmniApp,
-    data_mode: str,
-) -> Iterator["PermissionProjectContext"]:
+def permission_project(logged_app: OmniApp,data_mode: str) -> Iterator["PermissionProjectContext"]:
     if data_mode == KEEP:
         with permission_project_lock():
             ensure_permission_baseline(logged_app, create_missing=True)
