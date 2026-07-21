@@ -34,10 +34,10 @@ from utils.permission_baseline import (
 
 
 """
-用途:集中管理專案自訂的 pytest CLI 參數。
+    用途:集中管理專案自訂的 pytest CLI 參數。
 
-執行流程:
-    1. --data-mode 控制測試資料是否於 teardown 清除。
+    執行流程:
+        1. --data-mode 控制測試資料是否於 teardown 清除。
 """
 def pytest_addoption(parser):
     parser.addoption(
@@ -48,19 +48,23 @@ def pytest_addoption(parser):
         help="Test data lifecycle: isolated deletes fixture data; keep retains it",
     )
 
-"""
-用途:將 --data-mode 轉成其他 fixtures 可以注入使用的字串。
 
-執行流程:
-    1. pytest 解析 CLI。
-    2. 未傳入時回傳 isolated。
-    3. 傳入 --data-mode=keep 時回傳 keep。
+"""
+    用途:將 --data-mode 轉成其他 fixtures 可以注入使用的字串。
+
+    執行流程:
+        1. pytest 解析 CLI。
+        2. 未傳入時回傳 isolated。
+        3. 傳入 --data-mode=keep 時回傳 keep。
 """
 @pytest.fixture(scope="session")
 def data_mode(pytestconfig) -> str:
     return pytestconfig.getoption("--data-mode")
 
 
+"""
+    用途: 建立 Basic Object。
+"""
 @pytest.fixture
 def app(page: Page):
     try:
@@ -69,6 +73,11 @@ def app(page: Page):
         raise Exception(f"Failed to initialize OmniApp: {error}")
 
 
+"""
+    用途: 建立 Basic Object並運行前置動作。
+    前置動作：
+        1. 登入
+"""
 @pytest.fixture
 def logged_app(page: Page):
     try:
@@ -80,22 +89,30 @@ def logged_app(page: Page):
 
 
 """
-運行順序:
-    1. 建立 Page object -> logged_app。
-    2. 分流測試模式:[ isolated、keep ]。
-    3.1.keep:
-        1. 進入跨程序鎖。
-        2. 檢查固定 project-abbr-main 與 Permission Init,有缺就補。
-        3. 測試結束後保留資料。
-    3.2.isolated:
-        1. 建立本次測試專屬 UUID Project。
-        2. 在 UUID Project 建立最小 Permission Init。
-        3. yield 將 Project context 交給下游 fixture 與測試。
-        4. 測試結束後先刪除 Application,再刪除 UUID Project。
+    用途:維持 Scope/Role/Default Permission 原本只取得 OmniApp 的介面。
 
-平行運行:
-    1. isolated 每個測試使用不同 UUID Project,不共用測試資料。
-    2. keep 透過跨程序鎖補建固定 baseline,避免多個 worker 同時建立。
+    permission_project 先完成 Project 前置與生命週期管理,這裡只取出同一個OmniApp object.
+    確保下游 fixtures 與 teardown 都操作同一個 browser page。
+"""
+@pytest.fixture
+def permission_project_app(
+    permission_project: PermissionProjectContext,
+) -> OmniApp:
+    return permission_project.app
+
+@dataclass(frozen=True)
+class PermissionProjectContext:
+    app: OmniApp
+    abbreviation: str
+
+"""
+    用途: 建立 permission頁面的Object並運行前置新增動作。
+    前置動作：
+        1. 登入
+        2. 判斷data-mode
+        2.1. keep: 建立跨程序鎖 -> 檢查 main project 與 permission Init,有缺就補 -> 測試後保留資料
+        2.2. isolated: 建立UUID project -> 建立最小Permission
+        3. yield -> 交付給下游fixture測試
 """
 @pytest.fixture
 def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["PermissionProjectContext"]:
@@ -166,35 +183,15 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
                     f"Permission isolated cleanup failed for {project_abbreviation}: {error}"
                 ) from error
 
-
-@dataclass(frozen=True)
-class PermissionProjectContext:
-    app: OmniApp
-    abbreviation: str
-
-
 """
-用途:維持 Scope/Role/Default Permission 原本只取得 OmniApp 的介面。
+    用途:提供 Assign Permission 額外需要的專案成員與固定 SSO Application。
 
-permission_project 先完成 Project 前置與生命週期管理,這裡只取出同一個OmniApp object.
-確保下游 fixtures 與 teardown 都操作同一個 browser page。
-"""
-@pytest.fixture
-def permission_project_app(
-    permission_project: PermissionProjectContext,
-) -> OmniApp:
-    return permission_project.app
-
-
-"""
-用途:提供 Assign Permission 額外需要的專案成員與固定 SSO Application。
-
-執行流程:
-    1. permission_project 先準備 keep 主專案或 isolated UUID Project。
-    2. 將固定第二位測試成員加入「本次 context 指定的專案」。
-    3. 確認/建立 Assign Permission 成員清單需要的固定 SSO。
-    4. keep 使用跨程序鎖;isolated 因 Project 不共用,不需要鎖。
-    5. 最後回到該專案的身份驗證首頁,交給 Assign Permission 測試。
+    執行流程:
+        1. permission_project 先準備 keep 主專案或 isolated UUID Project。
+        2. 將固定第二位測試成員加入「本次 context 指定的專案」。
+        3. 確認/建立 Assign Permission 成員清單需要的固定 SSO。
+        4. keep 使用跨程序鎖;isolated 因 Project 不共用,不需要鎖。
+        5. 最後回到該專案的身份驗證首頁,交給 Assign Permission 測試。
 """
 @pytest.fixture
 def assign_permission_project_app(
@@ -204,16 +201,16 @@ def assign_permission_project_app(
     context = permission_project
 
     def prepare_prerequisites() -> None:
-        ensure_permission_project_member(
-            context.app,
-            context.abbreviation,
-            create_missing=True,
-        )
-        context.app.page.goto(BASE_URL_DEV)
-        context.app.operate_page.go_to_permission_page(context.abbreviation)
+        # ensure_permission_project_member(
+        #     context.app,
+        #     context.abbreviation,
+        #     create_missing=True,
+        # )
+        # context.app.page.goto(BASE_URL_DEV)
+        # context.app.operate_page.go_to_permission_page(context.abbreviation)
         ensure_sso_application(context.app, create_missing=True)
-        context.app.page.goto(BASE_URL_DEV)
-        context.app.operate_page.go_to_permission_page(context.abbreviation)
+        # context.app.page.goto(BASE_URL_DEV)
+        # context.app.operate_page.go_to_permission_page(context.abbreviation)
 
     if data_mode == KEEP:
         with permission_project_lock():
@@ -225,16 +222,14 @@ def assign_permission_project_app(
 
 
 """
-用途:提供 Group 額外需要的固定 SSO Application。
+    用途:提供 Group 額外需要的固定 SSO Application。
 
-執行流程:
-    1. permission_project 先準備 keep 主專案或 isolated UUID Project。
-    2. 只確認/建立 Group 必要的 SSO,不建立 S2S。
-    3. keep 使用跨程序鎖;isolated 的固定 SSO 建在專屬 UUID Project 內。
-    4. isolated teardown 由 permission_project 先刪除 SSO,再刪除 Project。
+    執行流程:
+        1. permission_project 先準備 keep 主專案或 isolated UUID Project。
+        2. 只確認/建立 Group 必要的 SSO,不建立 S2S。
+        3. keep 使用跨程序鎖;isolated 的固定 SSO 建在專屬 UUID Project 內。
+        4. isolated teardown 由 permission_project 先刪除 SSO,再刪除 Project。
 """
-
-
 @pytest.fixture
 def group_permission_project_app(
     permission_project: PermissionProjectContext,
@@ -243,11 +238,11 @@ def group_permission_project_app(
     context = permission_project
 
     def prepare_sso() -> None:
-        context.app.page.goto(BASE_URL_DEV)
-        context.app.operate_page.go_to_permission_page(context.abbreviation)
+        # context.app.page.goto(BASE_URL_DEV)
+        # context.app.operate_page.go_to_permission_page(context.abbreviation)
         ensure_sso_application(context.app, create_missing=True)
-        context.app.page.goto(BASE_URL_DEV)
-        context.app.operate_page.go_to_permission_page(context.abbreviation)
+        # context.app.page.goto(BASE_URL_DEV)
+        # context.app.operate_page.go_to_permission_page(context.abbreviation)
 
     if data_mode == KEEP:
         with permission_project_lock():
