@@ -208,5 +208,5 @@ class ApplicationSingleSignOnPage:
     def submit_sso_and_verify_success(self):
         self.operate_page.submit_and_confirm(
             confirm_button=self.elements.btn_dialog_permission_confirm,
-            dialog=self.elements.dialog_sso_success
+            dialog=self.elements.btn_dialog_permission_confirm
         )

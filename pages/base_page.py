@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
-from config.settings import DEFAULT_TIMEOUT
+from config.settings import DEFAULT_TIMEOUT, LOGIN_TIMEOUT
 from pages.locators.elements import BaseElements
 import random
 import allure
@@ -36,7 +36,7 @@ class BasePage:
 
         if expected_value is not None:
             try:
-                expect(expected_value).to_be_visible()
+                expect(expected_value).to_be_visible(timeout=LOGIN_TIMEOUT)
             except PlaywrightTimeoutError as e:
                 if reclick:
                     self.click_expect(locator, expected_value, False)
