@@ -26,7 +26,7 @@ class ApplicationPermissionPage:
         self.base_page.wait_loading_disapper()
         return self.elements.btn_permission_add_permission.is_visible()
 
-    @allure.step("Open Permission Init page")
+    @allure.step("開啟權限初始化頁面")
     def open_to_create_permission_page(self):
         self.base_page.click_expect(self.elements.tab_permission, self.elements.btn_permission_add_permission)
         self.base_page.click_expect(self.elements.btn_permission_add_permission, self.elements.btn_permission_add_scope)

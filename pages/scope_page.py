@@ -29,7 +29,7 @@ class ScopePage:
 
 
 
-    @allure.step("Create scope [{scope_code}]")
+    @allure.step("新增範圍 [{scope_code}]")
     def create_scope(self, scope_code: str, scope_name: str, scope_description: str):
         self.click_to_create_scope_page()
         self.elements.input_scope_code.fill(scope_code)
@@ -41,13 +41,13 @@ class ScopePage:
 
     #  create
 
-    @allure.step("Open create scope dialog")
+    @allure.step("開啟新增範圍視窗")
     def click_to_create_scope_page(self):
         self.base_page.click_expect(self.elements.tab_permission_scope)
         self.base_page.click_expect(self.elements.btn_create_scope)
         expect(self.elements.input_scope_code).to_be_visible()
 
-    @allure.step("Validate and fill scope code")
+    @allure.step("驗證並填寫範圍代碼")
     def validate_and_fill_scope_code(self, scope_code: str):
         self.input_code_cases = [
             ("中文", "只允許半形之英數字及符號：_-."),
@@ -62,7 +62,7 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
         self.elements.input_scope_code.fill(scope_code)
 
-    @allure.step("Validate and fill scope name")
+    @allure.step("驗證並填寫範圍名稱")
     def validate_and_fill_scope_name(self, scope_name: str):
         self.input_name_cases = [
             ("#" * 41, "輸入字數超過限制長度40"),
@@ -74,7 +74,7 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
         self.elements.input_scope_name.fill(scope_name)
 
-    @allure.step("Validate and fill scope description")
+    @allure.step("驗證並填寫範圍描述")
     def validate_and_fill_scope_description(self, scope_description: str):
         self.input_description_cases = [
             ("#" * 201, "輸入字數超過限制長度200")
@@ -84,7 +84,7 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
         self.elements.input_scope_description.fill(scope_description)
 
-    @allure.step("Validate duplicate scope code")
+    @allure.step("驗證範圍代碼不可重複")
     def validate_duplicate_scope(self, scope_code: str):
         self.elements.btn_scope_add_more_scope.click()
 
@@ -93,7 +93,7 @@ class ScopePage:
         ]
         self.operate_page.verify_input(self.elements.input_scope_code.last, self.elements.msg_field_error, self.input_scope_cases)
 
-    @allure.step("Create another scope")
+    @allure.step("新增另一筆範圍")
     def create_another_scope(
         self,
         scope_code: str,
@@ -106,7 +106,7 @@ class ScopePage:
         self.elements.input_scope_name.last.fill(scope_name)
         self.elements.input_scope_description.last.fill(scope_description)
     
-    @allure.step("Submit scope and verify created")
+    @allure.step("送出範圍並驗證新增成功")
     def submit_and_verify_created(self, scope_code: str):
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
@@ -120,7 +120,7 @@ class ScopePage:
 
     #  copy
 
-    @allure.step("Open copy scope dialog")
+    @allure.step("開啟複製範圍視窗")
     def click_to_copy_scope_page(self, source_scope_code: str):
         self.base_page.click_expect(self.elements.tab_permission_scope)
         self.operate_page.open_card_action(
@@ -131,7 +131,7 @@ class ScopePage:
             self.elements.btn_card_menu_copy,
         )
 
-    @allure.step("Validate and fill scope code")
+    @allure.step("驗證並填寫複製後的範圍代碼")
     def validate_copy_and_fill_code(self, copied_scope_code: str):
         self.operate_page.verify_input_text(self.elements.input_scope_code, "copy-")
         
@@ -148,7 +148,7 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
         self.elements.input_scope_code.fill(copied_scope_code)
 
-    @allure.step("Validate and update scope name")
+    @allure.step("驗證並填寫複製後的範圍名稱")
     def validate_copy_and_fill_name(self, copied_scope_name: str):
         expect(self.elements.input_scope_name).to_have_value(re.compile("copy-"),timeout=5000)
 
@@ -162,7 +162,7 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
         self.elements.input_scope_name.fill(copied_scope_name)
 
-    @allure.step("Validate and update scope description")
+    @allure.step("驗證並填寫複製後的範圍描述")
     def validate_and_copy_scope_description(self, copied_scope_description: str):
         self.input_description_cases = [
             ("#" * 201, "輸入字數超過限制長度200")
@@ -172,11 +172,11 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
         self.elements.input_scope_description.fill(copied_scope_description)
 
-    @allure.step("update scope status")
+    @allure.step("啟用複製後的範圍狀態")
     def enable_scope_status(self):
         self.elements.radio_status_enable.click()
 
-    @allure.step("Submit scope and verify updated")
+    @allure.step("送出範圍並驗證複製成功")
     def submit_and_verify_copied(self, copied_scope_code: str):
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
@@ -264,7 +264,7 @@ class ScopePage:
 
     #  update
 
-    @allure.step("Open update scope dialog")
+    @allure.step("開啟編輯範圍視窗")
     def click_to_update_scope_page(self, scope_code: str):
         self.base_page.click_expect(self.elements.tab_permission_scope)
         self.operate_page.open_card_action(
@@ -276,7 +276,7 @@ class ScopePage:
             action_reclick=True,
         )
 
-    @allure.step("Validate and update scope name")
+    @allure.step("驗證並更新範圍名稱")
     def validate_and_update_scope_name(self, updated_scope_name: str):
         self.input_name_cases = [
             ("  ", "必填欄位"),
@@ -288,7 +288,7 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
         self.elements.input_scope_name.fill(updated_scope_name)
 
-    @allure.step("Validate and update scope description")
+    @allure.step("驗證並更新範圍描述")
     def validate_and_update_scope_description(self, updated_scope_description: str):
         self.input_description_cases = [
             ("#" * 201, "輸入字數超過限制長度200")
@@ -298,11 +298,11 @@ class ScopePage:
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
         self.elements.input_scope_description.fill(updated_scope_description)
 
-    @allure.step("update scope status")
+    @allure.step("停用範圍狀態")
     def disable_scope_status(self):
         self.elements.radio_status_disable.click()
 
-    @allure.step("Submit scope and verify updated")
+    @allure.step("送出範圍並驗證更新成功")
     def submit_and_verify_updated(self, updated_scope_name: str):
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
@@ -315,7 +315,7 @@ class ScopePage:
 
     #  delete
 
-    @allure.step("Delete scope [{scope_code}]")
+    @allure.step("刪除範圍 [{scope_code}]")
     def delete_scope(self, scope_code: str):
         self.base_page.click_expect(self.elements.tab_permission_scope)
         self.operate_page.open_card_action(
@@ -329,7 +329,7 @@ class ScopePage:
         self.operate_page.verify_delete()
         self.base_page.wait_loading_disapper()
 
-    @allure.step("Delete scope if it exists [{scope_code}]")
+    @allure.step("若範圍存在則刪除 [{scope_code}]")
     def delete_scope_if_exists(self, scope_code: str) -> bool:
         self.base_page.click_expect(self.elements.tab_permission_scope)
         self.elements.input_keyword_search.fill(scope_code)
@@ -345,7 +345,7 @@ class ScopePage:
     def click_to_delete_scope_page(self, scope_code: str):
         self.delete_scope(scope_code)
 
-    @allure.step("Verify deleted scope if exist")
+    @allure.step("驗證範圍已刪除 [{scope_code}]")
     def verify_scope_deleted(self, scope_code: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,

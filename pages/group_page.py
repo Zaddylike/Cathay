@@ -17,7 +17,7 @@ class GroupPage:
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
 
-    @allure.step("Create group [{group_name}]")
+    @allure.step("新增群組 [{group_name}]")
     def create_group(self, group_name: str, group_description: str, member_keyword: str):
         self.click_to_create_group_page()
         self.open_create_group_page()
@@ -29,16 +29,16 @@ class GroupPage:
 
     #  create
 
-    @allure.step("Open create group page")
+    @allure.step("進入群組功能並開啟新增頁面")
     def click_to_create_group_page(self):
         self.base_page.click_expect(self.elements.tab_permission_group, self.elements.btn_create_group)
         self.base_page.click_expect(self.elements.btn_create_group, self.elements.btn_create_more_group)
 
-    @allure.step("Open create group page")
+    @allure.step("開啟另一筆群組新增表單")
     def open_create_group_page(self):
         self.base_page.click_expect(self.elements.btn_create_more_group, self.elements.input_group_name.first)
 
-    @allure.step("Validate and fill group name")
+    @allure.step("驗證並填寫群組名稱")
     def validate_and_fill_group_name(self, group_name: str):
         self.operate_page.verify_input(
             self.elements.input_group_name.first,
@@ -47,7 +47,7 @@ class GroupPage:
         )
         self.elements.input_group_name.first.fill(group_name)
 
-    @allure.step("Validate and fill group description")
+    @allure.step("驗證並填寫群組描述")
     def validate_and_fill_group_description(self, group_description: str):
         self.operate_page.verify_input(
             self.elements.input_group_description.first,
@@ -56,7 +56,7 @@ class GroupPage:
         )
         self.elements.input_group_description.first.fill(group_description)
 
-    @allure.step("Invite group member")
+    @allure.step("邀請群組成員")
     def invite_group_member(self, member_keyword: str, group_description: str):
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
@@ -68,7 +68,7 @@ class GroupPage:
         self.base_page.click_expect(self.elements.btn_group_add_member)
         self.base_page.wait_fill(self.elements.input_group_description.last, group_description)
 
-    @allure.step("Submit group and verify created")
+    @allure.step("送出群組並驗證新增成功")
     def submit_and_verify_created(self, group_name: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
@@ -79,11 +79,11 @@ class GroupPage:
 
     #  copy
 
-    @allure.step("Open create group page")
+    @allure.step("開啟群組清單")
     def click_to_group_page(self):
         self.base_page.click_expect(self.elements.tab_permission_group, self.elements.btn_create_group)
 
-    @allure.step("Open copy group page")
+    @allure.step("開啟複製群組頁面")
     def open_copy_group_page(self, source_group_name: str):
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
@@ -93,7 +93,7 @@ class GroupPage:
             self.elements.btn_card_menu_copy,
         )
 
-    @allure.step("Validate and fill copied group")
+    @allure.step("驗證並填寫複製後的群組資料")
     def validate_and_fill_copied_group(
         self,
         copied_group_name: str,
@@ -103,7 +103,7 @@ class GroupPage:
         self.elements.input_group_name.fill(copied_group_name)
         self.elements.input_group_description.first.fill(copied_group_description)
 
-    @allure.step("Submit group and verify copied")
+    @allure.step("送出群組並驗證複製成功")
     def submit_and_verify_copied(self, copied_group_name: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
@@ -114,7 +114,7 @@ class GroupPage:
 
     #  read
 
-    @allure.step("Search group with no result")
+    @allure.step("搜尋不存在的群組並驗證無結果")
     def search_group_with_no_result(self):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
@@ -123,7 +123,7 @@ class GroupPage:
         )
         self.elements.btn_filter_clear_noResult.click()
 
-    @allure.step("Search group by name")
+    @allure.step("依群組名稱搜尋")
     def search_group_by_name(self, group_name: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
@@ -132,7 +132,7 @@ class GroupPage:
         )
         self.elements.input_keyword_search.fill("")
 
-    @allure.step("Filter groups by status")
+    @allure.step("依狀態篩選群組")
     def filter_groups_by_status(self):
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
@@ -148,7 +148,7 @@ class GroupPage:
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_footer_clearfilter.click()
 
-    @allure.step("Sort groups by created time")
+    @allure.step("依建立時間排序群組")
     def sort_groups_by_created_time(self):
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_date_reyoung.click()
@@ -163,7 +163,7 @@ class GroupPage:
 
     #  update
 
-    @allure.step("Open update group page")
+    @allure.step("開啟編輯群組頁面")
     def open_update_group_page(self, group_name: str):
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
@@ -173,7 +173,7 @@ class GroupPage:
             self.elements.btn_card_menu_update,
         )
 
-    @allure.step("Validate and update group name")
+    @allure.step("驗證並更新群組名稱")
     def validate_and_update_group_name(self, updated_group_name: str):
         input_cases = [
             ("#" * 41, "輸入字數超過限制長度40"),
@@ -187,7 +187,7 @@ class GroupPage:
         )
         self.elements.input_group_name.fill(updated_group_name)
 
-    @allure.step("Validate and update group description")
+    @allure.step("驗證並更新群組描述")
     def validate_and_update_group_description(self, updated_group_description: str):
         input_cases = [
             ("#" * 201, "輸入字數超過限制長度200"),
@@ -199,11 +199,11 @@ class GroupPage:
         )
         self.elements.input_group_description.first.fill(updated_group_description)
 
-    @allure.step("Disable group status")
+    @allure.step("停用群組狀態")
     def disable_group_status(self):
         self.elements.radio_status_disable.click()
 
-    @allure.step("Submit group and verify updated")
+    @allure.step("送出群組並驗證更新成功")
     def submit_and_verify_updated(self, updated_group_name: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
@@ -214,7 +214,7 @@ class GroupPage:
 
     #  delete
 
-    @allure.step("Open group delete dialog")
+    @allure.step("開啟刪除群組視窗")
     def open_group_delete_dialog(self, group_name: str):
         self.operate_page.open_card_action(
             self.elements.input_keyword_search,
@@ -224,17 +224,17 @@ class GroupPage:
             self.elements.btn_card_menu_delete,
         )
 
-    @allure.step("Verify group delete input")
+    @allure.step("驗證群組刪除確認欄位")
     def verify_deleted_input(self):
         self.operate_page.verify_delete()
 
-    @allure.step("Delete group [{group_name}]")
+    @allure.step("刪除群組 [{group_name}]")
     def delete_group(self, group_name: str):
         self.click_to_group_page()
         self.open_group_delete_dialog(group_name)
         self.verify_deleted_input()
 
-    @allure.step("Delete group if it exists [{group_name}]")
+    @allure.step("若群組存在則刪除 [{group_name}]")
     def delete_group_if_exists(self, group_name: str) -> bool:
         self.click_to_group_page()
         self.elements.input_keyword_search.fill(group_name)
@@ -246,7 +246,7 @@ class GroupPage:
         self.verify_deleted_input()
         return True
 
-    @allure.step("Verify deleted group")
+    @allure.step("驗證群組已刪除 [{group_name}]")
     def verify_group_deleted(self, group_name: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,

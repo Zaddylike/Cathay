@@ -204,6 +204,7 @@ def create_sso_application(app: OmniApp) -> None:
     sso_page.select_tenant()
     elements.input_application_redirectUrl.fill(PERMISSION_SSO_REDIRECT_URL)
     elements.input_application_logoutUrl.fill(PERMISSION_SSO_LOGOUT_URL)
+    sso_page.setting_date()
     sso_page.submit_sso_and_verify_success()
 
 

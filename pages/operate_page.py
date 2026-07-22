@@ -77,7 +77,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to select list : {e}")
 
-    @allure.step("Select list option [{option_text}]")
+    @allure.step("選擇清單選項 [{option_text}]")
     def select_list_by_text(self, list_element, option_element, option_text: str):
         try:
             list_element.click()
@@ -87,7 +87,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to select list option [{option_text}]: {e}")
 
-    @allure.step("Submit form and confirm dialog")
+    @allure.step("送出表單並確認視窗")
     def submit_and_confirm(self, submit_button=None, dialog=None, confirm_button=None, enabled_timeout=None):
         try:
             submit_button = self.elements.btn_submit if submit_button is None else submit_button
@@ -103,7 +103,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to submit and confirm: {e}")
 
-    @allure.step("Search keyword and verify result")
+    @allure.step("搜尋關鍵字並驗證結果")
     def search_keyword(self, search_input, keyword, result_locator=None, should_exist=True):
         try:
             result_locator = self.elements.option_cards.first if result_locator is None else result_locator
@@ -116,7 +116,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to search keyword [{keyword}]: {e}")
 
-    @allure.step("Open card action menu")
+    @allure.step("開啟卡片操作選單")
     def open_card_action(self, search_input, keyword, menu_button, menu_page, action_button, action_reclick=False):
         try:
             search_input.fill(keyword)
@@ -128,7 +128,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to open card action for [{keyword}]: {e}")
 
-    @allure.step("Delete application [{application_name}] if it exists")
+    @allure.step("若應用端存在則刪除 [{application_name}]")
     def delete_application_card_if_exists(self, application_name: str) -> bool:
         search_input = self.elements.input_keyword_search_id
         search_input.fill(application_name)
@@ -158,7 +158,7 @@ class OperatePage:
         search_input.fill("")
         return True
 
-    @allure.step("Select member from advanced search")
+    @allure.step("從進階搜尋選擇成員")
     def select_member_from_advanced_search(
         self,
         search_button,
@@ -175,7 +175,7 @@ class OperatePage:
         except Exception as e:
             raise Exception(f"Failed to select member [{keyword}]: {e}")
 
-    @allure.step("Open project permission page")
+    @allure.step("開啟專案權限頁面")
     def go_to_permission_page(
         self,
         project_abbreviation: str = PERMISSION_PROJECT_ABBR,

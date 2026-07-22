@@ -13,7 +13,7 @@ class AssignPermissionPage:
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page)
 
-    @allure.step("Create assign permission [{role_code}]")
+    @allure.step("新增指定權限 [{role_code}]")
     def create_assign_permission(
         self,
         member_keyword: str,
@@ -28,7 +28,7 @@ class AssignPermissionPage:
         self.elements.input_assign_permission_description.fill(description)
         self.submit_and_verify_created(role_code)
 
-    @allure.step("Open assign permission list")
+    @allure.step("開啟指定權限清單")
     def open_assign_permission_list(self):
         self.base_page.click_expect(
             self.elements.tab_permission_assign,
@@ -38,7 +38,7 @@ class AssignPermissionPage:
 
     #  create
 
-    @allure.step("Open create assign permission page")
+    @allure.step("開啟新增指定權限頁面")
     def open_create_assign_permission_page(self):
         self.open_assign_permission_list()
         self.base_page.click_expect(
@@ -46,7 +46,7 @@ class AssignPermissionPage:
             self.elements.btn_assign_create_more_assign,
         )
 
-    @allure.step("Select assign permission member")
+    @allure.step("選擇指定權限成員")
     def select_assign_permission_member(self, member_keyword: str):
         self.operate_page.select_member_from_advanced_search(
             self.elements.btn_filter_condition_page.first,
@@ -56,7 +56,7 @@ class AssignPermissionPage:
             member_keyword,
         )
 
-    @allure.step("Select assign role permission")
+    @allure.step("選擇指定權限角色")
     def select_assign_role_permission(self, role_code: str):
         self.operate_page.select_list_by_text(
             self.elements.list_assign_permission_role.first,
@@ -64,7 +64,7 @@ class AssignPermissionPage:
             role_code,
         )
 
-    @allure.step("Select assign scope permission")
+    @allure.step("選擇指定權限範圍")
     def select_assign_scope_permission(self, scope_code: str):
         self.operate_page.select_list_by_text(
             self.elements.list_assign_permission_scope.nth(1),
@@ -72,7 +72,7 @@ class AssignPermissionPage:
             scope_code,
         )
 
-    @allure.step("Validate and fill assign permission description")
+    @allure.step("驗證並填寫指定權限描述")
     def validate_and_fill_description(self, description: str):
         input_cases = [
             ("#" * 201, "輸入字數超過限制長度200"),
@@ -84,7 +84,7 @@ class AssignPermissionPage:
         )
         self.elements.input_assign_permission_description.fill(description)
 
-    @allure.step("Create another assign permission")
+    @allure.step("新增另一筆指定權限")
     def create_another_assign_permission(
         self,
         member_keyword: str,
@@ -118,7 +118,7 @@ class AssignPermissionPage:
             description
         )
 
-    @allure.step("Submit assign permission and verify created")
+    @allure.step("送出指定權限並驗證新增成功")
     def submit_and_verify_created(self, assignment_key: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
@@ -130,12 +130,12 @@ class AssignPermissionPage:
 
     #  read
 
-    @allure.step("Verify assign permission list visible")
+    @allure.step("驗證指定權限清單顯示")
     def verify_assign_permission_list_visible(self):
         self.open_assign_permission_list()
         expect(self.elements.btn_create_assign_permission).to_be_visible()
 
-    @allure.step("Search assign permission by member")
+    @allure.step("依成員搜尋指定權限")
     def search_assign_permission_by_member(self, member_keyword: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
@@ -144,7 +144,7 @@ class AssignPermissionPage:
         )
         self.elements.input_keyword_search.fill("")
 
-    @allure.step("Search assign permission with no result")
+    @allure.step("搜尋不存在的指定權限並驗證無結果")
     def search_assign_permission_with_no_result(self):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
@@ -153,7 +153,7 @@ class AssignPermissionPage:
         )
         self.elements.btn_filter_clear_noResult.click()
 
-    @allure.step("Sort assign permissions by created time")
+    @allure.step("依建立時間排序指定權限")
     def sort_assign_permissions_by_created_time(self):
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition)
         self.elements.btn_filter_date_reyoung.click()
@@ -169,7 +169,7 @@ class AssignPermissionPage:
 
     #  update
 
-    @allure.step("Open update assign permission page")
+    @allure.step("開啟編輯指定權限頁面")
     def open_update_assign_permission_page(self, assignment_key: str):
         self.open_assign_permission_list()
         expect(self.elements.btn_create_assign_permission).to_be_visible()
@@ -181,7 +181,7 @@ class AssignPermissionPage:
             self.elements.btn_card_menu_update,
         )
 
-    @allure.step("Replace assign role permission")
+    @allure.step("更換指定權限角色")
     def replace_assign_role_permission(self, role_code: str):
         self.operate_page.select_list_by_text(
             self.elements.list_assign_edit_permission_role.first,
@@ -189,7 +189,7 @@ class AssignPermissionPage:
             role_code,
         )
 
-    @allure.step("Replace assign scope permission")
+    @allure.step("更換指定權限範圍")
     def replace_assign_scope_permission(self, scope_code: str):
         self.operate_page.select_list_by_text(
             self.elements.list_assign_edit_permission_scope.last,
@@ -197,7 +197,7 @@ class AssignPermissionPage:
             scope_code,
         )
 
-    @allure.step("Validate and update assign permission description")
+    @allure.step("驗證並更新指定權限描述")
     def validate_and_update_description(self, updated_description: str):
         input_cases = [
             ("#" * 201, "輸入字數超過限制長度200"),
@@ -209,7 +209,7 @@ class AssignPermissionPage:
         )
         self.elements.input_assign_permission_description.fill(updated_description)
 
-    @allure.step("Submit assign permission and verify updated")
+    @allure.step("送出指定權限並驗證更新成功")
     def submit_and_verify_updated(self, assignment_key: str):
         self.operate_page.submit_and_confirm()
         self.operate_page.search_keyword(
@@ -220,7 +220,7 @@ class AssignPermissionPage:
 
     #  delete
 
-    @allure.step("Open assign permission delete dialog")
+    @allure.step("開啟刪除指定權限視窗")
     def open_assign_permission_delete_dialog(self, assignment_key: str):
         self.open_assign_permission_list()
         expect(self.elements.btn_create_assign_permission).to_be_visible()
@@ -232,16 +232,16 @@ class AssignPermissionPage:
             self.elements.btn_card_menu_delete,
         )
 
-    @allure.step("Verify assign permission delete input")
+    @allure.step("驗證指定權限刪除確認欄位")
     def verify_deleted_input(self):
         self.operate_page.verify_delete()
 
-    @allure.step("Delete assign permission [{assignment_key}]")
+    @allure.step("刪除指定權限 [{assignment_key}]")
     def delete_assign_permission(self, assignment_key: str):
         self.open_assign_permission_delete_dialog(assignment_key)
         self.verify_deleted_input()
 
-    @allure.step("Delete assign permission if it exists [{assignment_key}]")
+    @allure.step("若指定權限存在則刪除 [{assignment_key}]")
     def delete_assign_permission_if_exists(self, assignment_key: str) -> bool:
         self.open_assign_permission_list()
         self.elements.input_keyword_search.fill(assignment_key)
@@ -252,7 +252,7 @@ class AssignPermissionPage:
         self.delete_assign_permission(assignment_key)
         return True
 
-    @allure.step("Verify deleted assign permission")
+    @allure.step("驗證指定權限已刪除 [{assignment_key}]")
     def verify_assign_permission_deleted(self, assignment_key: str):
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
