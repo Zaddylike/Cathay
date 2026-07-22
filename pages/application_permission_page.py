@@ -229,7 +229,6 @@ class ApplicationPermissionPage:
     @allure.step("點擊下一步到新增指定權限頁面")
     def click_to_permission_next_step(self):
         self.base_page.click_expect(self.elements.btn_next_step, self.elements.btn_permission_add_assign)
-        self.base_page.sleep(3)
         
 # Assign permission
 

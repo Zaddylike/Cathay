@@ -197,13 +197,11 @@ class RolePage:
         self.elements.btn_filter_status_enable.click()
         self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.last)
 
-        self.base_page.sleep(1)
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition, True)
         self.elements.btn_filter_status_disable.click()
         self.base_page.click_expect(self.elements.btn_filter_footer_search, self.elements.option_cards.last)
 
-        self.base_page.sleep(1)
         self.elements.input_keyword_search.click()
         self.base_page.click_expect(self.elements.btn_filter_condition_page.last, self.elements.page_filter_condition, True)
         self.elements.btn_filter_footer_clearfilter.click()
