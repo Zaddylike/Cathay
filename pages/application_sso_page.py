@@ -26,13 +26,13 @@ class ApplicationSingleSignOnPage:
         self.base_page.wait_loading_disapper()
         return self.page.get_by_text(application_name, exact=True).is_visible()
 
-    @allure.step("Delete SSO application [{application_name}] if it exists")
+    @allure.step("若單一登入應用端存在則刪除 [{application_name}]")
     def delete_application_if_exists(self, application_name: str) -> bool:
         if not self.application_exists(application_name):
             return False
         return self.operate_page.delete_application_card_if_exists(application_name)
 
-    @allure.step("Open SSO creation page")
+    @allure.step("開啟單一登入新增頁面")
     def open_to_create_sso_page(self):
         self.base_page.click_expect(self.elements.tab_signon, self.elements.btn_permission_add_sso)
         self.base_page.click_expect(self.elements.btn_permission_add_sso, self.elements.btn_next_step)

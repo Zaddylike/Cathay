@@ -13,13 +13,13 @@ Cathay OmniHub UI 自動化測試專案，使用 **Python、Pytest、Playwright*
 
 ### 測試範圍
 
-| 功能 | 測試內容 |
-|---|---|
-| Login | Account、Entra ID、Google 登入 |
-| Project | Create、Read、Update、Delete |
-| Project Member | Create、Read、Update、Delete |
-| Application | Permission Init、SSO Init、S2S Init |
-| Permission | Scope、Role、Group、Assign Permission、Default Permission(CRUD) |
+| 功能           | 測試內容                                                        |
+| -------------- | --------------------------------------------------------------- |
+| Login          | Account、Entra ID、Google 登入                                  |
+| Project        | Create、Read、Update、Delete                                    |
+| Project Member | Create、Read、Update、Delete                                    |
+| Application    | Permission Init、SSO Init、S2S Init                             |
+| Permission     | Scope、Role、Group、Assign Permission、Default Permission(CRUD) |
 
 ## 測試設計
 
@@ -111,10 +111,10 @@ python -m pytest tests/scope --headed
 
 ## 測試資料模式
 
-| 模式 | 用途 | 測試後資料 |
-|---|---|---|
-| `isolated` | CI、重複執行、隔離測試 | 自動清除 fixture 建立的資料 |
-| `keep` | 人工檢查除錯、建立資料後續運行permission | 保留 fixture 建立的資料 |
+| 模式       | 用途                                     | 測試後資料                  |
+| ---------- | ---------------------------------------- | --------------------------- |
+| `isolated` | CI、重複執行、隔離測試                   | 自動清除 fixture 建立的資料 |
+| `keep`     | 人工檢查除錯、建立資料後續運行permission | 保留 fixture 建立的資料     |
 
 ### isolated（預設）
 
@@ -211,3 +211,8 @@ utils/        資料模式、baseline 與共用工具
 conftest.py   共用 fixtures、CLI 與瀏覽器設定
 pytest.ini    Pytest 預設執行參數
 ```
+
+allure-reports
+
+allure generate reports/allure-results -o reports/allure-report --clean
+allure open reports/allure-report

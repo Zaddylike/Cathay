@@ -35,13 +35,13 @@ class ApplicationServerToServerPage:
         self.base_page.wait_loading_disapper()
         return self.page.get_by_text(application_name, exact=True).is_visible()
 
-    @allure.step("Delete S2S application [{application_name}] if it exists")
+    @allure.step("若伺服器串接應用端存在則刪除 [{application_name}]")
     def delete_application_if_exists(self, application_name: str) -> bool:
         if not self.application_exists(application_name):
             return False
         return self.operate_page.delete_application_card_if_exists(application_name)
 
-    @allure.step("Open S2S creation page")
+    @allure.step("開啟伺服器串接新增頁面")
     def open_to_create_s2s_page(self):
         self.base_page.click_expect(self.elements.tab_s2s, self.elements.btn_permission_add_s2s)
         self.base_page.click_expect(

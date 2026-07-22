@@ -363,7 +363,7 @@ class ProjectPage:
         self.open_project_delete_dialog(project_abbreviation)
         self.confirm_project_delete()
 
-    @allure.step("Delete project if it exists [{project_abbreviation}]")
+    @allure.step("若專案存在則刪除 [{project_abbreviation}]")
     def delete_project_if_exists(self, project_abbreviation: str) -> bool:
         """
         用途:提供 fixture cleanup 安全刪除測試專案。

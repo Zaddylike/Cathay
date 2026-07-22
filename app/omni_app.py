@@ -1,4 +1,5 @@
 import allure
+
 from playwright.sync_api import Page
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
@@ -35,7 +36,7 @@ class OmniApp:
         self.single_signon_page = self.single_sign_on_page
         self.server_to_servser_page = self.server_to_server_page
 
-    @allure.step("Open browser& Valid correct web& Log in")
+    @allure.step("開啟瀏覽器 & 確認網頁Title & 登入程序")
     def login_by_account(self, account: str, password: str):
         try:
             self.login_page.open_browser()

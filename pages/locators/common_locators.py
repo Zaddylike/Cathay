@@ -172,7 +172,7 @@ class CommonLocators:
     @property
     # S2S, SSO 新增視窗的權限設定按鈕
     def btn_dialog_permission_confirm(self):
-        return self.page.locator('[role="dialog"] .prompt-dialog__footer', has=self.page.get_by_text("權限設定"))
+        return self.page.locator('[role="dialog"] .prompt-dialog__footer button', has=self.page.get_by_text("權限設定"))
 
 #   Date Picker
 
