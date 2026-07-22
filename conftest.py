@@ -10,6 +10,8 @@ from app.omni_app import OmniApp
 from config.settings import (
     ACCOUNT_PASSWORD,
     ACCOUNT_USERNAME,
+    ACCOUNT_USERNAME_2,
+    ACCOUNT_PASSWORD_2,
     BASE_URL_DEV,
     BROWSER_ARGS,
     HEADLESS,
@@ -33,6 +35,56 @@ from utils.permission_baseline import (
 )
 
 
+# Browser settings
+
+@pytest.fixture(scope="session")
+def browser_type_launch_args(browser_type_launch_args):
+    return {
+        **browser_type_launch_args,
+        "headless": browser_type_launch_args.get("headless", HEADLESS),
+        "slow_mo": DELAY_TIME,
+        "args": [
+            *browser_type_launch_args.get("args", []),
+            *BROWSER_ARGS,
+        ],
+    }
+
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "java_script_enabled": True,
+        "locale": "zh-TW",
+        "no_viewport": True,
+        "extra_http_headers": {
+            **browser_context_args.get("extra_http_headers", {}),
+            "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+        },
+    }
+
+@pytest.fixture
+def page(page: Page, browser_name: str, browser_type_launch_args):
+    is_headless = browser_type_launch_args.get("headless", True)
+
+    if browser_name == "chromium" and not is_headless:
+        cdp_session = page.context.new_cdp_session(page)
+        try:
+            window = cdp_session.send("Browser.getWindowForTarget")
+            cdp_session.send(
+                "Browser.setWindowBounds",
+                {
+                    "windowId": window["windowId"],
+                    "bounds": {"windowState": "maximized"},
+                },
+            )
+        finally:
+            cdp_session.detach()
+
+    return page
+
+
+# CLI
+
 """
     用途:集中管理專案自訂的 pytest CLI 參數。
 
@@ -48,7 +100,6 @@ def pytest_addoption(parser):
         help="Test data lifecycle: isolated deletes fixture data; keep retains it",
     )
 
-
 """
     用途:將 --data-mode 轉成其他 fixtures 可以注入使用的字串。
 
@@ -62,6 +113,37 @@ def data_mode(pytestconfig) -> str:
     return pytestconfig.getoption("--data-mode")
 
 
+# threading accounts
+
+ACCOUNTS_Rollbook = [
+    {
+        "username": ACCOUNT_USERNAME,
+        "password": ACCOUNT_PASSWORD,
+    },
+    {
+        "username": ACCOUNT_USERNAME_2,
+        "password": ACCOUNT_PASSWORD_2,
+    },
+]
+
+@pytest.fixture
+def thread_account(worker_id):
+    if worker_id == "master":
+        return ACCOUNTS_Rollbook[0]
+    
+    worker_index = int(worker_id.replace("gw", ""))
+
+    if worker_index >= len(ACCOUNTS_Rollbook):
+        pytest.exit(
+            f"Thread數量超過可用帳號數量："
+            f"{worker_index + 1} Workers / {len(ACCOUNTS_Rollbook)} Accounts"
+        )
+
+    return ACCOUNTS_Rollbook[worker_index]
+
+
+# 各情境 Object
+
 """
     用途: 建立 Basic Object。
 """
@@ -72,21 +154,22 @@ def app(page: Page):
     except Exception as error:
         raise Exception(f"Failed to initialize OmniApp: {error}")
 
-
 """
     用途: 建立 Basic Object並運行前置動作。
     前置動作：
         1. 登入
 """
 @pytest.fixture
-def logged_app(page: Page):
+def logged_app(page: Page, thread_account):
     try:
         omni_app = OmniApp(page)
-        omni_app.login_by_account(ACCOUNT_USERNAME, ACCOUNT_PASSWORD)
+        omni_app.login_by_account(thread_account['username'], thread_account['password'])
         return omni_app
     except Exception as error:
         raise Exception(f"Failed to log in: {error}")
 
+"""
+"""
 @dataclass(frozen=True)
 class PermissionProjectContext:
     app: OmniApp
@@ -99,9 +182,7 @@ class PermissionProjectContext:
     確保下游 fixtures 與 teardown 都操作同一個 browser page。
 """
 @pytest.fixture
-def permission_project_app(
-    permission_project: PermissionProjectContext,
-) -> OmniApp:
+def permission_project_app(permission_project: PermissionProjectContext,) -> OmniApp:
     return permission_project.app
 
 """
@@ -193,10 +274,7 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
         5. 最後回到該專案的身份驗證首頁,交給 Assign Permission 測試。
 """
 @pytest.fixture
-def assign_permission_project_app(
-    permission_project: PermissionProjectContext,
-    data_mode: str,
-) -> OmniApp:
+def assign_permission_project_app(permission_project: PermissionProjectContext,data_mode: str,) -> OmniApp:
     context = permission_project
 
     def prepare_prerequisites() -> None:
@@ -219,7 +297,6 @@ def assign_permission_project_app(
 
     return context.app
 
-
 """
     用途:提供 Group 額外需要的固定 SSO Application。
 
@@ -230,10 +307,7 @@ def assign_permission_project_app(
         4. isolated teardown 由 permission_project 先刪除 SSO,再刪除 Project。
 """
 @pytest.fixture
-def group_permission_project_app(
-    permission_project: PermissionProjectContext,
-    data_mode: str,
-) -> OmniApp:
+def group_permission_project_app(permission_project: PermissionProjectContext,data_mode: str,) -> OmniApp:
     context = permission_project
 
     def prepare_sso() -> None:
@@ -252,51 +326,3 @@ def group_permission_project_app(
     return context.app
 
 
-#  Browser settings
-
-@pytest.fixture(scope="session")
-def browser_type_launch_args(browser_type_launch_args):
-    return {
-        **browser_type_launch_args,
-        "headless": browser_type_launch_args.get("headless", HEADLESS),
-        "slow_mo": DELAY_TIME,
-        "args": [
-            *browser_type_launch_args.get("args", []),
-            *BROWSER_ARGS,
-        ],
-    }
-
-
-@pytest.fixture(scope="session")
-def browser_context_args(browser_context_args):
-    return {
-        **browser_context_args,
-        "java_script_enabled": True,
-        "locale": "zh-TW",
-        "no_viewport": True,
-        "extra_http_headers": {
-            **browser_context_args.get("extra_http_headers", {}),
-            "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-        },
-    }
-
-
-@pytest.fixture
-def page(page: Page, browser_name: str, browser_type_launch_args):
-    is_headless = browser_type_launch_args.get("headless", True)
-
-    if browser_name == "chromium" and not is_headless:
-        cdp_session = page.context.new_cdp_session(page)
-        try:
-            window = cdp_session.send("Browser.getWindowForTarget")
-            cdp_session.send(
-                "Browser.setWindowBounds",
-                {
-                    "windowId": window["windowId"],
-                    "bounds": {"windowState": "maximized"},
-                },
-            )
-        finally:
-            cdp_session.detach()
-
-    return page

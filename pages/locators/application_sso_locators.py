@@ -230,9 +230,3 @@ class ApplicationSsoLocators:
     #
     def input_application_description(self):
         return self.page.locator('[formcontrolname="description"]').last
-
-
-    @property
-    #
-    def dialog_sso_success(self):
-        return self.page.locator('[role="dialog"] prompt-dialog__body')

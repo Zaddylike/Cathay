@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect
-from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT, DEFAULT_NAVIGATION_TIMEOUT
+from config.settings import BASE_URL_DEV, DEFAULT_TIMEOUT, DEFAULT_NAVIGATION_TIMEOUT, LOGIN_TIMEOUT
 from pages.locators.elements import LoginElements
 from pages.base_page import BasePage
 import allure
@@ -13,29 +13,13 @@ class LoginPage:
     @allure.step("開啟瀏覽器")
     def open_browser(self):
         try:
-            # self.page.set_default_timeout(DEFAULT_TIMEOUT)
             self.page.goto(
                 BASE_URL_DEV,
                 wait_until="load", # "load", "domcontentloaded" 用這兩就好
-                timeout=DEFAULT_NAVIGATION_TIMEOUT,
+                timeout=LOGIN_TIMEOUT,
             )
         except Exception as e:
             raise Exception(f"Failed to open browser: {e}")
-
-    @allure.step("驗證目標頁面是否正確")
-    def verify_title(self):
-        try:
-            expect(self.page).to_have_title("Omni", timeout=DEFAULT_TIMEOUT)
-        except Exception as e:
-            raise AssertionError(f"Failed to verify page title: {e}")
-    
-    def change_language(self, language: str):
-        try:
-            self.base_page.click_expect(self.elements.language_arrow, self.elements.language_list)
-            self.base_page.click_expect(self.elements.language_option_en if language == "EN" else self.elements.language_option_zh)
-            self.base_page.wait_loading_disapper()
-        except Exception as e:
-            raise Exception(f"Failed to change language: {e}")
 
     @allure.step("點擊登入按鈕/輸入帳號密碼: {account}")
     def user_login(self, account: str, password: str):
@@ -77,6 +61,21 @@ class LoginPage:
             self.base_page.click_expect(self.elements.btn_login_nextStep, self.elements.btn_user_avatar)
         except Exception as e:
             raise Exception(f"Failed to log in with Entra ID: {e}")
+
+    @allure.step("驗證目標頁面是否正確")
+    def verify_title(self):
+        try:
+            expect(self.page).to_have_title("Omni", timeout=DEFAULT_TIMEOUT)
+        except Exception as e:
+            raise AssertionError(f"Failed to verify page title: {e}")
+    
+    def change_language(self, language: str):
+        try:
+            self.base_page.click_expect(self.elements.language_arrow, self.elements.language_list)
+            self.base_page.click_expect(self.elements.language_option_en if language == "EN" else self.elements.language_option_zh)
+            self.base_page.wait_loading_disapper()
+        except Exception as e:
+            raise Exception(f"Failed to change language: {e}")
         
     def user_logout(self):
         try:
