@@ -87,6 +87,10 @@ def logged_app(page: Page):
     except Exception as error:
         raise Exception(f"Failed to log in: {error}")
 
+@dataclass(frozen=True)
+class PermissionProjectContext:
+    app: OmniApp
+    abbreviation: str
 
 """
     用途:維持 Scope/Role/Default Permission 原本只取得 OmniApp 的介面。
@@ -99,11 +103,6 @@ def permission_project_app(
     permission_project: PermissionProjectContext,
 ) -> OmniApp:
     return permission_project.app
-
-@dataclass(frozen=True)
-class PermissionProjectContext:
-    app: OmniApp
-    abbreviation: str
 
 """
     用途: 建立 permission頁面的Object並運行前置新增動作。

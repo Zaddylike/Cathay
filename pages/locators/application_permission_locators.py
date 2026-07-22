@@ -131,6 +131,11 @@ class ApplicationPermissionLocators:
 # Permission Assignment
 
     @property
+    # 身分驗證頁面_權限設定頁面
+    def btn_permission_add_assign(self):
+        return self.page.locator("app-permission-assign button", has=self.page.get_by_text("新增權限"))
+
+    @property
     # 身分驗證頁面_分頁_新增頁面_預設權限_成員清單
     def list_permission_role(self):
         return self.page.locator('[formcontrolname="id"]')

@@ -73,11 +73,11 @@ class ProjectPage:
     @allure.step("驗證「專案縮寫」欄位輸入")
     def validate_and_fill_project_abbreviation(self, project_abbreviation: str):
         self.input_abbr_cases = [
-            ("中文", "只允許半形之英數字及符號:_-."),
+            ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號:_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號:_-."),
-            ("  ", "只允許半形之英數字及符號:_-."),
+            ("$$$", "只允許半形之英數字及符號：_-."),
+            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
+            ("  ", "只允許半形之英數字及符號：_-."),
             ("#" * 41, "輸入字數超過限制長度40"),
         ]
         element_input = self.elements.input_project_abbr

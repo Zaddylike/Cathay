@@ -40,11 +40,11 @@ class RolePage:
     @allure.step("Validate and fill role code")
     def validate_and_fill_role_code(self, role_code: str):
         self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號:_-."),
+            ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號:_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號:_-."),
-            ("  ", "只允許半形之英數字及符號:_-."),
+            ("$$$", "只允許半形之英數字及符號：_-."),
+            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
+            ("  ", "只允許半形之英數字及符號：_-."),
             ("#" * 21, "輸入字數超過限制長度20"),
         ]
         element_input = self.elements.input_role_code
@@ -109,11 +109,11 @@ class RolePage:
         expect(self.elements.input_role_code).to_have_value(re.compile("copy-"),timeout=5000)
 
         self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號:_-."),
+            ("中文", "只允許半形之英數字及符號：_-."),
             ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號:_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號:_-."),
-            ("  ", "只允許半形之英數字及符號:_-."),
+            ("$$$", "只允許半形之英數字及符號：_-."),
+            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
+            ("  ", "只允許半形之英數字及符號：_-."),
             ("#" * 21, "輸入字數超過限制長度20"),
         ]
         element_input = self.elements.input_role_code
