@@ -119,6 +119,50 @@ python -m pytest tests/project --headed
 
 預設瀏覽器、輸出報表及其他共用參數定義於 `pytest.ini`。
 
+## 測試錄影
+
+錄影功能由 `pytest-playwright` 提供，不需要在 Page Object 或 fixture 內另外撰寫錄影程式。
+
+目前 `pytest.ini` 已設定:
+
+```ini
+--video=on
+--output=reports/playwright
+```
+
+因此執行 Pytest 時，所有測試都會自動錄影。影片會在測試結束、Browser Context 關閉後寫入:
+
+```text
+reports/playwright/<test-case-name>/video.webm
+```
+
+### 錄影模式
+
+| 參數 | 行為 |
+| --- | --- |
+| `--video=off` | 不錄影 |
+| `--video=on` | 錄製並保留所有測試影片 |
+| `--video=retain-on-failure` | 錄製所有測試，只保留失敗案例影片 |
+
+只想在單次執行時指定錄影模式，可以直接加入指令:
+
+```bash
+# 保留所有測試影片
+python -m pytest tests/project/test_project_journey.py --video=on
+
+# 只保留失敗案例影片
+python -m pytest tests/project/test_project_journey.py --video=retain-on-failure
+
+# 關閉錄影
+python -m pytest tests/project/test_project_journey.py --video=off
+```
+
+若要永久更改模式，修改 `pytest.ini` 內的 `--video` 設定即可。一般 CI 或完整 regression
+建議使用 `retain-on-failure`，可減少影片占用空間。
+
+影片可能包含登入畫面、帳號或其他敏感資訊，請避免將 `reports/playwright/` 提交至版本控制
+或長期存放於公開位置。
+
 ## 測試資料模式
 
 使用 `--data-mode` 控制 fixture 建立資料後是否清除。預設為 `isolated`。
