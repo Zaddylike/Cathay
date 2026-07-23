@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import allure
 import pytest
-from playwright.sync_api import Page
+from playwright.sync_api import BrowserContext, Error as PlaywrightError, Page
 
 from app.omni_app import OmniApp
 from config.settings import (
@@ -61,6 +61,30 @@ def browser_context_args(browser_context_args):
             "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
         },
     }
+
+@pytest.fixture
+def context(new_context) -> Iterator[BrowserContext]:
+    browser_context = new_context()
+    recorded_pages: list[Page] = []
+    browser_context.on("page", lambda created_page: recorded_pages.append(created_page))
+
+    yield browser_context
+
+    browser_context.close()
+
+    for index, recorded_page in enumerate(recorded_pages, start=1):
+        try:
+            video = recorded_page.video
+            if video is None:
+                continue
+
+            allure.attach.file(
+                video.path(),
+                name=f"Playwright video {index}",
+                attachment_type=allure.attachment_type.WEBM,
+            )
+        except PlaywrightError:
+            continue
 
 @pytest.fixture
 def page(page: Page, browser_name: str, browser_type_launch_args):

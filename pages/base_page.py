@@ -22,6 +22,7 @@ class BasePage:
             attachment_type=allure.attachment_type.PNG
         )
 
+
     def click_expect(self, locator, expected_value=None, reclick=False):
         try:
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
