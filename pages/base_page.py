@@ -13,7 +13,7 @@ class BasePage:
         try:
             self.page.wait_for_timeout(seconds * 1000)
         except Exception as e:
-            raise Exception(f"Failed to sleep: {e}")
+            raise Exception(f"Failed to sleep, Because of {e}")
     
     def take_screenshot(self, photo_name):
         allure.attach(
@@ -28,38 +28,39 @@ class BasePage:
             locator.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
             locator.click(timeout=DEFAULT_TIMEOUT)
             self.elements.icon_loading.wait_for(state="hidden", timeout=DEFAULT_TIMEOUT)
-            self.sleep(1)
+
         except PlaywrightTimeoutError as e:
-            raise AssertionError(f"Failed to find this element: {e}")
+            # raise AssertionError(f"Failed to Click time out: {e}")
+            raise TimeoutError(f"Click action timed out, Because of {e}")
         except Exception as e:
-            raise Exception(f"Failed to click this element: {e}")
+            raise Exception(f"Failed to click, Because of {e}")
 
         if expected_value is not None:
             try:
-                expect(expected_value).to_be_visible(timeout=LOGIN_TIMEOUT)
+                expected_value.wait_for(state='visible', timeout=DEFAULT_TIMEOUT)
             except PlaywrightTimeoutError as e:
                 if reclick:
                     self.click_expect(locator, expected_value, False)
                 else:
-                    raise AssertionError(f"Failed to find expected element {expected_value}: {e}")
+                    raise TimeoutError(f"Expect element timed out, Because of {expected_value}: {e}")
             except Exception as e:
-                raise Exception(f"Click passed, but expected element {expected_value} is not visible: {e}")
+                raise Exception(f"Click passed, but fail to expected element {expected_value} is not visible: {e}")
 
     def wait_fill(self, locator, value: str):
         try:
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
             locator.fill(value)
         except Exception as e:
-            raise Exception(f"Failed to fill value: {e}")
-        
+            raise Exception(f"Failed to fill value, Because of {e}")
+
     def wait_loading_disapper(self):
         try:
             self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
             self.sleep(1)
         except PlaywrightTimeoutError as e:
-            raise AssertionError(f"Timeout while waiting for loading to disappear: {e}")
+            raise TimeoutError(f"Waiting for loading to disappear timed out, Because of {e}")
         except Exception as e:
-            raise Exception(f"Failed while waiting for loading to disappear: {e}")
+            raise Exception(f"Failed while waiting for loading to disappear, Because of {e}")
             
     def get_random_number(self, value) -> int:
         try:

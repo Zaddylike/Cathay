@@ -100,6 +100,7 @@ class OperatePage:
                 expect(submit_button).to_be_enabled(timeout=enabled_timeout)
             self.base_page.click_expect(submit_button, dialog)
             self.base_page.click_expect(confirm_button)
+            
         except Exception as e:
             raise Exception(f"Failed to submit and confirm: {e}")
 
