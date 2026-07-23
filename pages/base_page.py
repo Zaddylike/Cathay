@@ -31,10 +31,9 @@ class BasePage:
             self.elements.icon_loading.wait_for(state="hidden", timeout=DEFAULT_TIMEOUT)
 
         except PlaywrightTimeoutError as e:
-            # raise AssertionError(f"Failed to Click time out: {e}")
-            raise TimeoutError(f"Click action timed out, Because of {e}")
+            raise TimeoutError(f"Failed to find element, Because {e}")
         except Exception as e:
-            raise Exception(f"Failed to click, Because of {e}")
+            raise Exception(f"Failed to click, Because {e}")
 
         if expected_value is not None:
             try:
