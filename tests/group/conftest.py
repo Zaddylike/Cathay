@@ -43,9 +43,9 @@ def group_app(group_permission_project_app: OmniApp) -> OmniApp:
     return group_permission_project_app
 
 
+"""登記 UUID Group;yield 後 isolated 刪除，keep 保留。"""
 @pytest.fixture
 def group_cleanup(group_app: OmniApp, data_mode: str):
-    """登記 UUID Group;yield 後 isolated 刪除，keep 保留。"""
     tracked_names = []
 
     def track(group_name: str):

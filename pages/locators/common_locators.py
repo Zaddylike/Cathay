@@ -162,17 +162,22 @@ class CommonLocators:
     @property
     # 刪除對話視窗_確認按鈕
     def btn_dialog_delete_confirm(self):
-        return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 確認 ")
+        return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text("確認")
 
     @property
     # 刪除對話視窗_確認按鈕
     def btn_dialog_delete_cancel(self):    
-        return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text(" 取消 ")
+        return self.page.locator('[role="dialog"] app-prompt-delete-dialog .form-dialog__footer').get_by_text("取消")
     
     @property
     # S2S, SSO 新增視窗的權限設定按鈕
     def btn_dialog_permission_confirm(self):
         return self.page.locator('[role="dialog"] .prompt-dialog__footer button', has=self.page.get_by_text("權限設定"))
+
+    @property
+    #  權限設定_我知道了
+    def btn_dialog_iknow(self):
+        return self.page.locator('[role="dialog"] .p-dialog-content button', has=self.page.get_by_text("我知道了"))
 
 #   Date Picker
 

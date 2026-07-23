@@ -1,4 +1,5 @@
 from app.omni_app import OmniApp
+from config.settings import PERMISSION_SCOPE_CODE
 import allure
 
 
@@ -9,8 +10,5 @@ def test_role_update_success(role_app: OmniApp, created_role):
     role_app.role_page.validate_and_update_role_description(
         created_role.updated_description
     )
-    role_app.role_page.update_role_scopes(
-        created_role.updated_scope_code,
-        created_role.second_scope_code,
-    )
+    role_app.role_page.add_role_scope(PERMISSION_SCOPE_CODE)
     role_app.role_page.submit_and_verify_updated(created_role.updated_name)

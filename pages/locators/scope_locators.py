@@ -31,6 +31,11 @@ class ScopeLocators:
     def input_scope_description(self):
         return self.page.locator('[formcontrolname="description"]')
 
+    @property
+    #  權限設定_範圍_垃圾桶_按鈕
+    def btn_scope_remove_create(self):
+        return self.page.locator('app-custom-form-field  [tooltipposition="bottom"] app-icon')
+
 # Create
 
     @property

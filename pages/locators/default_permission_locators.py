@@ -14,6 +14,11 @@ class DefaultPermissionLocators:
     @property
     # 權限設定_預設權限頁面_新增預設權限
     def btn_create_default_permission(self):
+        return self.page.locator('[role="tabpanel"]:nth-child(3) .function-bar .function-bar__item:nth-child(3) button', has=self.page.get_by_text("新增預設權限"))
+
+    @property
+    # 權限設定_預設權限頁面_新增預設權限
+    def btn_set_default_permission(self):
         return self.page.locator('[role="tabpanel"]:nth-child(3) .function-bar .function-bar__item:nth-child(3) button', has=self.page.get_by_text("設定預設權限"))
 
     @property

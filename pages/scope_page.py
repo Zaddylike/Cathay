@@ -92,6 +92,7 @@ class ScopePage:
             (scope_code, " 代碼不可重複 "),
         ]
         self.operate_page.verify_input(self.elements.input_scope_code.last, self.elements.msg_field_error, self.input_scope_cases)
+        self.base_page.click_expect(self.elements.btn_scope_remove_create.last)
 
     @allure.step("新增另一筆範圍")
     def create_another_scope(

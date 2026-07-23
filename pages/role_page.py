@@ -259,17 +259,12 @@ class RolePage:
         self.elements.input_role_description.fill(updated_role_description)
 
     @allure.step("更新角色適用範圍")
-    def update_role_scopes(self, updated_scope_code: str, second_scope_code: str):
+    def add_role_scope(self, scope_code: str):
         self.elements.btn_create_more.click()
-        self.operate_page.select_list_by_text(
-            self.elements.list_dropdown.first,
-            self.elements.option_dropdown_list_avail,
-            updated_scope_code,
-        )
         self.operate_page.select_list_by_text(
             self.elements.list_dropdown.last,
             self.elements.option_dropdown_list_avail,
-            second_scope_code,
+            scope_code,
         )
 
     @allure.step("送出角色並驗證更新成功")

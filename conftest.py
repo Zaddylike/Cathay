@@ -219,7 +219,10 @@ def permission_project_app(permission_project: PermissionProjectContext,) -> Omn
         3. yield -> 交付給下游fixture測試
 """
 @pytest.fixture
-def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["PermissionProjectContext"]:
+def permission_project(
+    logged_app: OmniApp,
+    data_mode: str
+) -> Iterator["PermissionProjectContext"]:
     if data_mode == KEEP:
         with permission_project_lock():
             ensure_permission_baseline(logged_app, create_missing=True)
@@ -269,10 +272,10 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
                     )
                     
                     if not logged_app.application_permission_page.permission_initialization_available():
-                        logged_app.default_permission_page.delete_default_permission_if_exists(
-                            PERMISSION_ROLE_CODE
-                        )
-                        logged_app.role_page.delete_role_if_exists(PERMISSION_ROLE_CODE)
+                        # logged_app.default_permission_page.delete_default_permission_if_exists(
+                        #     PERMISSION_ROLE_CODE
+                        # )
+                        # logged_app.role_page.delete_role_if_exists(PERMISSION_ROLE_CODE)
                         logged_app.scope_page.delete_scope_if_exists(PERMISSION_SCOPE_CODE)
 
                     logged_app.page.goto(BASE_URL_DEV)

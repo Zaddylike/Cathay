@@ -17,10 +17,11 @@ class ApplicationSingleSignOnPage:
     def open_to_permission_page(self, project_abbreviation: str):
         self.operate_page.go_to_permission_page(project_abbreviation)
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-    
+
+
+    """切換到 SSO 頁籤，使用完整 Application 名稱確認 baseline。"""
     @allure.step("進入單一登入新增頁面")
     def application_exists(self, application_name: str) -> bool:
-        """切換到 SSO 頁籤，使用完整 Application 名稱確認 baseline。"""
         self.elements.tab_signon.click()
         expect(self.elements.tab_signon).to_have_attribute("aria-selected", "true")
         self.base_page.wait_loading_disapper()
@@ -210,3 +211,4 @@ class ApplicationSingleSignOnPage:
             confirm_button=self.elements.btn_dialog_permission_confirm,
             dialog=self.elements.btn_dialog_permission_confirm
         )
+        

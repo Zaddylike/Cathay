@@ -1,4 +1,5 @@
 from app.omni_app import OmniApp
+from config.settings import PERMISSION_SCOPE_CODE
 import allure
 
 
@@ -24,10 +25,7 @@ def test_role_crud_journey(
     role_app.role_page.validate_and_update_role_description(
         role_data.updated_description
     )
-    role_app.role_page.update_role_scopes(
-        role_data.updated_scope_code,
-        role_data.second_scope_code,
-    )
+    role_app.role_page.add_role_scope(PERMISSION_SCOPE_CODE)
     role_app.role_page.submit_and_verify_updated(role_data.updated_name)
     role_app.role_page.delete_role(role_data.code)
     role_app.role_page.verify_role_deleted(role_data.code)

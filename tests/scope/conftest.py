@@ -18,9 +18,6 @@ class ScopeTestData:
     code: str
     name: str
     description: str
-    second_code: str
-    second_name: str
-    second_description: str
     copied_code: str
     copied_name: str
     copied_description: str
@@ -39,9 +36,6 @@ def scope_data() -> ScopeTestData:
         code=code,
         name=name,
         description=description,
-        second_code=f"{SCOPE_CODE_PREFIX}{uuid4().hex[:4]}",
-        second_name=f"{SCOPE_NAME_PREFIX}{uuid4().hex[:4]}",
-        second_description=f"{SCOPE_DESCRIPTION_PREFIX}{uuid4().hex[:4]}",
         copied_code=f"copy-{code}",
         copied_name=f"copy-{name}",
         copied_description=f"copy-{description}",

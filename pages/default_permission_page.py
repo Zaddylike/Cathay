@@ -20,10 +20,10 @@ class DefaultPermissionPage:
         self.select_default_scope_permission(scope_code)
         self.submit_and_verify_created(role_code)
 
-    #  create
+# create
 
     @allure.step("開啟預設權限清單")
-    def open_default_permission_list(self):
+    def open_create_permission_list(self):
         self.base_page.click_expect(
             self.elements.tab_permission_default,
             self.elements.btn_create_default_permission,
@@ -31,7 +31,10 @@ class DefaultPermissionPage:
 
     @allure.step("開啟新增預設權限頁面")
     def open_create_default_permission_page(self):
-        self.open_default_permission_list()
+        self.base_page.click_expect(
+            self.elements.tab_permission_default,
+            self.elements.btn_create_default_permission,
+        )
         self.base_page.click_expect(
             self.elements.btn_create_default_permission,
             self.elements.btn_submit,
@@ -73,11 +76,21 @@ class DefaultPermissionPage:
             self.elements.option_permissions.last,
         )
 
-    #  read
+# read
+
+    @allure.step("開啟預設權限清單")
+    def open_permission_list(self):
+        self.base_page.click_expect(
+            self.elements.tab_permission_default,
+            self.elements.btn_set_default_permission,
+        )
 
     @allure.step("驗證預設權限清單顯示")
     def verify_default_permission_list_visible(self):
-        self.open_default_permission_list()
+        self.base_page.click_expect(
+            self.elements.tab_permission_default,
+            self.elements.btn_set_default_permission,
+        )
         expect(self.elements.option_permissions.first).to_be_visible()
 
     @allure.step("依角色搜尋預設權限")
@@ -113,7 +126,10 @@ class DefaultPermissionPage:
 
     @allure.step("開啟編輯預設權限頁面")
     def open_update_default_permission_page(self):
-        self.open_default_permission_list()
+        self.base_page.click_expect(
+            self.elements.tab_permission_default,
+            self.elements.btn_set_default_permission,
+        )
         self.base_page.click_expect(
             self.elements.btn_create_default_permission,
             self.elements.list_default_role.last,
@@ -157,7 +173,10 @@ class DefaultPermissionPage:
 
     @allure.step("開啟刪除預設權限視窗")
     def open_default_permission_delete_dialog(self, role_code: str):
-        self.open_default_permission_list()
+        self.base_page.click_expect(
+            self.elements.tab_permission_default,
+            self.elements.btn_set_default_permission,
+        )
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
         row = self.get_default_permission_row(role_code)
@@ -175,7 +194,7 @@ class DefaultPermissionPage:
 
     @allure.step("若預設權限存在則刪除 [{role_code}]")
     def delete_default_permission_if_exists(self, role_code: str) -> bool:
-        self.open_default_permission_list()
+        self.base_page.click_expect(self.elements.tab_permission_default)
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
         row = self.get_default_permission_row(role_code)

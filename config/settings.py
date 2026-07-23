@@ -7,7 +7,7 @@ print(f'Starting Time: {now.strftime("%Y/%m/%d %H:%M")}')
 
 # Browser settings
 HEADLESS = True
-DELAY_TIME = 100
+DELAY_TIME = 50
 BROWSER_ARGS = [
     "--start-maximized",
     "--window-position=0,0",
@@ -50,9 +50,9 @@ PROJECT_EN_NAME_PREFIX = "project-en-"
 PROJECT_DESCRIPTION_PREFIX = "project-description-"
 
 # Testing prefix - Scope
-SCOPE_CODE_PREFIX = "scopy-code-"
-SCOPE_NAME_PREFIX = "scopy-name-"
-SCOPE_DESCRIPTION_PREFIX = "scopy-description-"
+SCOPE_CODE_PREFIX = "scope-code-"
+SCOPE_NAME_PREFIX = "scope-name-"
+SCOPE_DESCRIPTION_PREFIX = "scope-description-"
 
 # Testing prefix - Role
 ROLE_CODE = "role-code-"
@@ -80,17 +80,11 @@ PERMISSION_S2S_SCOPE_DESCRIPTION = "s2s-scope-main"
 PERMISSION_SCOPE_CODE = "perm-scope-main"
 PERMISSION_SCOPE_NAME = "permission-scope-name-main"
 PERMISSION_SCOPE_DESCRIPTION = "permission-scope-description-main"
-PERMISSION_SECOND_SCOPE_CODE = "perm-scope-2-main"
-PERMISSION_SECOND_SCOPE_NAME = "permission-scope-second-name-main"
-PERMISSION_SECOND_SCOPE_DESCRIPTION = "permission-scope-second-description-main"
 PERMISSION_THIRD_SCOPE_CODE = "perm-scope-3-main"
 PERMISSION_THIRD_SCOPE_NAME = "permission-scope-third-name-main"
 PERMISSION_ROLE_CODE = "perm-role-main"
 PERMISSION_ROLE_NAME = "permission-role-name-main"
 PERMISSION_ROLE_DESCRIPTION = "permission-role-description-main"
-PERMISSION_SECOND_ROLE_CODE = "perm-role-2-main"
-PERMISSION_SECOND_ROLE_NAME = "permission-role-second-name-main"
-PERMISSION_SECOND_ROLE_DESCRIPTION = "permission-role-second-description-main"
 PERMISSION_GROUP_NAME = "permission-group-main"
 PERMISSION_GROUP_DESCRIPTION = "permission-group-description-main"
 PERMISSION_GROUP_MEMBER_DESCRIPTION = "permission-group-member-description-main"

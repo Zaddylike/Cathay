@@ -104,7 +104,6 @@ def ensure_permission_project_member(
 """
 def create_permission_initialization(app: OmniApp) -> None:
     permission_page = app.application_permission_page
-
     permission_page.open_to_create_permission_page()
     scope_panels = app.page.locator("app-permission-scope p-accordion-panel")
     if scope_panels.count() != 1:
@@ -114,21 +113,42 @@ def create_permission_initialization(app: OmniApp) -> None:
     first_scope_panel.locator('[formcontrolname="name"]').fill(PERMISSION_SCOPE_NAME)
     first_scope_panel.locator('[formcontrolname="description"]').fill(PERMISSION_SCOPE_DESCRIPTION)
     permission_page.click_to_role_next_step()
-    permission_page.click_to_extend_role_page()
-    role_panels = app.page.locator("app-permission-role p-accordion-panel")
-    if role_panels.count() != 1:
-        raise AssertionError(f"Expected one initial Role panel, got {role_panels.count()}")
-    first_role_panel = role_panels.nth(0)
-    first_role_panel.locator('[formcontrolname="code"]').fill(PERMISSION_ROLE_CODE)
-    first_role_panel.locator('[formcontrolname="name"]').fill(PERMISSION_ROLE_NAME)
-    first_role_panel.locator('[formcontrolname="description"]').fill(PERMISSION_ROLE_DESCRIPTION)
-    permission_page.select_created_scope()
     permission_page.click_to_group_next_step()
     permission_page.click_to_permission_next_step()
     permission_page.click_to_default_permission_next_step()
-    app.default_permission_page.select_default_role_permission(PERMISSION_ROLE_CODE)
-    app.default_permission_page.select_default_scope_permission(PERMISSION_SCOPE_CODE)
     permission_page.operate_page.submit_and_confirm(enabled_timeout=15_000)
+
+
+    # permission_page = app.application_permission_page
+    # # Scope
+    # permission_page.open_to_create_permission_page()
+    # scope_panels = app.page.locator("app-permission-scope p-accordion-panel")
+    # if scope_panels.count() != 1:
+    #     raise AssertionError(f"Expected one initial Scope panel, got {scope_panels.count()}")
+    # first_scope_panel = scope_panels.nth(0)
+    # first_scope_panel.locator('[formcontrolname="code"]').fill(PERMISSION_SCOPE_CODE)
+    # first_scope_panel.locator('[formcontrolname="name"]').fill(PERMISSION_SCOPE_NAME)
+    # first_scope_panel.locator('[formcontrolname="description"]').fill(PERMISSION_SCOPE_DESCRIPTION)
+    # permission_page.click_to_role_next_step()
+    # # Role
+    # permission_page.click_to_extend_role_page()
+    # role_panels = app.page.locator("app-permission-role p-accordion-panel")
+    # if role_panels.count() != 1:
+    #     raise AssertionError(f"Expected one initial Role panel, got {role_panels.count()}")
+    # first_role_panel = role_panels.nth(0)
+    # first_role_panel.locator('[formcontrolname="code"]').fill(PERMISSION_ROLE_CODE)
+    # first_role_panel.locator('[formcontrolname="name"]').fill(PERMISSION_ROLE_NAME)
+    # first_role_panel.locator('[formcontrolname="description"]').fill(PERMISSION_ROLE_DESCRIPTION)
+    # # Group
+    # permission_page.select_created_scope()
+    # permission_page.click_to_group_next_step()
+    # permission_page.click_to_permission_next_step()
+    # # Assign
+    # permission_page.click_to_default_permission_next_step()
+    # # Default
+    # app.default_permission_page.select_default_role_permission(PERMISSION_ROLE_CODE)
+    # app.default_permission_page.select_default_scope_permission(PERMISSION_SCOPE_CODE)
+    # permission_page.operate_page.submit_and_confirm(enabled_timeout=15_000)
 
 
 
@@ -179,11 +199,7 @@ def ensure_permission_scope(app: OmniApp, create_missing: bool) -> None:
 
 
 """
-用途:建立 Scope/Role/Group/Permission 測試依賴的固定 SSO Application。
-
-此流程只建立 Group 測試必要的 Microsoft Entra ID provider,不執行
-Application SSO 測試本身的欄位驗證、重複 provider、Google 與 OIDC 流程。
-建立結果仍使用 permission-sso-main 精準確認與清除。
+用途:建立 Scope/Role/Group/Assign Permission 測試依賴的固定 SSO Application。
 """
 def create_sso_application(app: OmniApp) -> None:
     sso_page = app.single_sign_on_page
@@ -206,12 +222,12 @@ def create_sso_application(app: OmniApp) -> None:
     elements.input_application_logoutUrl.fill(PERMISSION_SSO_LOGOUT_URL)
     sso_page.setting_date()
     sso_page.submit_sso_and_verify_success()
+    app.base_page.click_expect(elements.btn_dialog_iknow, elements.btn_dialog_iknow)
+    app.base_page.click_expect(elements.btn_dialog_iknow)
 
 
 """
-用途:確認固定 SSO Application 是否存在。
-
-isolated 只檢查,缺少時 fail;keep 缺少時呼叫 create_sso_application 補建。
+用途:確認固定 SSO Application 是否存在。    
 """
 def ensure_sso_application(app: OmniApp, create_missing: bool) -> None:
     if app.single_sign_on_page.application_exists(PERMISSION_SSO_APPLICATION_NAME):

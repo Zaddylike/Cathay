@@ -45,6 +45,8 @@ class OperatePage:
                 expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為:{expected_msg}").to_have_text(expected_msg)
 
                 inputElement.fill("")
+                self.base_page.wait_loading_disapper()
+                
         except Exception as e:
             raise Exception(f"Failed to verify input : {e}")
 

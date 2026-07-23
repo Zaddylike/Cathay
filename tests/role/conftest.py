@@ -31,13 +31,6 @@ class RoleTestData:
     scope_name: str
     scope_description: str
 
-    updated_scope_code: str
-    updated_scope_name: str
-    updated_scope_description: str
-    second_scope_code: str
-    second_scope_name: str
-    second_scope_description: str
-
 
 @pytest.fixture
 def role_data() -> RoleTestData:
@@ -49,8 +42,6 @@ def role_data() -> RoleTestData:
     scope_code = f"{SCOPE_CODE_PREFIX}{scope_suffix}"
     scope_name = f"{SCOPE_NAME_PREFIX}{scope_suffix}"
     scope_description = f"{SCOPE_DESCRIPTION_PREFIX}{scope_suffix}"
-    updated_scope_suffix = uuid4().hex[:4]
-    second_scope_suffix = uuid4().hex[:4]
 
     return RoleTestData(
         code=code,
@@ -65,12 +56,6 @@ def role_data() -> RoleTestData:
         scope_code=scope_code,
         scope_name=scope_name,
         scope_description=scope_description,
-        updated_scope_code=f"{SCOPE_CODE_PREFIX}{updated_scope_suffix}",
-        updated_scope_name=f"{SCOPE_NAME_PREFIX}{updated_scope_suffix}",
-        updated_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}{updated_scope_suffix}",
-        second_scope_code=f"{SCOPE_CODE_PREFIX}{second_scope_suffix}",
-        second_scope_name=f"{SCOPE_NAME_PREFIX}{second_scope_suffix}",
-        second_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}{second_scope_suffix}",
     )
 
 
@@ -131,16 +116,6 @@ def prepared_role_scopes(
             role_data.scope_code,
             role_data.scope_name,
             role_data.scope_description,
-        ),
-        (
-            role_data.updated_scope_code,
-            role_data.updated_scope_name,
-            role_data.updated_scope_description,
-        ),
-        (
-            role_data.second_scope_code,
-            role_data.second_scope_name,
-            role_data.second_scope_description,
         ),
     )
 
