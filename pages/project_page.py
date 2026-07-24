@@ -360,6 +360,7 @@ class ProjectPage:
     def delete_project(self, project_abbreviation: str):
         self.open_project_delete_dialog(project_abbreviation)
         self.confirm_project_delete()
+        self.base_page.wait_loading_disapper()
 
     @allure.step("若專案存在則刪除 [{project_abbreviation}]")
     def delete_project_if_exists(self, project_abbreviation: str) -> bool:

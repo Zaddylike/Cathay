@@ -192,11 +192,13 @@ class DefaultPermissionPage:
         deleted_perms = self.elements.option_permissions.filter(has_text=role_code)
         if deleted_perms.count() == 0 or not deleted_perms.is_visible():
             self.elements.input_keyword_search.fill("")
+            self.base_page.wait_loading_disapper()
             return False
         
         self.base_page.click_expect(
             deleted_perms.locator('app-icon[class="cursor-pointer"]')
         )
+        
         self.verify_deleted_input()
         return True
 

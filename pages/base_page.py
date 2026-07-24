@@ -9,11 +9,17 @@ class BasePage:
         self.page = page
         self.elements = BaseElements(page)
 
-    def sleep(self, seconds: int):
+    def sleep(self, seconds):
         try:
             self.page.wait_for_timeout(seconds * 1000)
         except Exception as e:
             raise Exception(f"Failed to sleep, Because of {e}")
+
+    def get_random_number(self, value) -> int:
+        try:
+            return random.randint(0, value)
+        except Exception as e:
+            raise Exception(f"Failed to generate random number: {e}")
     
     def take_screenshot(self, photo_name):
         allure.attach(
@@ -22,13 +28,23 @@ class BasePage:
             attachment_type=allure.attachment_type.PNG
         )
 
+    def wait_loading_disapper(self):
+        try:
+            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.sleep(0.25)
+        except PlaywrightTimeoutError as e:
+            raise TimeoutError(f"Waiting for loading to disappear timed out, Because of {e}")
+        except Exception as e:
+            raise Exception(f"Failed while waiting for loading to disappear, Because of {e}")
+
 
     def click_expect(self, locator, expected_value=None, reclick=False):
         try:
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
             locator.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
             locator.click(timeout=DEFAULT_TIMEOUT)
-            self.elements.icon_loading.wait_for(state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.sleep(0.25)
 
         except PlaywrightTimeoutError as e:
             raise TimeoutError(f"Failed to find element, Because {e}")
@@ -50,20 +66,8 @@ class BasePage:
         try:
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
             locator.fill(value)
+            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.sleep(0.25)
+
         except Exception as e:
             raise Exception(f"Failed to fill value, Because of {e}")
-
-    def wait_loading_disapper(self):
-        try:
-            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
-            self.sleep(1)
-        except PlaywrightTimeoutError as e:
-            raise TimeoutError(f"Waiting for loading to disappear timed out, Because of {e}")
-        except Exception as e:
-            raise Exception(f"Failed while waiting for loading to disappear, Because of {e}")
-            
-    def get_random_number(self, value) -> int:
-        try:
-            return random.randint(0, value)
-        except Exception as e:
-            raise Exception(f"Failed to generate random number: {e}")

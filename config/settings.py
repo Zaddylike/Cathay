@@ -7,7 +7,7 @@ print(f'Starting Time: {now.strftime("%Y/%m/%d %H:%M")}')
 
 # Browser settings
 HEADLESS = True
-DELAY_TIME = 50
+DELAY_TIME = 0
 BROWSER_ARGS = [
     "--start-maximized",
     "--window-position=0,0",

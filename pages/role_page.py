@@ -280,6 +280,7 @@ class RolePage:
         self.base_page.click_expect(self.elements.tab_permission_role)
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
+        
         if self.elements.msg_search_noResult.is_visible():
             self.elements.input_keyword_search.fill("")
             return False

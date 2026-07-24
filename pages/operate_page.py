@@ -3,7 +3,7 @@ from playwright.sync_api import Page, expect
 from pages.locators.elements import OperationElements
 from pages.base_page import BasePage
 import re
-from config.settings import PERMISSION_PROJECT_ABBR
+from config.settings import PERMISSION_PROJECT_ABBR, DEFAULT_TIMEOUT
 
 class OperatePage:
     def __init__(self, page: Page):
@@ -24,12 +24,14 @@ class OperatePage:
 
             for input_value in input_cases:
                 self.base_page.wait_fill(input_element, input_value)
-                expect(self.elements.btn_dialog_delete_confirm).to_be_disabled()
+                expect(self.elements.btn_dialog_delete_confirm).to_be_disabled(timeout=DEFAULT_TIMEOUT)
                 input_element.clear()
             
             input_element.fill("DELETE")
             self.elements.btn_dialog_delete_confirm.click()
             self.elements.btn_dialog_checked.click()
+            self.base_page.wait_loading_disapper()
+            
         except Exception as e:
             raise  Exception(f'Failed to :{e}')
 
@@ -40,8 +42,9 @@ class OperatePage:
         try:
             for input_value, expected_msg in cases:
                 inputElement.fill(input_value)
+                self.base_page.wait_loading_disapper()
 
-                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應該出現").to_be_visible()
+                expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應該出現").to_be_visible(timeout=DEFAULT_TIMEOUT)
                 expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為:{expected_msg}").to_have_text(expected_msg)
 
                 inputElement.fill("")
@@ -124,10 +127,10 @@ class OperatePage:
         try:
             search_input.fill(keyword)
             self.page.mouse.wheel(0, 500)
-            self.base_page.sleep(1)
+            self.base_page.sleep(0.5)
             self.base_page.click_expect(menu_button.last, menu_page)
             self.base_page.click_expect(action_button, reclick=action_reclick)
-            self.base_page.sleep(1)
+            self.base_page.sleep(0.5)
         except Exception as e:
             raise Exception(f"Failed to open card action for [{keyword}]: {e}")
 
@@ -158,7 +161,10 @@ class OperatePage:
         self.verify_delete()
         self.base_page.wait_loading_disapper()
         expect(application_card).to_have_count(0)
+        
         search_input.fill("")
+        self.base_page.wait_loading_disapper()
+
         return True
 
     @allure.step("從進階搜尋選擇成員")
