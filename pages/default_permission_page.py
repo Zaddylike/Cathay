@@ -20,14 +20,8 @@ class DefaultPermissionPage:
         self.select_default_scope_permission(scope_code)
         self.submit_and_verify_created(role_code)
 
-# create
 
-    @allure.step("開啟預設權限清單")
-    def open_create_permission_list(self):
-        self.base_page.click_expect(
-            self.elements.tab_permission_default,
-            self.elements.btn_create_default_permission,
-        )
+# create
 
     @allure.step("開啟新增預設權限頁面")
     def open_create_default_permission_page(self):
@@ -78,14 +72,7 @@ class DefaultPermissionPage:
 
 # read
 
-    @allure.step("開啟預設權限清單")
-    def open_permission_list(self):
-        self.base_page.click_expect(
-            self.elements.tab_permission_default,
-            self.elements.btn_set_default_permission,
-        )
-
-    @allure.step("驗證預設權限清單顯示")
+    @allure.step("開啟預設權限頁面及驗證權限存在")
     def verify_default_permission_list_visible(self):
         self.base_page.click_expect(
             self.elements.tab_permission_default,
@@ -122,7 +109,8 @@ class DefaultPermissionPage:
         )
         self.elements.btn_filter_clear_noResult.click()
 
-    #  update
+
+# Update
 
     @allure.step("開啟編輯預設權限頁面")
     def open_update_default_permission_page(self):
@@ -131,7 +119,7 @@ class DefaultPermissionPage:
             self.elements.btn_set_default_permission,
         )
         self.base_page.click_expect(
-            self.elements.btn_create_default_permission,
+            self.elements.btn_set_default_permission,
             self.elements.list_default_role.last,
         )
 
@@ -160,7 +148,8 @@ class DefaultPermissionPage:
             self.elements.option_permissions.last,
         )
 
-    #  delete
+
+# delete
 
     def get_default_permission_row(self, role_code: str):
         return self.elements.option_permissions.filter(has_text=role_code)
@@ -179,9 +168,11 @@ class DefaultPermissionPage:
         )
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
-        row = self.get_default_permission_row(role_code)
-        expect(row).to_be_visible()
-        self.click_default_permission_delete(role_code)
+        exist_perms = self.elements.option_permissions.filter(has_text=role_code)
+        expect(exist_perms).to_be_visible()
+        self.base_page.click_expect(
+            exist_perms.locator('app-icon[class="cursor-pointer"]')
+        )
 
     @allure.step("驗證預設權限刪除確認欄位")
     def verify_deleted_input(self):
@@ -197,11 +188,15 @@ class DefaultPermissionPage:
         self.base_page.click_expect(self.elements.tab_permission_default)
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
-        row = self.get_default_permission_row(role_code)
-        if row.count() == 0 or not row.is_visible():
+
+        deleted_perms = self.elements.option_permissions.filter(has_text=role_code)
+        if deleted_perms.count() == 0 or not deleted_perms.is_visible():
             self.elements.input_keyword_search.fill("")
             return False
-        self.click_default_permission_delete(role_code)
+        
+        self.base_page.click_expect(
+            deleted_perms.locator('app-icon[class="cursor-pointer"]')
+        )
         self.verify_deleted_input()
         return True
 

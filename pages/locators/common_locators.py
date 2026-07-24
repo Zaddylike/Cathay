@@ -84,7 +84,10 @@ class CommonLocators:
     @property
     # 篩選面板_共用[請輸入關鍵字]的搜尋欄
     def input_keyword_search_id(self):
-        return self.page.get_by_placeholder("請輸入名稱或用戶端 ID", exact=True)   
+        return self.page.get_by_placeholder(
+            "請輸入名稱或用戶端 ID",
+            exact=True,
+        ).filter(visible=True)
 
     @property
     # 篩選面板_共用[請輸入關鍵字]的搜尋欄

@@ -15,9 +15,11 @@ def test_default_permission_crud_journey(
         data.role_code,
         data.scope_code,
     )
+
     default_permission_app.default_permission_page.search_default_permission_by_role(
         data.role_code
     )
+
     default_permission_app.default_permission_page.open_update_default_permission_page()
     default_permission_app.default_permission_page.replace_default_role_permission(
         data.updated_role_code
@@ -28,6 +30,7 @@ def test_default_permission_crud_journey(
     default_permission_app.default_permission_page.submit_and_verify_updated(
         data.updated_role_code
     )
+    
     default_permission_app.default_permission_page.delete_default_permission(
         data.updated_role_code
     )
