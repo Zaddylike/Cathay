@@ -2,6 +2,13 @@ import re
 
 import allure
 from playwright.sync_api import Page, expect
+
+from data.schema.permission_cases import (
+    PERMISSION_CODE_CASES,
+    PERMISSION_CREATE_NAME_CASES,
+    PERMISSION_DESCRIPTION_CASES,
+    PERMISSION_EDIT_NAME_CASES,
+)
 from pages.locators.elements import RoleElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
@@ -39,14 +46,7 @@ class RolePage:
 
     @allure.step("驗證並填寫角色代碼")
     def validate_and_fill_role_code(self, role_code: str):
-        self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
-            ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
-            ("#" * 21, "輸入字數超過限制長度20"),
-        ]
+        self.input_code_cases = PERMISSION_CODE_CASES
         element_input = self.elements.input_role_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
@@ -54,11 +54,7 @@ class RolePage:
 
     @allure.step("驗證並填寫角色名稱")
     def validate_and_fill_role_name(self, role_name: str):
-        self.input_name_cases = [
-            ("#" * 41, "輸入字數超過限制長度40"),
-            ("  ", "必填欄位"),
-            ("", "必填欄位"),
-        ]
+        self.input_name_cases = PERMISSION_CREATE_NAME_CASES
         element_input = self.elements.input_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
@@ -66,9 +62,7 @@ class RolePage:
 
     @allure.step("驗證並填寫角色描述")
     def validate_and_fill_role_description(self, role_description: str):
-        self.input_description_cases = [
-            ("#" * 201, "輸入字數超過限制長度200")
-        ]
+        self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
@@ -108,14 +102,7 @@ class RolePage:
     def validate_copy_and_fill_code(self, copied_role_code: str):
         expect(self.elements.input_role_code).to_have_value(re.compile("copy-"),timeout=5000)
 
-        self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
-            ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
-            ("#" * 21, "輸入字數超過限制長度20"),
-        ]
+        self.input_code_cases = PERMISSION_CODE_CASES
         element_input = self.elements.input_role_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
@@ -125,11 +112,7 @@ class RolePage:
     def validate_copy_and_fill_name(self, copied_role_name: str):
         expect(self.elements.input_role_name).to_have_value(re.compile("copy-"),timeout=5000)
 
-        self.input_name_cases = [
-            ("  ", "必填欄位"),
-            ("#" * 41, "輸入字數超過限制長度40"),
-            ("", "必填欄位"),
-        ]
+        self.input_name_cases = PERMISSION_EDIT_NAME_CASES
         element_input = self.elements.input_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
@@ -137,9 +120,7 @@ class RolePage:
 
     @allure.step("驗證並填寫複製後的角色描述")
     def validate_and_copy_role_description(self, copied_role_description: str):
-        self.input_description_cases = [
-            ("#" * 201, "輸入字數超過限制長度200")
-        ]
+        self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
@@ -238,11 +219,7 @@ class RolePage:
 
     @allure.step("驗證並更新角色名稱")
     def validate_and_update_role_name(self, updated_role_name: str):
-        self.input_name_cases = [
-            ("  ", "必填欄位"),
-            ("#" * 41, "輸入字數超過限制長度40"),
-            ("", "必填欄位"),
-        ]
+        self.input_name_cases = PERMISSION_EDIT_NAME_CASES
         element_input = self.elements.input_role_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
@@ -250,9 +227,7 @@ class RolePage:
 
     @allure.step("驗證並更新角色描述")
     def validate_and_update_role_description(self, updated_role_description: str):
-        self.input_description_cases = [
-            ("#" * 201, "輸入字數超過限制長度200")
-        ]
+        self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_role_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)

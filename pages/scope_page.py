@@ -2,6 +2,14 @@ import re
 
 import allure
 from playwright.sync_api import Page, expect
+
+from data.schema.permission_cases import (
+    PERMISSION_CODE_CASES,
+    PERMISSION_CREATE_NAME_CASES,
+    PERMISSION_DESCRIPTION_CASES,
+    PERMISSION_EDIT_NAME_CASES,
+    duplicate_permission_code_cases,
+)
 from pages.locators.elements import ScopeElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
@@ -49,14 +57,7 @@ class ScopePage:
 
     @allure.step("驗證並填寫範圍代碼")
     def validate_and_fill_scope_code(self, scope_code: str):
-        self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
-            ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
-            ("#" * 21, "輸入字數超過限制長度20"),
-        ]
+        self.input_code_cases = PERMISSION_CODE_CASES
         element_input = self.elements.input_scope_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
@@ -64,11 +65,7 @@ class ScopePage:
 
     @allure.step("驗證並填寫範圍名稱")
     def validate_and_fill_scope_name(self, scope_name: str):
-        self.input_name_cases = [
-            ("#" * 41, "輸入字數超過限制長度40"),
-            ("  ", "必填欄位"),
-            ("", "必填欄位"),
-        ]
+        self.input_name_cases = PERMISSION_CREATE_NAME_CASES
         element_input = self.elements.input_scope_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
@@ -76,9 +73,7 @@ class ScopePage:
 
     @allure.step("驗證並填寫範圍描述")
     def validate_and_fill_scope_description(self, scope_description: str):
-        self.input_description_cases = [
-            ("#" * 201, "輸入字數超過限制長度200")
-        ]
+        self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_scope_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
@@ -88,9 +83,7 @@ class ScopePage:
     def validate_duplicate_scope(self, scope_code: str):
         self.elements.btn_scope_add_more_scope.click()
 
-        self.input_scope_cases = [
-            (scope_code, " 代碼不可重複 "),
-        ]
+        self.input_scope_cases = duplicate_permission_code_cases(scope_code)
         self.operate_page.verify_input(self.elements.input_scope_code.last, self.elements.msg_field_error, self.input_scope_cases)
         self.base_page.click_expect(self.elements.btn_scope_remove_create.last)
 
@@ -136,14 +129,7 @@ class ScopePage:
     def validate_copy_and_fill_code(self, copied_scope_code: str):
         self.operate_page.verify_input_text(self.elements.input_scope_code, "copy-")
         
-        self.input_code_cases = [
-            ("中文", "只允許半形之英數字及符號：_-."),
-            ("", "必填欄位"),
-            ("$$$", "只允許半形之英數字及符號：_-."),
-            ("ＡＢＣ", "只允許半形之英數字及符號：_-."),
-            ("  ", "只允許半形之英數字及符號：_-."),
-            ("#" * 21, "輸入字數超過限制長度20"),
-        ]
+        self.input_code_cases = PERMISSION_CODE_CASES
         element_input = self.elements.input_scope_code
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
@@ -153,11 +139,7 @@ class ScopePage:
     def validate_copy_and_fill_name(self, copied_scope_name: str):
         expect(self.elements.input_scope_name).to_have_value(re.compile("copy-"),timeout=5000)
 
-        self.input_name_cases = [
-            ("  ", "必填欄位"),
-            ("#" * 41, "輸入字數超過限制長度40"),
-            ("", "必填欄位"),
-        ]
+        self.input_name_cases = PERMISSION_EDIT_NAME_CASES
         element_input = self.elements.input_scope_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
@@ -165,9 +147,7 @@ class ScopePage:
 
     @allure.step("驗證並填寫複製後的範圍描述")
     def validate_and_copy_scope_description(self, copied_scope_description: str):
-        self.input_description_cases = [
-            ("#" * 201, "輸入字數超過限制長度200")
-        ]
+        self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_scope_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
@@ -277,11 +257,7 @@ class ScopePage:
 
     @allure.step("驗證並更新範圍名稱")
     def validate_and_update_scope_name(self, updated_scope_name: str):
-        self.input_name_cases = [
-            ("  ", "必填欄位"),
-            ("#" * 41, "輸入字數超過限制長度40"),
-            ("", "必填欄位"),
-        ]
+        self.input_name_cases = PERMISSION_EDIT_NAME_CASES
         element_input = self.elements.input_scope_name
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
@@ -289,9 +265,7 @@ class ScopePage:
 
     @allure.step("驗證並更新範圍描述")
     def validate_and_update_scope_description(self, updated_scope_description: str):
-        self.input_description_cases = [
-            ("#" * 201, "輸入字數超過限制長度200")
-        ]
+        self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_scope_description
         element_error = self.elements.msg_field_error
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
