@@ -17,7 +17,6 @@ from config.settings import (
     HEADLESS,
     DELAY_TIME,
     PERMISSION_PROJECT_ABBR,
-    PERMISSION_ROLE_CODE,
     PERMISSION_S2S_APPLICATION_NAME,
     PERMISSION_SCOPE_CODE,
     PERMISSION_SSO_APPLICATION_NAME,
@@ -30,12 +29,13 @@ from utils.data_mode import DATA_MODES, KEEP, permission_project_lock, should_cl
 from utils.permission_baseline import (
     create_permission_initialization,
     ensure_permission_baseline,
-    ensure_permission_project_member,
     ensure_sso_application,
 )
+from utils.resource_cleanup import CleanupRegistry
 
 
 # Browser settings
+
 
 @pytest.fixture(scope="session")
 def browser_type_launch_args(browser_type_launch_args):
@@ -49,6 +49,7 @@ def browser_type_launch_args(browser_type_launch_args):
         ],
     }
 
+
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
     return {
@@ -61,6 +62,7 @@ def browser_context_args(browser_context_args):
             "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
         },
     }
+
 
 @pytest.fixture
 def context(new_context) -> Iterator[BrowserContext]:
@@ -85,6 +87,7 @@ def context(new_context) -> Iterator[BrowserContext]:
             )
         except PlaywrightError:
             continue
+
 
 @pytest.fixture
 def page(page: Page, browser_name: str, browser_type_launch_args):
@@ -115,6 +118,8 @@ def page(page: Page, browser_name: str, browser_type_launch_args):
     執行流程:
         1. --data-mode 控制測試資料是否於 teardown 清除。
 """
+
+
 def pytest_addoption(parser):
     parser.addoption(
         "--data-mode",
@@ -124,6 +129,7 @@ def pytest_addoption(parser):
         help="Test data lifecycle: isolated deletes fixture data; keep retains it",
     )
 
+
 """
     用途:將 --data-mode 轉成其他 fixtures 可以注入使用的字串。
 
@@ -132,9 +138,38 @@ def pytest_addoption(parser):
         2. 未傳入時回傳 isolated。
         3. 傳入 --data-mode=keep 時回傳 keep。
 """
+
+
 @pytest.fixture(scope="session")
 def data_mode(pytestconfig) -> str:
     return pytestconfig.getoption("--data-mode")
+
+
+@pytest.fixture
+def cleanup_registry(data_mode: str) -> Iterator[CleanupRegistry]:
+    registry = CleanupRegistry(enabled=should_cleanup(data_mode))
+    yield registry
+    registry.cleanup()
+
+
+@pytest.fixture
+def project_cleanup(logged_app: OmniApp, cleanup_registry: CleanupRegistry):
+    def delete_project(project_abbreviation: str) -> None:
+        logged_app.page.keyboard.press("Escape")
+        logged_app.page.goto(BASE_URL_DEV)
+        logged_app.project_page.delete_project_if_exists(project_abbreviation)
+
+    def register(project_abbreviation: str) -> None:
+        def cleanup() -> None:
+            delete_project(project_abbreviation)
+
+        cleanup_registry.register(
+            "Project",
+            project_abbreviation,
+            cleanup,
+        )
+
+    return register
 
 
 # threading accounts
@@ -150,11 +185,12 @@ ACCOUNTS_Rollbook = [
     },
 ]
 
+
 @pytest.fixture
 def thread_account(worker_id):
     if worker_id == "master":
         return ACCOUNTS_Rollbook[0]
-    
+
     worker_index = int(worker_id.replace("gw", ""))
 
     if worker_index >= len(ACCOUNTS_Rollbook):
@@ -171,6 +207,8 @@ def thread_account(worker_id):
 """
     用途: 建立 Basic Object。
 """
+
+
 @pytest.fixture
 def app(page: Page):
     try:
@@ -178,51 +216,36 @@ def app(page: Page):
     except Exception as error:
         raise Exception(f"Failed to initialize OmniApp: {error}")
 
+
 """
     用途: 建立 Basic Object並運行前置動作。
     前置動作：
         1. 登入
 """
+
+
 @pytest.fixture
 def logged_app(page: Page, thread_account):
     try:
         omni_app = OmniApp(page)
-        omni_app.login_by_account(thread_account['username'], thread_account['password'])
+        omni_app.login_by_account(thread_account["username"], thread_account["password"])
         return omni_app
     except Exception as error:
         raise Exception(f"Failed to log in: {error}")
 
-"""
-"""
+
 @dataclass(frozen=True)
 class PermissionProjectContext:
+    """Permission 測試使用的 App 與 Project 識別資料。"""
+
     app: OmniApp
     abbreviation: str
 
-"""
-    用途:維持 Scope/Role/Default Permission 原本只取得 OmniApp 的介面。
 
-    permission_project 先完成 Project 前置與生命週期管理,這裡只取出同一個OmniApp object.
-    確保下游 fixtures 與 teardown 都操作同一個 browser page。
-"""
 @pytest.fixture
-def permission_project_app(permission_project: PermissionProjectContext,) -> OmniApp:
-    return permission_project.app
+def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["PermissionProjectContext"]:
+    """準備 Permission Project，並在 isolated 模式負責清除。"""
 
-"""
-    用途: 建立 permission頁面的Object並運行前置新增動作。
-    前置動作：
-        1. 登入
-        2. 判斷data-mode
-        2.1. keep: 建立跨程序鎖 -> 檢查 main project 與 permission Init,有缺就補 -> 測試後保留資料
-        2.2. isolated: 建立UUID project -> 建立最小Permission
-        3. yield -> 交付給下游fixture測試
-"""
-@pytest.fixture
-def permission_project(
-    logged_app: OmniApp,
-    data_mode: str
-) -> Iterator["PermissionProjectContext"]:
     if data_mode == KEEP:
         with permission_project_lock():
             ensure_permission_baseline(logged_app, create_missing=True)
@@ -233,7 +256,7 @@ def permission_project(
         return
 
     suffix = uuid4().hex[:4]
-    project_abbreviation = f"{PROJECT_ABBR_PREFIX}permission-{suffix}"
+    project_abbreviation = f"{PROJECT_ABBR_PREFIX}-permission-{suffix}"
     context = PermissionProjectContext(
         app=logged_app,
         abbreviation=project_abbreviation,
@@ -242,15 +265,15 @@ def permission_project(
     try:
         logged_app.project_page.create_project(
             project_abbreviation,
-            f"{PROJECT_ZH_NAME_PREFIX}permission-{suffix}",
-            f"{PROJECT_EN_NAME_PREFIX}permission-{suffix}",
-            f"{PROJECT_DESCRIPTION_PREFIX}permission-{suffix}",
+            f"{PROJECT_ZH_NAME_PREFIX}-permission-{suffix}",
+            f"{PROJECT_EN_NAME_PREFIX}-permission-{suffix}",
+            f"{PROJECT_DESCRIPTION_PREFIX}-permission-{suffix}",
         )
         logged_app.operate_page.go_to_permission_page(project_abbreviation)
         create_permission_initialization(logged_app)
 
         yield context
-        
+
     finally:
         if should_cleanup(data_mode):
             try:
@@ -261,7 +284,7 @@ def permission_project(
 
                 logged_app.page.keyboard.press("Escape")
                 logged_app.page.goto(BASE_URL_DEV)
-                
+
                 if logged_app.project_page.project_exists(project_abbreviation):
                     logged_app.operate_page.go_to_permission_page(project_abbreviation)
                     logged_app.single_sign_on_page.delete_application_if_exists(
@@ -270,7 +293,7 @@ def permission_project(
                     logged_app.server_to_server_page.delete_application_if_exists(
                         PERMISSION_S2S_APPLICATION_NAME
                     )
-                    
+
                     if not logged_app.application_permission_page.permission_initialization_available():
                         # logged_app.default_permission_page.delete_default_permission_if_exists(
                         #     PERMISSION_ROLE_CODE
@@ -290,59 +313,25 @@ def permission_project(
                     f"Permission isolated cleanup failed for {project_abbreviation}: {error}"
                 ) from error
 
-"""
-    用途:提供 Assign Permission 額外需要的專案成員與固定 SSO Application。
 
-    執行流程:
-        1. permission_project 先準備 keep 主專案或 isolated UUID Project。
-        2. 將固定第二位測試成員加入「本次 context 指定的專案」。
-        3. 確認/建立 Assign Permission 成員清單需要的固定 SSO。
-        4. keep 使用跨程序鎖;isolated 因 Project 不共用,不需要鎖。
-        5. 最後回到該專案的身份驗證首頁,交給 Assign Permission 測試。
-"""
 @pytest.fixture
-def assign_permission_project_app(permission_project: PermissionProjectContext,data_mode: str,) -> OmniApp:
-    context = permission_project
+def permission_settings_app(
+    permission_project: PermissionProjectContext,
+) -> OmniApp:
+    """開啟目前測試專案的權限設定頁。"""
+    permission_project.app.operate_page.open_to_permissions_page()
+    return permission_project.app
 
-    def prepare_prerequisites() -> None:
-        # ensure_permission_project_member(
-        #     context.app,
-        #     context.abbreviation,
-        #     create_missing=True,
-        # )
-        # context.app.page.goto(BASE_URL_DEV)
-        # context.app.operate_page.go_to_permission_page(context.abbreviation)
-        ensure_sso_application(context.app, create_missing=True)
-        # context.app.page.goto(BASE_URL_DEV)
-        # context.app.operate_page.go_to_permission_page(context.abbreviation)
 
-    if data_mode == KEEP:
-        with permission_project_lock():
-            prepare_prerequisites()
-    else:
-        prepare_prerequisites()
-
-    return context.app
-
-"""
-    用途:提供 Group 額外需要的固定 SSO Application。
-
-    執行流程:
-        1. permission_project 先準備 keep 主專案或 isolated UUID Project。
-        2. 只確認/建立 Group 必要的 SSO,不建立 S2S。
-        3. keep 使用跨程序鎖;isolated 的固定 SSO 建在專屬 UUID Project 內。
-        4. isolated teardown 由 permission_project 先刪除 SSO,再刪除 Project。
-"""
 @pytest.fixture
-def group_permission_project_app(permission_project: PermissionProjectContext,data_mode: str,) -> OmniApp:
-    context = permission_project
+def permission_project_with_sso(
+    permission_project: PermissionProjectContext,
+    data_mode: str,
+) -> PermissionProjectContext:
+    """補齊 Group 與 Assign Permission 共用的 SSO 前置資料。"""
 
     def prepare_sso() -> None:
-        # context.app.page.goto(BASE_URL_DEV)
-        # context.app.operate_page.go_to_permission_page(context.abbreviation)
-        ensure_sso_application(context.app, create_missing=True)
-        # context.app.page.goto(BASE_URL_DEV)
-        # context.app.operate_page.go_to_permission_page(context.abbreviation)
+        ensure_sso_application(permission_project.app, create_missing=True)
 
     if data_mode == KEEP:
         with permission_project_lock():
@@ -350,6 +339,13 @@ def group_permission_project_app(permission_project: PermissionProjectContext,da
     else:
         prepare_sso()
 
-    return context.app
+    return permission_project
 
 
+@pytest.fixture
+def permission_settings_sso_app(
+    permission_project_with_sso: PermissionProjectContext,
+) -> OmniApp:
+    """完成 SSO 前置後開啟權限設定頁。"""
+    permission_project_with_sso.app.operate_page.open_to_permissions_page()
+    return permission_project_with_sso.app

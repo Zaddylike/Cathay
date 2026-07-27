@@ -1,79 +1,18 @@
-from dataclasses import dataclass
-from uuid import uuid4
-
-import allure
 import pytest
 
 from app.omni_app import OmniApp
-from config.settings import (
-    SCOPE_CODE_PREFIX,
-    SCOPE_DESCRIPTION_PREFIX,
-    SCOPE_NAME_PREFIX,
-)
-from utils.data_mode import should_cleanup
+from data.factories.resource_data import ScopeTestData, build_scope_test_data
+from utils.resource_cleanup import CleanupRegistry
 
 
-@dataclass(frozen=True)
-class ScopeTestData:
-    code: str
-    name: str
-    description: str
-    copied_code: str
-    copied_name: str
-    copied_description: str
-    updated_name: str
-    updated_description: str
+@pytest.fixture
+def scope_app(permission_settings_app: OmniApp) -> OmniApp:
+    return permission_settings_app
 
 
 @pytest.fixture
 def scope_data() -> ScopeTestData:
-    suffix = uuid4().hex[:4]
-    code = f"{SCOPE_CODE_PREFIX}{suffix}"
-    name = f"{SCOPE_NAME_PREFIX}{suffix}"
-    description=f"{SCOPE_DESCRIPTION_PREFIX}{suffix}"
-
-    return ScopeTestData(
-        code=code,
-        name=name,
-        description=description,
-        copied_code=f"copy-{code}",
-        copied_name=f"copy-{name}",
-        copied_description=f"copy-{description}",
-        updated_name=f"updated-{name}",
-        updated_description=f"updated-{description}",
-    )
-
-
-@pytest.fixture
-def scope_app(permission_project_app: OmniApp) -> OmniApp:
-    permission_project_app.operate_page.open_to_permissions_page()
-    return permission_project_app
-
-
-"""登記 UUID Scope; yield 後 isolated 刪除,keep 保留。"""
-@pytest.fixture
-def scope_cleanup(scope_app: OmniApp, data_mode: str):
-    tracked_codes = []
-
-    def track(scope_code: str):
-        if scope_code not in tracked_codes:
-            tracked_codes.append(scope_code)
-
-    yield track
-
-    if not should_cleanup(data_mode):
-        return
-
-    for scope_code in reversed(tracked_codes):
-        try:
-            scope_app.page.keyboard.press("Escape")
-            scope_app.scope_page.delete_scope_if_exists(scope_code)
-        except Exception as error:
-            allure.attach(
-                str(error),
-                name=f"Scope cleanup failed: {scope_code}",
-                attachment_type=allure.attachment_type.TEXT,
-            )
+    return build_scope_test_data()
 
 
 @pytest.fixture
@@ -89,3 +28,25 @@ def created_scope_data(
         scope_data.description,
     )
     return scope_data
+
+
+@pytest.fixture
+def scope_cleanup(
+    scope_app: OmniApp,
+    cleanup_registry: CleanupRegistry,
+):
+    def delete_scope(scope_code: str) -> None:
+        scope_app.page.keyboard.press("Escape")
+        scope_app.scope_page.delete_scope_if_exists(scope_code)
+
+    def register(scope_code: str) -> None:
+        def cleanup() -> None:
+            delete_scope(scope_code)
+
+        cleanup_registry.register(
+            "Scope",
+            scope_code,
+            cleanup,
+        )
+
+    return register

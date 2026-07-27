@@ -73,10 +73,10 @@ def build_application_test_data(data_mode: str) -> ApplicationTestData:
         project_en_name = PERMISSION_PROJECT_EN_NAME
         project_description = PERMISSION_PROJECT_DESCRIPTION
     else:
-        project_abbreviation = f"{PROJECT_ABBR_PREFIX}{suffix}"
-        project_zh_name = f"{PROJECT_ZH_NAME_PREFIX}{suffix}"
-        project_en_name = f"{PROJECT_EN_NAME_PREFIX}{suffix}"
-        project_description = f"{PROJECT_DESCRIPTION_PREFIX}{suffix}"
+        project_abbreviation = f"{PROJECT_ABBR_PREFIX}-{suffix}"
+        project_zh_name = f"{PROJECT_ZH_NAME_PREFIX}-{suffix}"
+        project_en_name = f"{PROJECT_EN_NAME_PREFIX}-{suffix}"
+        project_description = f"{PROJECT_DESCRIPTION_PREFIX}-{suffix}"
 
     return ApplicationTestData(
         project_abbreviation=project_abbreviation,
@@ -97,23 +97,23 @@ def build_application_test_data(data_mode: str) -> ApplicationTestData:
         s2s_application_name=f"s2s-application-{suffix}",
         s2s_description=f"s2s-description-{suffix}",
         s2s_scope_description=f"s2s-scope-{suffix}",
-        scope_code=f"{SCOPE_CODE_PREFIX}{suffix}",
-        scope_name=f"{SCOPE_NAME_PREFIX}{suffix}",
-        scope_description=f"{SCOPE_DESCRIPTION_PREFIX}{suffix}",
-        second_scope_code=f"{SCOPE_CODE_PREFIX}2-{suffix}",
-        second_scope_name=f"{SCOPE_NAME_PREFIX}2-{suffix}",
-        second_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}2-{suffix}",
-        third_scope_code=f"{SCOPE_CODE_PREFIX}3-{suffix}",
-        third_scope_name=f"{SCOPE_NAME_PREFIX}3-{suffix}",
-        role_code=f"{ROLE_CODE}{suffix}",
-        role_name=f"{ROLE_NAME_PREFIX}{suffix}",
-        role_description=f"{ROLE_DESCRIPTION_PREFIX}{suffix}",
-        second_role_code=f"{ROLE_CODE}2-{suffix}",
-        second_role_name=f"{ROLE_NAME_PREFIX}2-{suffix}",
-        second_role_description=f"{ROLE_DESCRIPTION_PREFIX}2-{suffix}",
-        group_name=f"{GROUP_NAME}{suffix}",
-        group_description=f"{GROUP_DESCRIPTION_PREFIX}{suffix}",
-        group_member_description=f"{GROUP_DESCRIPTION_PREFIX}member-{suffix}",
+        scope_code=f"{SCOPE_CODE_PREFIX}-{suffix}",
+        scope_name=f"{SCOPE_NAME_PREFIX}-{suffix}",
+        scope_description=f"{SCOPE_DESCRIPTION_PREFIX}-{suffix}",
+        second_scope_code=f"{SCOPE_CODE_PREFIX}-2-{suffix}",
+        second_scope_name=f"{SCOPE_NAME_PREFIX}-2-{suffix}",
+        second_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}-2-{suffix}",
+        third_scope_code=f"{SCOPE_CODE_PREFIX}-3-{suffix}",
+        third_scope_name=f"{SCOPE_NAME_PREFIX}-3-{suffix}",
+        role_code=f"{ROLE_CODE}-{suffix}",
+        role_name=f"{ROLE_NAME_PREFIX}-{suffix}",
+        role_description=f"{ROLE_DESCRIPTION_PREFIX}-{suffix}",
+        second_role_code=f"{ROLE_CODE}-2-{suffix}",
+        second_role_name=f"{ROLE_NAME_PREFIX}-2-{suffix}",
+        second_role_description=f"{ROLE_DESCRIPTION_PREFIX}-2-{suffix}",
+        group_name=f"{GROUP_NAME}-{suffix}",
+        group_description=f"{GROUP_DESCRIPTION_PREFIX}-{suffix}",
+        group_member_description=f"{GROUP_DESCRIPTION_PREFIX}-member-{suffix}",
         member_keyword=PROJECT_MEMBER_SECONDARY_KEYWORD,
         assignment_description=f"assignment-description-{suffix}",
     )

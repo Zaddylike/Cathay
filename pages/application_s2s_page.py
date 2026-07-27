@@ -8,11 +8,16 @@ from pages.operate_page import OperatePage
 
 
 class ApplicationServerToServerPage:
-    def __init__(self, page: Page):
-            self.page = page
-            self.elements = ApplicationS2sElements(page)
-            self.base_page = BasePage(page)
-            self.operate_page = OperatePage(page)
+    def __init__(
+        self,
+        page: Page,
+        base_page: BasePage | None = None,
+        operate_page: OperatePage | None = None,
+    ):
+        self.page = page
+        self.elements = ApplicationS2sElements(page)
+        self.base_page = base_page or BasePage(page)
+        self.operate_page = operate_page or OperatePage(page, self.base_page)
     
     @allure.step("點擊下一步")    
     def continue_to_scope_step(self):

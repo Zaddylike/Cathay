@@ -44,24 +44,24 @@ GOOGLE_PASSWORD = ""
 
 
 # PROJECT prefix
-PROJECT_ABBR_PREFIX = "project-abbr-"
-PROJECT_ZH_NAME_PREFIX = "project-zh-"
-PROJECT_EN_NAME_PREFIX = "project-en-"
-PROJECT_DESCRIPTION_PREFIX = "project-description-"
+PROJECT_ABBR_PREFIX = "project-abbr"
+PROJECT_ZH_NAME_PREFIX = "project-zh"
+PROJECT_EN_NAME_PREFIX = "project-en"
+PROJECT_DESCRIPTION_PREFIX = "project-description"
 
 # Testing prefix - Scope
-SCOPE_CODE_PREFIX = "scope-code-"
-SCOPE_NAME_PREFIX = "scope-name-"
-SCOPE_DESCRIPTION_PREFIX = "scope-description-"
+SCOPE_CODE_PREFIX = "scope-code"
+SCOPE_NAME_PREFIX = "scope-name"
+SCOPE_DESCRIPTION_PREFIX = "scope-description"
 
 # Testing prefix - Role
-ROLE_CODE = "role-code-"
-ROLE_NAME_PREFIX = "role-name-"
-ROLE_DESCRIPTION_PREFIX = "role-description-"
+ROLE_CODE = "role-code"
+ROLE_NAME_PREFIX = "role-name"
+ROLE_DESCRIPTION_PREFIX = "role-description"
 
 # Testing prefix = Group
-GROUP_NAME = "group-name-"
-GROUP_DESCRIPTION_PREFIX = "group-description-"
+GROUP_NAME = "group-name"
+GROUP_DESCRIPTION_PREFIX = "group-description"
 
 
 # Stable permission project used by Scope / Role / Group / Permission tests

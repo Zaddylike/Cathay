@@ -5,11 +5,16 @@ from pages.operate_page import OperatePage
 import allure
 
 class ProjectMemberPage:
-    def __init__(self, page: Page):
+    def __init__(
+        self,
+        page: Page,
+        base_page: BasePage | None = None,
+        operate_page: OperatePage | None = None,
+    ):
         self.page = page
         self.elements = ProjectMemberElements(page)
-        self.base_page = BasePage(page)
-        self.operate_page = OperatePage(page)
+        self.base_page = base_page or BasePage(page)
+        self.operate_page = operate_page or OperatePage(page, self.base_page)
     #create
     @allure.step("進入專案成員頁面")
     def open_to_member_page(self, project_abbreviation: str):

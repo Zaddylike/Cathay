@@ -1,108 +1,47 @@
-from dataclasses import dataclass
-from uuid import uuid4
-
-import allure
 import pytest
 
 from app.omni_app import OmniApp
-from config.settings import (
-    ROLE_CODE,
-    ROLE_DESCRIPTION_PREFIX,
-    ROLE_NAME_PREFIX,
-    SCOPE_CODE_PREFIX,
-    SCOPE_DESCRIPTION_PREFIX,
-    SCOPE_NAME_PREFIX,
-)
-from utils.data_mode import should_cleanup
+from data.factories.resource_data import RoleTestData, build_role_test_data
+from utils.resource_cleanup import CleanupRegistry
 
 
-@dataclass(frozen=True)
-class RoleTestData:
-    code: str
-    name: str
-    description: str
-    copied_code: str
-    copied_name: str
-    copied_description: str
-    updated_name: str
-    updated_description: str
-
-    scope_code: str
-    scope_name: str
-    scope_description: str
+@pytest.fixture
+def role_app(permission_settings_app: OmniApp) -> OmniApp:
+    return permission_settings_app
 
 
 @pytest.fixture
 def role_data() -> RoleTestData:
-    suffix = uuid4().hex[:4]
-    code = f"{ROLE_CODE}{suffix}"
-    name = f"{ROLE_NAME_PREFIX}{suffix}"
-    description = f"{ROLE_DESCRIPTION_PREFIX}{suffix}"
-    scope_suffix = uuid4().hex[:4]
-    scope_code = f"{SCOPE_CODE_PREFIX}{scope_suffix}"
-    scope_name = f"{SCOPE_NAME_PREFIX}{scope_suffix}"
-    scope_description = f"{SCOPE_DESCRIPTION_PREFIX}{scope_suffix}"
-
-    return RoleTestData(
-        code=code,
-        name=name,
-        description=description,
-        copied_code=f"copy-{code}",
-        copied_name=f"copy-{name}",
-        copied_description=f"copy-{description}",
-        updated_name=f"updated-{name}",
-        updated_description=f"updated-{description}",
-
-        scope_code=scope_code,
-        scope_name=scope_name,
-        scope_description=scope_description,
-    )
+    return build_role_test_data()
 
 
 @pytest.fixture
-def role_app(permission_project_app: OmniApp) -> OmniApp:
-    permission_project_app.operate_page.open_to_permissions_page()
-    return permission_project_app
+def role_cleanup(
+    role_app: OmniApp,
+    cleanup_registry: CleanupRegistry,
+):
+    def delete_role(role_code: str) -> None:
+        role_app.page.keyboard.press("Escape")
+        role_app.role_page.delete_role_if_exists(role_code)
 
+    def delete_scope(scope_code: str) -> None:
+        role_app.page.keyboard.press("Escape")
+        role_app.scope_page.delete_scope_if_exists(scope_code)
 
-@pytest.fixture
-def role_cleanup(role_app: OmniApp, data_mode: str):
-    """分別登記 UUID Role/Scope;isolated 依相依順序刪除，keep 保留。"""
-    tracked_codes = {
-        "role": [], 
-        "scope": []
-    }
+    def register(resource_type: str, resource_code: str) -> None:
+        if resource_type == "role":
+            delete_resource = delete_role
+        elif resource_type == "scope":
+            delete_resource = delete_scope
+        else:
+            raise ValueError(f"Unsupported role cleanup resource: {resource_type}")
 
-    def track(resource_type: str, resource_code: str):
-        if resource_code not in tracked_codes[resource_type]:
-            tracked_codes[resource_type].append(resource_code)
+        def cleanup() -> None:
+            delete_resource(resource_code)
 
-    yield track
+        cleanup_registry.register(resource_type.title(), resource_code, cleanup)
 
-    if not should_cleanup(data_mode):
-        return
-
-    for role_code in reversed(tracked_codes["role"]):
-        try:
-            role_app.page.keyboard.press("Escape")
-            role_app.role_page.delete_role_if_exists(role_code)
-        except Exception as error:
-            allure.attach(
-                str(error),
-                name=f"Role cleanup failed: {role_code}",
-                attachment_type=allure.attachment_type.TEXT,
-            )
-
-    for scope_code in reversed(tracked_codes["scope"]):
-        try:
-            role_app.page.keyboard.press("Escape")
-            role_app.scope_page.delete_scope_if_exists(scope_code)
-        except Exception as error:
-            allure.attach(
-                str(error),
-                name=f"Scope cleanup failed: {scope_code}",
-                attachment_type=allure.attachment_type.TEXT,
-            )
+    return register
 
 
 @pytest.fixture
@@ -111,18 +50,12 @@ def prepared_role_scopes(
     role_data: RoleTestData,
     role_cleanup,
 ) -> RoleTestData:
-    scopes = (
-        (
-            role_data.scope_code,
-            role_data.scope_name,
-            role_data.scope_description,
-        ),
+    role_cleanup("scope", role_data.scope_code)
+    role_app.scope_page.create_scope(
+        role_data.scope_code,
+        role_data.scope_name,
+        role_data.scope_description,
     )
-
-    for code, name, description in scopes:
-        role_cleanup("scope", code)
-        role_app.scope_page.create_scope(code, name, description)
-
     return role_data
 
 
@@ -132,12 +65,11 @@ def created_role(
     prepared_role_scopes: RoleTestData,
     role_cleanup,
 ) -> RoleTestData:
-    data = prepared_role_scopes
-    role_cleanup("role", data.code)
+    role_cleanup("role", prepared_role_scopes.code)
     role_app.role_page.create_role(
-        data.code,
-        data.name,
-        data.description,
-        data.scope_code,
+        prepared_role_scopes.code,
+        prepared_role_scopes.name,
+        prepared_role_scopes.description,
+        prepared_role_scopes.scope_code,
     )
-    return data
+    return prepared_role_scopes

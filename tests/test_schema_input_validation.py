@@ -98,24 +98,24 @@ class SchemaValidationData:
 
 def build_schema_validation_data() -> SchemaValidationData:
     suffix = uuid4().hex[:4]
-    scope_code = f"{SCOPE_CODE_PREFIX}{suffix}"
-    scope_name = f"{SCOPE_NAME_PREFIX}{suffix}"
-    scope_description = f"{SCOPE_DESCRIPTION_PREFIX}{suffix}"
-    role_code = f"{ROLE_CODE}{suffix}"
-    role_name = f"{ROLE_NAME_PREFIX}{suffix}"
-    role_description = f"{ROLE_DESCRIPTION_PREFIX}{suffix}"
-    group_name = f"{GROUP_NAME}{suffix}"
-    group_description = f"{GROUP_DESCRIPTION_PREFIX}{suffix}"
-    assignment_description = f"{ASSIGN_PERMISSION_DESCRIPTION_PREFIX}{suffix}"
+    scope_code = f"{SCOPE_CODE_PREFIX}-{suffix}"
+    scope_name = f"{SCOPE_NAME_PREFIX}-{suffix}"
+    scope_description = f"{SCOPE_DESCRIPTION_PREFIX}-{suffix}"
+    role_code = f"{ROLE_CODE}-{suffix}"
+    role_name = f"{ROLE_NAME_PREFIX}-{suffix}"
+    role_description = f"{ROLE_DESCRIPTION_PREFIX}-{suffix}"
+    group_name = f"{GROUP_NAME}-{suffix}"
+    group_description = f"{GROUP_DESCRIPTION_PREFIX}-{suffix}"
+    assignment_description = f"{ASSIGN_PERMISSION_DESCRIPTION_PREFIX}-{suffix}"
 
     return SchemaValidationData(
-        project_abbreviation=f"{PROJECT_ABBR_PREFIX}schema-{suffix}",
-        project_zh_name=f"{PROJECT_ZH_NAME_PREFIX}schema-{suffix}",
-        project_en_name=f"{PROJECT_EN_NAME_PREFIX}schema-{suffix}",
-        project_description=f"{PROJECT_DESCRIPTION_PREFIX}schema-{suffix}",
-        updated_project_zh_name=f"updated-{PROJECT_ZH_NAME_PREFIX}{suffix}",
-        updated_project_en_name=f"updated-{PROJECT_EN_NAME_PREFIX}{suffix}",
-        updated_project_description=f"updated-{PROJECT_DESCRIPTION_PREFIX}{suffix}",
+        project_abbreviation=f"{PROJECT_ABBR_PREFIX}-schema-{suffix}",
+        project_zh_name=f"{PROJECT_ZH_NAME_PREFIX}-schema-{suffix}",
+        project_en_name=f"{PROJECT_EN_NAME_PREFIX}-schema-{suffix}",
+        project_description=f"{PROJECT_DESCRIPTION_PREFIX}-schema-{suffix}",
+        updated_project_zh_name=f"updated-{PROJECT_ZH_NAME_PREFIX}-{suffix}",
+        updated_project_en_name=f"updated-{PROJECT_EN_NAME_PREFIX}-{suffix}",
+        updated_project_description=f"updated-{PROJECT_DESCRIPTION_PREFIX}-{suffix}",
         entra_client_id=f"entra-client-{suffix}",
         entra_secret=f"entra-secret-{suffix}",
         entra_tenant=f"entra-tenant-{suffix}",
@@ -130,24 +130,24 @@ def build_schema_validation_data() -> SchemaValidationData:
         s2s_application_name=f"s2s-application-{suffix}",
         s2s_description=f"s2s-description-{suffix}",
         s2s_scope_description=f"s2s-scope-{suffix}",
-        init_scope_code=f"{SCOPE_CODE_PREFIX}i-{suffix}",
-        init_scope_name=f"{SCOPE_NAME_PREFIX}i-{suffix}",
-        init_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}i-{suffix}",
-        init_second_scope_code=f"{SCOPE_CODE_PREFIX}i2-{suffix}",
-        init_second_scope_name=f"{SCOPE_NAME_PREFIX}i2-{suffix}",
+        init_scope_code=f"{SCOPE_CODE_PREFIX}-i-{suffix}",
+        init_scope_name=f"{SCOPE_NAME_PREFIX}-i-{suffix}",
+        init_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}-i-{suffix}",
+        init_second_scope_code=f"{SCOPE_CODE_PREFIX}-i2-{suffix}",
+        init_second_scope_name=f"{SCOPE_NAME_PREFIX}-i2-{suffix}",
         init_second_scope_description=f"{SCOPE_DESCRIPTION_PREFIX}i2-{suffix}",
-        init_third_scope_code=f"{SCOPE_CODE_PREFIX}i3-{suffix}",
-        init_third_scope_name=f"{SCOPE_NAME_PREFIX}i3-{suffix}",
-        init_role_code=f"{ROLE_CODE}i-{suffix}",
-        init_role_name=f"{ROLE_NAME_PREFIX}i-{suffix}",
-        init_role_description=f"{ROLE_DESCRIPTION_PREFIX}i-{suffix}",
-        init_second_role_code=f"{ROLE_CODE}i2-{suffix}",
-        init_second_role_name=f"{ROLE_NAME_PREFIX}i2-{suffix}",
-        init_second_role_description=f"{ROLE_DESCRIPTION_PREFIX}i2-{suffix}",
-        init_group_name=f"{GROUP_NAME}i-{suffix}",
-        init_group_description=f"{GROUP_DESCRIPTION_PREFIX}i-{suffix}",
+        init_third_scope_code=f"{SCOPE_CODE_PREFIX}-i3-{suffix}",
+        init_third_scope_name=f"{SCOPE_NAME_PREFIX}-i3-{suffix}",
+        init_role_code=f"{ROLE_CODE}-i-{suffix}",
+        init_role_name=f"{ROLE_NAME_PREFIX}-i-{suffix}",
+        init_role_description=f"{ROLE_DESCRIPTION_PREFIX}-i-{suffix}",
+        init_second_role_code=f"{ROLE_CODE}-i2-{suffix}",
+        init_second_role_name=f"{ROLE_NAME_PREFIX}-i2-{suffix}",
+        init_second_role_description=f"{ROLE_DESCRIPTION_PREFIX}-i2-{suffix}",
+        init_group_name=f"{GROUP_NAME}-i-{suffix}",
+        init_group_description=f"{GROUP_DESCRIPTION_PREFIX}-i-{suffix}",
         init_group_member_description=(
-            f"{GROUP_DESCRIPTION_PREFIX}member-{suffix}"
+            f"{GROUP_DESCRIPTION_PREFIX}-member-{suffix}"
         ),
         init_assignment_description=f"assignment-description-{suffix}",
         init_member_keyword=PROJECT_MEMBER_SECONDARY_KEYWORD,

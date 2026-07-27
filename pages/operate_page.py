@@ -6,10 +6,10 @@ import re
 from config.settings import PERMISSION_PROJECT_ABBR, DEFAULT_TIMEOUT
 
 class OperatePage:
-    def __init__(self, page: Page):
+    def __init__(self, page: Page, base_page: BasePage | None = None):
         self.page = page
         self.elements = OperationElements(page)
-        self.base_page = BasePage(page)
+        self.base_page = base_page or BasePage(page)
 
     @allure.step("驗證刪除視窗輸入")
     def verify_delete(self):
