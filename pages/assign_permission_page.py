@@ -147,7 +147,7 @@ class AssignPermissionPage:
             member_keyword,
             self.elements.option_assign,
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("搜尋不存在的指定權限並驗證無結果")
     def search_assign_permission_with_no_result(self):
@@ -252,7 +252,7 @@ class AssignPermissionPage:
         self.elements.input_keyword_search.fill(assignment_key)
         self.base_page.wait_loading_disapper()
         if self.elements.msg_search_noResult.is_visible():
-            self.elements.input_keyword_search.fill("")
+            self.elements.input_keyword_search.clear()
             return False
         self.delete_assign_permission(assignment_key)
         return True

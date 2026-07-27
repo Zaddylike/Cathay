@@ -75,7 +75,7 @@ class ProjectMemberPage:
         try:
             for input_value in cases:
                 self.operate_page.search_keyword(inputElement, input_value, expectElement)
-                inputElement.fill("")
+                inputElement.clear()
         except Exception as e:
             raise Exception(f"Failed to verify input : {e}")
         

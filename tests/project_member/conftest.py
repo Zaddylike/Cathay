@@ -19,12 +19,14 @@ def created_member_project(
     project_cleanup,
 ) -> ProjectMemberTestData:
     project_cleanup(project_member_data.project_abbreviation)
+
     logged_app.project_page.create_project(
         project_member_data.project_abbreviation,
         project_member_data.project_zh_name,
         project_member_data.project_en_name,
         project_member_data.project_description,
     )
+    
     return project_member_data
 
 

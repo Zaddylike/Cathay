@@ -2,8 +2,8 @@ from pages.locators.application_permission_locators import ApplicationPermission
 from pages.locators.assign_permission_locators import AssignPermissionLocators
 from pages.locators.common_locators import CommonLocators
 from pages.locators.default_permission_locators import DefaultPermissionLocators
+from pages.locators.elements_base import ElementsBase
 from pages.locators.elements import (
-    AllElements,
     ApplicationPermissionElements,
     ApplicationS2sElements,
     ApplicationSsoElements,

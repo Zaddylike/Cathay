@@ -135,7 +135,7 @@ class GroupPage:
             group_name,
             self.elements.option_cards.last
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("依狀態篩選群組")
     def filter_groups_by_status(self):
@@ -243,7 +243,7 @@ class GroupPage:
         self.elements.input_keyword_search.fill(group_name)
         self.base_page.wait_loading_disapper()
         if self.elements.msg_search_noResult.is_visible():
-            self.elements.input_keyword_search.fill("")
+            self.elements.input_keyword_search.clear()
             return False
         self.open_group_delete_dialog(group_name)
         self.verify_deleted_input()

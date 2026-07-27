@@ -249,7 +249,7 @@ class ProjectPage:
         try:
             for input_value in cases:
                 self.operate_page.search_keyword(inputElement, input_value, expectElement)
-                inputElement.fill("")
+                inputElement.clear()
         except Exception as e:
             raise Exception(f"Failed to verify input : {e}")
 
@@ -383,7 +383,7 @@ class ProjectPage:
             )
 
         if not self.project_exists(project_abbreviation):
-            self.elements.input_keyword_search.fill("")
+            self.elements.input_keyword_search.clear()
             return False
 
         self.delete_project(project_abbreviation)
@@ -394,7 +394,7 @@ class ProjectPage:
                 f"Project still exists after cleanup: {project_abbreviation}"
             )
 
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
         return True
 
     @allure.step("驗證刪除成功")

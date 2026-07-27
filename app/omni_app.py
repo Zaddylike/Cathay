@@ -18,11 +18,10 @@ from pages.application_sso_page import ApplicationSingleSignOnPage
 
 class OmniApp:
     def __init__(self, page: Page):
-        self.shared_page = (self.base_page, self.operate_page)
-
         self.page = page
         self.base_page = BasePage(page)
         self.operate_page = OperatePage(page, self.base_page)
+        self.shared_page = (self.base_page, self.operate_page)
         self.login_page = LoginPage(page, self.base_page)
         self.project_page = ProjectPage(page, self.base_page, self.operate_page)
         self.project_member_page = ProjectMemberPage(page, *self.shared_page)
@@ -34,9 +33,6 @@ class OmniApp:
         self.application_permission_page = ApplicationPermissionPage(page, *self.shared_page)
         self.single_sign_on_page = ApplicationSingleSignOnPage(page, *self.shared_page)
         self.server_to_server_page = ApplicationServerToServerPage(page, *self.shared_page)
-        self.permission_page = self.application_permission_page
-        self.single_signon_page = self.single_sign_on_page
-        self.server_to_servser_page = self.server_to_server_page
 
     @allure.step("開啟瀏覽器 & 確認網頁Title & 登入程序")
     def login_by_account(self, account: str, password: str):

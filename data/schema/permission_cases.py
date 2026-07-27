@@ -29,4 +29,4 @@ PERMISSION_DESCRIPTION_CASES: ValidationCases = (
 
 
 def duplicate_permission_code_cases(code: str) -> ValidationCases:
-    return ((code, " 代碼不可重複 "),)
+    return ((code, "代碼不可重複"),)

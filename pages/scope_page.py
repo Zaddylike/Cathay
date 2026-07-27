@@ -37,7 +37,7 @@ class ScopePage:
             has=self.page.get_by_text(scope_code, exact=True)
         )
         exists = scope_card.count() == 1
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
         return exists
 
 
@@ -65,6 +65,7 @@ class ScopePage:
         self.input_code_cases = PERMISSION_CODE_CASES
         element_input = self.elements.input_scope_code
         element_error = self.elements.msg_field_error
+
         self.operate_page.verify_input(element_input, element_error, self.input_code_cases)
         self.elements.input_scope_code.fill(scope_code)
 
@@ -73,6 +74,7 @@ class ScopePage:
         self.input_name_cases = PERMISSION_CREATE_NAME_CASES
         element_input = self.elements.input_scope_name
         element_error = self.elements.msg_field_error
+
         self.operate_page.verify_input(element_input, element_error, self.input_name_cases)
         self.elements.input_scope_name.fill(scope_name)
 
@@ -81,15 +83,19 @@ class ScopePage:
         self.input_description_cases = PERMISSION_DESCRIPTION_CASES
         element_input = self.elements.input_scope_description
         element_error = self.elements.msg_field_error
+
         self.operate_page.verify_input(element_input, element_error, self.input_description_cases)
         self.elements.input_scope_description.fill(scope_description)
 
     @allure.step("驗證範圍代碼不可重複")
     def validate_duplicate_scope(self, scope_code: str):
         self.elements.btn_scope_add_more_scope.click()
-
+        
         self.input_scope_cases = duplicate_permission_code_cases(scope_code)
-        self.operate_page.verify_input(self.elements.input_scope_code.last, self.elements.msg_field_error, self.input_scope_cases)
+        element_input = self.elements.input_scope_code.last
+        element_error = self.elements.msg_field_error
+
+        self.operate_page.verify_input(element_input, element_error, self.input_scope_cases)
         self.base_page.click_expect(self.elements.btn_scope_remove_create.last)
 
     @allure.step("新增另一筆範圍")
@@ -201,7 +207,7 @@ class ScopePage:
             self.elements.msg_search_noResult,
             should_exist=False,
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("搜尋框搜尋姓名已存在範圍")
     def search_scope_by_name(self, scope_name: str):
@@ -211,7 +217,7 @@ class ScopePage:
             self.elements.msg_search_noResult,
             should_exist=False,
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("進階篩選面板篩選狀態")
     def filter_projects_by_status(self):
@@ -314,7 +320,7 @@ class ScopePage:
         self.base_page.wait_loading_disapper()
 
         if self.elements.msg_search_noResult.is_visible():
-            self.elements.input_keyword_search.fill("")
+            self.elements.input_keyword_search.clear()
             return False
 
         self.delete_scope(scope_code)

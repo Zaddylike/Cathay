@@ -1,9 +1,7 @@
-from playwright.sync_api import Page
+from pages.locators.elements_base import ElementsBase
 
 
-class AssignPermissionLocators:
-    def __init__(self, page: Page):
-        self.page = page
+class AssignPermissionLocators(ElementsBase):
 
 # Basic
 

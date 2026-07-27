@@ -93,7 +93,7 @@ class DefaultPermissionPage:
             self.elements.msg_search_noResult,
             should_exist=False
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("依範圍搜尋預設權限")
     def search_default_permission_by_scope(self, scope_code: str):
@@ -103,7 +103,7 @@ class DefaultPermissionPage:
             self.elements.msg_search_noResult,
             should_exist=False
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("搜尋不存在的預設權限並驗證無結果")
     def search_default_permission_with_no_result(self):
@@ -196,7 +196,7 @@ class DefaultPermissionPage:
 
         deleted_perms = self.elements.option_permissions.filter(has_text=role_code)
         if deleted_perms.count() == 0 or not deleted_perms.is_visible():
-            self.elements.input_keyword_search.fill("")
+            self.elements.input_keyword_search.clear()
             self.base_page.wait_loading_disapper()
             return False
         

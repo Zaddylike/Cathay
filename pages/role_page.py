@@ -164,7 +164,7 @@ class RolePage:
             self.elements.msg_search_noResult,
             should_exist=False,
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("依角色名稱搜尋")
     def search_role_by_name(self, role_name: str):
@@ -174,7 +174,7 @@ class RolePage:
             self.elements.msg_search_noResult,
             should_exist=False,
         )
-        self.elements.input_keyword_search.fill("")
+        self.elements.input_keyword_search.clear()
 
     @allure.step("依狀態篩選角色")
     def filter_roles_by_status(self):
@@ -287,7 +287,7 @@ class RolePage:
         self.base_page.wait_loading_disapper()
         
         if self.elements.msg_search_noResult.is_visible():
-            self.elements.input_keyword_search.fill("")
+            self.elements.input_keyword_search.clear()
             return False
         self.delete_role(role_code)
         return True

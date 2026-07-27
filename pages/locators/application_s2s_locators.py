@@ -1,8 +1,7 @@
-from playwright.sync_api import Page
+from pages.locators.elements_base import ElementsBase
 
-class ApplicationS2sLocators:
-    def __init__(self, page: Page):
-        self.page = page
+
+class ApplicationS2sLocators(ElementsBase):
 
 # Entry / Page
 

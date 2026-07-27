@@ -1,5 +1,3 @@
-from playwright.sync_api import Page
-
 from pages.locators.application_permission_locators import ApplicationPermissionLocators
 from pages.locators.application_s2s_locators import ApplicationS2sLocators
 from pages.locators.application_sso_locators import ApplicationSsoLocators
@@ -16,81 +14,49 @@ from pages.locators.scope_locators import ScopeLocators
 
 
 class BaseElements(CommonLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class LoginElements(CommonLocators, LoginLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class ProjectElements(CommonLocators, ProjectLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class ProjectMemberElements(CommonLocators, ProjectMemberLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class ScopeElements(CommonLocators, ScopeLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class RoleElements(CommonLocators, RoleLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class GroupElements(CommonLocators, GroupLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class AssignPermissionElements(CommonLocators, AssignPermissionLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class DefaultPermissionElements(CommonLocators, DefaultPermissionLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 
 class ApplicationPermissionElements(CommonLocators, ApplicationPermissionLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 class ApplicationS2sElements(CommonLocators, ApplicationS2sLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 class ApplicationSsoElements(CommonLocators, ApplicationSsoLocators):
-    def __init__(self, page: Page):
-        self.page = page
+    pass
 
 class OperationElements(CommonLocators, OperationLocators):
-    def __init__(self, page: Page):
-        self.page = page
-
-
-class AllElements(
-    CommonLocators,
-    LoginLocators,
-    ProjectLocators,
-    ProjectMemberLocators,
-    ScopeLocators,
-    RoleLocators,
-    GroupLocators,
-    AssignPermissionLocators,
-    DefaultPermissionLocators,
-    ApplicationPermissionLocators,
-    ApplicationS2sLocators,
-    ApplicationSsoLocators,
-    OperationLocators,
-):
-    def __init__(self, page: Page):
-        self.page = page
+    pass

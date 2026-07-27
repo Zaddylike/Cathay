@@ -1,8 +1,7 @@
-from playwright.sync_api import Page
+from pages.locators.elements_base import ElementsBase
 
-class CommonLocators:
-    def __init__(self, page: Page):
-        self.page = page
+
+class CommonLocators(ElementsBase):
 
 
 #   未登入頁面、登入頁、Omni Logo

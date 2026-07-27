@@ -41,13 +41,13 @@ class OperatePage:
         ErrorElement = self.elements.msg_field_error if ErrorElement is None else ErrorElement
         try:
             for input_value, expected_msg in cases:
+                inputElement.wait_for(state='visible', timeout=DEFAULT_TIMEOUT)
                 inputElement.fill(input_value)
-                self.base_page.wait_loading_disapper()
+                self.base_page.sleep(0.25)
 
                 expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應該出現").to_be_visible(timeout=DEFAULT_TIMEOUT)
                 expect(ErrorElement, f" 輸入 [{input_value}] 後，錯誤訊息應為:{expected_msg}").to_have_text(expected_msg)
-
-                inputElement.fill("")
+                inputElement.clear()
                 self.base_page.wait_loading_disapper()
                 
         except Exception as e:
@@ -144,7 +144,7 @@ class OperatePage:
             has=self.page.get_by_text(application_name, exact=True)
         )
         if application_card.count() == 0:
-            search_input.fill("")
+            search_input.clear()
             return False
 
         expect(application_card).to_have_count(1)
@@ -162,7 +162,7 @@ class OperatePage:
         self.base_page.wait_loading_disapper()
         expect(application_card).to_have_count(0)
         
-        search_input.fill("")
+        search_input.clear()
         self.base_page.wait_loading_disapper()
 
         return True
