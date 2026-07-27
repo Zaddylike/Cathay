@@ -72,7 +72,7 @@ class DefaultPermissionPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             role_code,
-            self.elements.option_permissions.last,
+            self.elements.option_default.last,
         )
 
 # read
@@ -83,7 +83,7 @@ class DefaultPermissionPage:
             self.elements.tab_permission_default,
             self.elements.btn_set_default_permission,
         )
-        expect(self.elements.option_permissions.first).to_be_visible()
+        expect(self.elements.option_default.first).to_be_visible()
 
     @allure.step("依角色搜尋預設權限")
     def search_default_permission_by_role(self, role_code: str):
@@ -150,14 +150,14 @@ class DefaultPermissionPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             role_code,
-            self.elements.option_permissions.last,
+            self.elements.option_default.last,
         )
 
 
 # delete
 
     def get_default_permission_row(self, role_code: str):
-        return self.elements.option_permissions.filter(has_text=role_code)
+        return self.elements.option_default.filter(has_text=role_code)
 
     def click_default_permission_delete(self, role_code: str):
         row = self.get_default_permission_row(role_code)
@@ -173,7 +173,7 @@ class DefaultPermissionPage:
         )
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
-        exist_perms = self.elements.option_permissions.filter(has_text=role_code)
+        exist_perms = self.elements.option_default.filter(has_text=role_code)
         expect(exist_perms).to_be_visible()
         self.base_page.click_expect(
             exist_perms.locator('app-icon[class="cursor-pointer"]')
@@ -194,7 +194,7 @@ class DefaultPermissionPage:
         self.elements.input_keyword_search.fill(role_code)
         self.base_page.wait_loading_disapper()
 
-        deleted_perms = self.elements.option_permissions.filter(has_text=role_code)
+        deleted_perms = self.elements.option_default.filter(has_text=role_code)
         if deleted_perms.count() == 0 or not deleted_perms.is_visible():
             self.elements.input_keyword_search.clear()
             self.base_page.wait_loading_disapper()
@@ -212,6 +212,6 @@ class DefaultPermissionPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             role_code,
-            self.elements.option_permissions,
+            self.elements.option_default,
             should_exist=False,
         )

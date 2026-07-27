@@ -245,7 +245,7 @@ class CommonLocators(ElementsBase):
         return self.page.locator('.data-card--permission')
     @property
     # 權限設定_預設權限的項目
-    def option_permissions(self):
+    def option_default(self):
         return self.page.locator('[role="rowgroup"][data-pc-section="tbody"] tr')
 
 #   Member Common

@@ -129,7 +129,7 @@ class AssignPermissionPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             assignment_key,
-            self.elements.option_assign,
+            self.elements.option_default,
         )
 
 
@@ -220,7 +220,7 @@ class AssignPermissionPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             assignment_key,
-            self.elements.option_assign,
+            self.elements.option_assign.first,
         )
 
     #  delete

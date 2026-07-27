@@ -2,7 +2,7 @@ import sys
 from datetime import datetime
 
 now = datetime.now()
-print(f'Testing  Path: {sys.argv}')
+print(f'Testing Path: {sys.argv}')
 print(f'Starting Time: {now.strftime("%Y/%m/%d %H:%M")}')
 
 # Browser settings
