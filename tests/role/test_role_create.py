@@ -6,6 +6,7 @@ import allure
 def test_role_create_success(role_app: OmniApp, prepared_role_scopes, role_cleanup):
     role_data = prepared_role_scopes
     role_cleanup("role", role_data.code)
+    
     role_app.role_page.click_to_create_role_page()
     role_app.role_page.validate_and_fill_role_code(role_data.code)
     role_app.role_page.validate_and_fill_role_name(role_data.name)

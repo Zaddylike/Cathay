@@ -36,7 +36,6 @@ from utils.resource_cleanup import CleanupRegistry
 
 # Browser settings
 
-
 @pytest.fixture(scope="session")
 def browser_type_launch_args(browser_type_launch_args):
     return {
@@ -48,7 +47,6 @@ def browser_type_launch_args(browser_type_launch_args):
             *BROWSER_ARGS,
         ],
     }
-
 
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
@@ -62,7 +60,6 @@ def browser_context_args(browser_context_args):
             "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
         },
     }
-
 
 @pytest.fixture
 def context(new_context) -> Iterator[BrowserContext]:
@@ -88,7 +85,6 @@ def context(new_context) -> Iterator[BrowserContext]:
         except PlaywrightError:
             continue
 
-
 @pytest.fixture
 def page(page: Page, browser_name: str, browser_type_launch_args):
     is_headless = browser_type_launch_args.get("headless", True)
@@ -110,16 +106,11 @@ def page(page: Page, browser_name: str, browser_type_launch_args):
     return page
 
 
-# CLI
+# Parameters
 
 """
     用途:集中管理專案自訂的 pytest CLI 參數。
-
-    執行流程:
-        1. --data-mode 控制測試資料是否於 teardown 清除。
 """
-
-
 def pytest_addoption(parser):
     parser.addoption(
         "--data-mode",
@@ -129,17 +120,9 @@ def pytest_addoption(parser):
         help="Test data lifecycle: isolated deletes fixture data; keep retains it",
     )
 
-
 """
     用途:將 --data-mode 轉成其他 fixtures 可以注入使用的字串。
-
-    執行流程:
-        1. pytest 解析 CLI。
-        2. 未傳入時回傳 isolated。
-        3. 傳入 --data-mode=keep 時回傳 keep。
 """
-
-
 @pytest.fixture(scope="session")
 def data_mode(pytestconfig) -> str:
     return pytestconfig.getoption("--data-mode")
@@ -148,7 +131,9 @@ def data_mode(pytestconfig) -> str:
 @pytest.fixture
 def cleanup_registry(data_mode: str) -> Iterator[CleanupRegistry]:
     registry = CleanupRegistry(enabled=should_cleanup(data_mode))
+
     yield registry
+    
     registry.cleanup()
 
 
@@ -207,8 +192,6 @@ def thread_account(worker_id):
 """
     用途: 建立 Basic Object。
 """
-
-
 @pytest.fixture
 def app(page: Page):
     try:
@@ -219,11 +202,7 @@ def app(page: Page):
 
 """
     用途: 建立 Basic Object並運行前置動作。
-    前置動作：
-        1. 登入
 """
-
-
 @pytest.fixture
 def logged_app(page: Page, thread_account):
     try:
@@ -234,17 +213,20 @@ def logged_app(page: Page, thread_account):
         raise Exception(f"Failed to log in: {error}")
 
 
+"""
+    Permission 測試使用的 App 與 Project 識別資料。
+"""
 @dataclass(frozen=True)
 class PermissionProjectContext:
-    """Permission 測試使用的 App 與 Project 識別資料。"""
-
     app: OmniApp
     abbreviation: str
 
 
+"""
+    準備 Permission Project，並在 isolated 模式負責清除。
+"""
 @pytest.fixture
 def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["PermissionProjectContext"]:
-    """準備 Permission Project，並在 isolated 模式負責清除。"""
 
     if data_mode == KEEP:
         with permission_project_lock():
@@ -269,6 +251,7 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
             f"{PROJECT_EN_NAME_PREFIX}-permission-{suffix}",
             f"{PROJECT_DESCRIPTION_PREFIX}-permission-{suffix}",
         )
+
         logged_app.operate_page.go_to_permission_page(project_abbreviation)
         create_permission_initialization(logged_app)
 

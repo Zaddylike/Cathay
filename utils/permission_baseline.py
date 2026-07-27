@@ -118,40 +118,6 @@ def create_permission_initialization(app: OmniApp) -> None:
     permission_page.click_to_default_permission_next_step()
     permission_page.operate_page.submit_and_confirm(enabled_timeout=15_000)
 
-
-    # permission_page = app.application_permission_page
-    # # Scope
-    # permission_page.open_to_create_permission_page()
-    # scope_panels = app.page.locator("app-permission-scope p-accordion-panel")
-    # if scope_panels.count() != 1:
-    #     raise AssertionError(f"Expected one initial Scope panel, got {scope_panels.count()}")
-    # first_scope_panel = scope_panels.nth(0)
-    # first_scope_panel.locator('[formcontrolname="code"]').fill(PERMISSION_SCOPE_CODE)
-    # first_scope_panel.locator('[formcontrolname="name"]').fill(PERMISSION_SCOPE_NAME)
-    # first_scope_panel.locator('[formcontrolname="description"]').fill(PERMISSION_SCOPE_DESCRIPTION)
-    # permission_page.click_to_role_next_step()
-    # # Role
-    # permission_page.click_to_extend_role_page()
-    # role_panels = app.page.locator("app-permission-role p-accordion-panel")
-    # if role_panels.count() != 1:
-    #     raise AssertionError(f"Expected one initial Role panel, got {role_panels.count()}")
-    # first_role_panel = role_panels.nth(0)
-    # first_role_panel.locator('[formcontrolname="code"]').fill(PERMISSION_ROLE_CODE)
-    # first_role_panel.locator('[formcontrolname="name"]').fill(PERMISSION_ROLE_NAME)
-    # first_role_panel.locator('[formcontrolname="description"]').fill(PERMISSION_ROLE_DESCRIPTION)
-    # # Group
-    # permission_page.select_created_scope()
-    # permission_page.click_to_group_next_step()
-    # permission_page.click_to_permission_next_step()
-    # # Assign
-    # permission_page.click_to_default_permission_next_step()
-    # # Default
-    # app.default_permission_page.select_default_role_permission(PERMISSION_ROLE_CODE)
-    # app.default_permission_page.select_default_scope_permission(PERMISSION_SCOPE_CODE)
-    # permission_page.operate_page.submit_and_confirm(enabled_timeout=15_000)
-
-
-
 """
 用途:判斷目前專案是否已完成 Permission Init。
 
