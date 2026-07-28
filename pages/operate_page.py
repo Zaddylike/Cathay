@@ -3,7 +3,7 @@ from playwright.sync_api import Page, expect
 from pages.locators.elements import OperationElements
 from pages.base_page import BasePage
 import re
-from config.settings import PERMISSION_PROJECT_ABBR, DEFAULT_TIMEOUT
+from config.settings import PERMISSION_PROJECT_ABBR, DEFAULT_TIMEOUT, BASE_URL_DEV
 
 class OperatePage:
     def __init__(self, page: Page, base_page: BasePage | None = None):
@@ -85,8 +85,11 @@ class OperatePage:
     @allure.step("選擇清單選項 [{option_text}]")
     def select_list_by_text(self, list_element, option_element, option_text: str):
         try:
+            list_element.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
+            list_element.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
             list_element.click()
             option = option_element.filter(has_text=option_text).first
+            print(option_element.filter(has_text=option_text))
             expect(option).to_be_visible()
             option.click()
         except Exception as e:
@@ -189,14 +192,17 @@ class OperatePage:
         self,
         project_abbreviation: str = PERMISSION_PROJECT_ABBR,
     ):
+        self.reset_to_anchor(BASE_URL_DEV)
         self.elements.input_keyword_search.fill(project_abbreviation)
         self.base_page.wait_loading_disapper()
         expect(self.elements.msg_search_noResult).not_to_be_visible()
+
         project_card = self.elements.option_cards.filter(
             has=self.page.get_by_text(project_abbreviation, exact=True)
         )
         expect(project_card).to_have_count(1)
         project_card.click()
+        
         self.elements.btn_project_info_permission.click()
         expect(self.elements.page_permission).to_be_visible()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
@@ -209,3 +215,12 @@ class OperatePage:
     @allure.step("點擊下一步")    
     def click_to_next_step(self):
         self.elements.btn_next_step.click()
+
+    @allure.step("回歸操作起始錨點頁面")
+    def reset_to_anchor(
+        self,
+        url
+    ):
+        self.page.keyboard.press("Escape")
+        self.page.goto(url)
+        self.base_page.wait_loading_disapper()

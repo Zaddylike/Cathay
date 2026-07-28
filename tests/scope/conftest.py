@@ -9,26 +9,9 @@ from utils.resource_cleanup import CleanupRegistry
 def scope_app(permission_settings_app: OmniApp) -> OmniApp:
     return permission_settings_app
 
-
 @pytest.fixture
 def scope_data() -> ScopeTestData:
     return build_scope_test_data()
-
-
-@pytest.fixture
-def created_scope_data(
-    scope_app: OmniApp,
-    scope_data: ScopeTestData,
-    scope_cleanup,
-) -> ScopeTestData:
-    scope_cleanup(scope_data.code)
-    scope_app.scope_page.create_scope(
-        scope_data.code,
-        scope_data.name,
-        scope_data.description,
-    )
-    return scope_data
-
 
 @pytest.fixture
 def scope_cleanup(
@@ -50,3 +33,20 @@ def scope_cleanup(
         )
 
     return register
+
+
+# 用途: 新增範圍資料用於測試Read, Update, Delete, Copy 情境
+@pytest.fixture
+def created_scope_data(
+    scope_app: OmniApp,
+    scope_data: ScopeTestData,
+    scope_cleanup,
+) -> ScopeTestData:
+    scope_cleanup(scope_data.code)
+    scope_app.scope_page.create_scope(
+        scope_data.code,
+        scope_data.name,
+        scope_data.description,
+    )
+    return scope_data
+

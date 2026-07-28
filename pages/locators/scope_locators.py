@@ -39,5 +39,6 @@ class ScopeLocators(ElementsBase):
 
     @property
     # 權限設定_範圍_新增範圍頁面_新增範圍按鈕
-    def btn_scope_add_more_scope(self):
+    def btn_scope_add_scope(self):
         return self.page.locator("app-permission-scope-edit app-permission-scope").get_by_text("新增範圍")
+

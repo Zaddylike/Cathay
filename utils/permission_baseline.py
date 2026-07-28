@@ -1,4 +1,5 @@
 from app.omni_app import OmniApp
+from pages.locators.elements import BaseElements
 from config.settings import (
     BASE_URL_DEV,
     PERMISSION_ENTRA_ATTRIBUTE,
@@ -91,28 +92,22 @@ def ensure_permission_project_member(
     app.base_page.wait_loading_disapper()
 
 
-"""
-用途:執行只能做一次的 Permission Init wizard。
 
-建立內容:
-    1. 固定 Scope 資料。
-    2. 固定 Role 與 Scope 關聯。
-    3. 跳過非必要的 Group/Assign Permission 初始資料。
-    4. 建立 Default Permission 後送出初始化。
-
-此方法只負責建立;是否需要建立由 ensure_permission_initialization 判斷。
-"""
+# 用途: 運行 permission init 只有scope 最小可實現顆粒度。
 def create_permission_initialization(app: OmniApp) -> None:
     permission_page = app.application_permission_page
     permission_page.open_to_create_permission_page()
-    scope_panels = app.page.locator("app-permission-scope p-accordion-panel")
+
+    scope_panels = app.application_permission_page.elements.page_scope_create
     if scope_panels.count() != 1:
         raise AssertionError(f"Expected one initial Scope panel, got {scope_panels.count()}")
+    
     first_scope_panel = scope_panels.nth(0)
     first_scope_panel.locator('[formcontrolname="code"]').fill(PERMISSION_SCOPE_CODE)
     first_scope_panel.locator('[formcontrolname="name"]').fill(PERMISSION_SCOPE_NAME)
     first_scope_panel.locator('[formcontrolname="description"]').fill(PERMISSION_SCOPE_DESCRIPTION)
     permission_page.click_to_role_next_step()
+
     permission_page.click_to_group_next_step()
     permission_page.click_to_permission_next_step()
     permission_page.click_to_default_permission_next_step()

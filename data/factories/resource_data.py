@@ -81,6 +81,9 @@ def build_project_member_test_data() -> ProjectMemberTestData:
     )
 
 
+
+# Scope Data 
+
 @dataclass(frozen=True)
 class ScopeTestData:
     code: str
@@ -91,7 +94,6 @@ class ScopeTestData:
     copied_description: str
     updated_name: str
     updated_description: str
-
 
 def build_scope_test_data(suffix: str | None = None) -> ScopeTestData:
     suffix = suffix or _new_suffix()
@@ -110,6 +112,9 @@ def build_scope_test_data(suffix: str | None = None) -> ScopeTestData:
         updated_description=f"updated-{description}",
     )
 
+
+
+# Role Data
 
 @dataclass(frozen=True)
 class RoleTestData:

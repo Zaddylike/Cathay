@@ -19,7 +19,7 @@ def test_application_init_success(logged_app: OmniApp, application_permission_in
     logged_app.application_permission_page.validate_and_fill_role_code(data.role_code)
     logged_app.application_permission_page.validate_and_fill_role_name(data.role_name)
     logged_app.application_permission_page.validate_and_fill_role_description(data.role_description)
-    logged_app.application_permission_page.select_created_scope()
+    logged_app.application_permission_page.select_created_scope(data.scope_code)
     logged_app.application_permission_page.validate_duplicate_role(data.role_code)
     logged_app.application_permission_page.create_another_role(data.second_role_code, data.second_role_name, data.second_role_description)
     logged_app.application_permission_page.create_scope_in_role_page(data.second_scope_code, data.second_scope_name, data.third_scope_code, data.third_scope_name)

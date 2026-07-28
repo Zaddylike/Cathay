@@ -12,6 +12,8 @@ from config.settings import (
     ACCOUNT_USERNAME,
     ACCOUNT_USERNAME_2,
     ACCOUNT_PASSWORD_2,
+    ACCOUNT_USERNAME_3,
+    ACCOUNT_PASSWORD_3,
     BASE_URL_DEV,
     BROWSER_ARGS,
     HEADLESS,
@@ -32,6 +34,7 @@ from utils.permission_baseline import (
     ensure_sso_application,
 )
 from utils.resource_cleanup import CleanupRegistry
+
 
 
 # Browser settings
@@ -106,11 +109,9 @@ def page(page: Page, browser_name: str, browser_type_launch_args):
     return page
 
 
+
 # Parameters
 
-"""
-    用途:集中管理專案自訂的 pytest CLI 參數。
-"""
 def pytest_addoption(parser):
     parser.addoption(
         "--data-mode",
@@ -120,78 +121,47 @@ def pytest_addoption(parser):
         help="Test data lifecycle: isolated deletes fixture data; keep retains it",
     )
 
-"""
-    用途:將 --data-mode 轉成其他 fixtures 可以注入使用的字串。
-"""
 @pytest.fixture(scope="session")
 def data_mode(pytestconfig) -> str:
     return pytestconfig.getoption("--data-mode")
 
 
-@pytest.fixture
-def cleanup_registry(data_mode: str) -> Iterator[CleanupRegistry]:
-    registry = CleanupRegistry(enabled=should_cleanup(data_mode))
-
-    yield registry
-    
-    registry.cleanup()
-
-
-@pytest.fixture
-def project_cleanup(logged_app: OmniApp, cleanup_registry: CleanupRegistry):
-    def delete_project(project_abbreviation: str) -> None:
-        logged_app.page.keyboard.press("Escape")
-        logged_app.page.goto(BASE_URL_DEV)
-        logged_app.project_page.delete_project_if_exists(project_abbreviation)
-
-    def register(project_abbreviation: str) -> None:
-        def cleanup() -> None:
-            delete_project(project_abbreviation)
-
-        cleanup_registry.register(
-            "Project",
-            project_abbreviation,
-            cleanup,
-        )
-
-    return register
-
 
 # threading accounts
 
-ACCOUNTS_Rollbook = [
-    {
-        "username": ACCOUNT_USERNAME,
-        "password": ACCOUNT_PASSWORD,
-    },
-    {
-        "username": ACCOUNT_USERNAME_2,
-        "password": ACCOUNT_PASSWORD_2,
-    },
-]
-
-
 @pytest.fixture
 def thread_account(worker_id):
+    ACCOUNTS_Rollbook = [
+        {
+            "username": ACCOUNT_USERNAME,
+            "password": ACCOUNT_PASSWORD,
+        },
+        {
+            "username": ACCOUNT_USERNAME_2,
+            "password": ACCOUNT_PASSWORD_2,
+        },
+        {
+            "username": ACCOUNT_USERNAME_3,
+            "password": ACCOUNT_PASSWORD_3,
+        },
+    ]
+
     if worker_id == "master":
         return ACCOUNTS_Rollbook[0]
-
     worker_index = int(worker_id.replace("gw", ""))
-
     if worker_index >= len(ACCOUNTS_Rollbook):
         pytest.exit(
             f"Thread數量超過可用帳號數量："
             f"{worker_index + 1} Workers / {len(ACCOUNTS_Rollbook)} Accounts"
         )
-
+        
     return ACCOUNTS_Rollbook[worker_index]
 
 
-# 各情境 Object
 
-"""
-    用途: 建立 Basic Object。
-"""
+# All type of page object
+
+# 用途: 建立 Basic Object。
 @pytest.fixture
 def app(page: Page):
     try:
@@ -199,10 +169,7 @@ def app(page: Page):
     except Exception as error:
         raise Exception(f"Failed to initialize OmniApp: {error}")
 
-
-"""
-    用途: 建立 Basic Object並運行前置動作。
-"""
+# 用途: 建立 Basic Object後運行前置登入。
 @pytest.fixture
 def logged_app(page: Page, thread_account):
     try:
@@ -212,19 +179,13 @@ def logged_app(page: Page, thread_account):
     except Exception as error:
         raise Exception(f"Failed to log in: {error}")
 
-
-"""
-    Permission 測試使用的 App 與 Project 識別資料。
-"""
+# 用途: Lock Permission 測試使用的 App 與 Project 識別資料。
 @dataclass(frozen=True)
 class PermissionProjectContext:
     app: OmniApp
     abbreviation: str
 
-
-"""
-    準備 Permission Project，並在 isolated 模式負責清除。
-"""
+# 用途: 建立 lodded_app object後, 建立測試Permission需要的project。
 @pytest.fixture
 def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["PermissionProjectContext"]:
 
@@ -261,12 +222,9 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
         if should_cleanup(data_mode):
             try:
                 if project_abbreviation == PERMISSION_PROJECT_ABBR:
-                    raise AssertionError(
-                        "Isolated Permission cleanup received the baseline project"
-                    )
+                    raise AssertionError("Isolated Permission cleanup received the baseline project")
 
-                logged_app.page.keyboard.press("Escape")
-                logged_app.page.goto(BASE_URL_DEV)
+                logged_app.operate_page.reset_to_anchor(BASE_URL_DEV)
 
                 if logged_app.project_page.project_exists(project_abbreviation):
                     logged_app.operate_page.go_to_permission_page(project_abbreviation)
@@ -276,15 +234,11 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
                     logged_app.server_to_server_page.delete_application_if_exists(
                         PERMISSION_S2S_APPLICATION_NAME
                     )
-
                     if not logged_app.application_permission_page.permission_initialization_available():
-                        # logged_app.default_permission_page.delete_default_permission_if_exists(
-                        #     PERMISSION_ROLE_CODE
-                        # )
-                        # logged_app.role_page.delete_role_if_exists(PERMISSION_ROLE_CODE)
                         logged_app.scope_page.delete_scope_if_exists(PERMISSION_SCOPE_CODE)
 
-                    logged_app.page.goto(BASE_URL_DEV)
+
+                    logged_app.operate_page.reset_to_anchor(BASE_URL_DEV)
                     logged_app.project_page.delete_project_if_exists(project_abbreviation)
             except Exception as error:
                 allure.attach(
@@ -296,7 +250,7 @@ def permission_project(logged_app: OmniApp, data_mode: str) -> Iterator["Permiss
                     f"Permission isolated cleanup failed for {project_abbreviation}: {error}"
                 ) from error
 
-
+# 用途: 建立lodded_app Object後, 建立測試Permission需要的Project。
 @pytest.fixture
 def permission_settings_app(
     permission_project: PermissionProjectContext,
@@ -305,13 +259,16 @@ def permission_settings_app(
     permission_project.app.operate_page.open_to_permissions_page()
     return permission_project.app
 
-
+"""
+用途: 
+1. 建立lodded_app Object後, 建立測試Permission需要的Project。
+2. 補齊 Group 與 Assign Permission 共用的 SSO 前置資料。
+"""
 @pytest.fixture
 def permission_project_with_sso(
     permission_project: PermissionProjectContext,
     data_mode: str,
 ) -> PermissionProjectContext:
-    """補齊 Group 與 Assign Permission 共用的 SSO 前置資料。"""
 
     def prepare_sso() -> None:
         ensure_sso_application(permission_project.app, create_missing=True)
@@ -324,7 +281,7 @@ def permission_project_with_sso(
 
     return permission_project
 
-
+# 用途: 建立lodded_app Object後, 建立測試Permission需要的Project。
 @pytest.fixture
 def permission_settings_sso_app(
     permission_project_with_sso: PermissionProjectContext,
@@ -332,3 +289,35 @@ def permission_settings_sso_app(
     """完成 SSO 前置後開啟權限設定頁。"""
     permission_project_with_sso.app.operate_page.open_to_permissions_page()
     return permission_project_with_sso.app
+
+
+
+# clean
+
+@pytest.fixture
+def cleanup_registry(data_mode: str) -> Iterator[CleanupRegistry]:
+    registry = CleanupRegistry(enabled=should_cleanup(data_mode))
+
+    yield registry
+    
+    registry.cleanup()
+
+
+@pytest.fixture
+def project_cleanup(logged_app: OmniApp, cleanup_registry: CleanupRegistry):
+    def delete_project(project_abbreviation: str) -> None:
+        logged_app.page.keyboard.press("Escape")
+        logged_app.page.goto(BASE_URL_DEV)
+        logged_app.project_page.delete_project_if_exists(project_abbreviation)
+
+    def register(project_abbreviation: str) -> None:
+        def cleanup() -> None:
+            delete_project(project_abbreviation)
+
+        cleanup_registry.register(
+            "Project",
+            project_abbreviation,
+            cleanup,
+        )
+
+    return register

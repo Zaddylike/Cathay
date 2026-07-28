@@ -1,5 +1,4 @@
 import re
-
 import allure
 from playwright.sync_api import Page, expect
 
@@ -10,6 +9,8 @@ from data.schema.permission_cases import (
     PERMISSION_EDIT_NAME_CASES,
     duplicate_permission_code_cases,
 )
+
+from config.settings import DEFAULT_TIMEOUT
 from pages.locators.elements import ScopeElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
@@ -89,7 +90,8 @@ class ScopePage:
 
     @allure.step("驗證範圍代碼不可重複")
     def validate_duplicate_scope(self, scope_code: str):
-        self.elements.btn_scope_add_more_scope.click()
+        self.base_page.click_expect(self.elements.btn_scope_add_scope)
+        expect(self.elements.input_scope_code).to_have_count(2)
         
         self.input_scope_cases = duplicate_permission_code_cases(scope_code)
         element_input = self.elements.input_scope_code.last

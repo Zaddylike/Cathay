@@ -36,3 +36,13 @@ class RoleLocators(ElementsBase):
     # 權限設定_角色_新增角色頁面_新增角色按鈕
     def btn_role_add_more_role(self):
         return self.page.locator("app-permission-role-edit app-permission-role").get_by_text("新增角色")
+
+    @property
+    #  權限設定_角色_垃圾桶_按鈕
+    def btn_role_remove_create(self):
+        return self.page.locator('app-custom-form-field  [tooltipposition="bottom"] app-icon')
+
+    @property
+    #
+    def btn_role_second_create(self):
+        return self.page.locator('p-accordion-panel:nth-child(2) app-custom-form-field  [tooltipposition="bottom"] app-icon')

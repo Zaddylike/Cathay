@@ -317,6 +317,31 @@ class CommonLocators(ElementsBase):
     def page_permission(self):
         return self.page.locator(".text-type--content-title")
 
+    @property
+    # 身分驗證_範圍_新增頁面
+    def page_scope_create(self):
+        return self.page.locator("app-permission-scope p-accordion-panel")
+
+    @property
+    # 身分驗證_角色_新增頁面
+    def page_role_create(self):
+        return self.page.locator("app-permission-role p-accordion-panel")
+
+    @property
+    # 身分驗證_群組_新增頁面
+    def page_group_create(self):
+        return self.page.locator("app-permission-group p-accordion-panel")
+
+    @property
+    # 身分驗證_預設_新增頁面
+    def page_default_create(self):
+        return self.page.locator("app-permission-default-edit app-permission-default")
+    
+    @property
+    # 身分驗證_指定_新增頁面
+    def page_assign_create(self):
+        return self.page.locator("app-permission-assign-edit app-permission-assign")
+
 #   專案三點清單
 
     @property

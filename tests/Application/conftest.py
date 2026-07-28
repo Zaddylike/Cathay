@@ -320,10 +320,12 @@ def application_permission_init_project(
                             lambda scope_code=scope_code: logged_app.scope_page.delete_scope_if_exists(scope_code)
                         )
 
-                    cleanup_step(
-                        f"SSO {PERMISSION_SSO_APPLICATION_NAME}", 
-                        lambda: logged_app.single_sign_on_page.delete_application_if_exists(PERMISSION_SSO_APPLICATION_NAME)
-                    )
+                cleanup_step(
+                    f"SSO {PERMISSION_SSO_APPLICATION_NAME}",
+                    lambda: logged_app.single_sign_on_page.delete_application_if_exists(
+                        PERMISSION_SSO_APPLICATION_NAME
+                    ),
+                )
 
         except Exception as error:
             allure.attach(

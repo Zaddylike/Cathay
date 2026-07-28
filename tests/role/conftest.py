@@ -43,7 +43,6 @@ def role_cleanup(
 
     return register
 
-
 @pytest.fixture
 def prepared_role_scopes(
     role_app: OmniApp,
@@ -51,6 +50,7 @@ def prepared_role_scopes(
     role_cleanup,
 ) -> RoleTestData:
     role_cleanup("scope", role_data.scope_code)
+    
     role_app.scope_page.create_scope(
         role_data.scope_code,
         role_data.scope_name,
@@ -58,7 +58,7 @@ def prepared_role_scopes(
     )
     return role_data
 
-
+# 用途: 新增角色資料用於測試Read, Update, Delete, Copy 情境
 @pytest.fixture
 def created_role(
     role_app: OmniApp,
