@@ -19,27 +19,27 @@ def default_permission_data() -> DefaultPermissionTestData:
 # 用途: 登記 Default Permission、Role 與 Scope 資料，並在測試結束後清除。
 @pytest.fixture
 def default_permission_cleanup(
-    permission_settings_app: OmniApp,
-    permission_project_context,
+    permission_initialized_context,
     cleanup_registry: CleanupRegistry,
 ):
+    context = permission_initialized_context
+    app = context.app
+
     def return_to_permission_settings() -> None:
-        permission_settings_app.page.keyboard.press("Escape")
-        permission_settings_app.page.goto(BASE_URL_DEV)
-        permission_settings_app.operate_page.go_to_permission_page(
-            permission_project_context.abbreviation
-        )
-        permission_settings_app.operate_page.open_to_permissions_page()
+        app.page.keyboard.press("Escape")
+        app.page.goto(BASE_URL_DEV)
+        app.operate_page.go_to_permission_page(context.abbreviation)
+        app.operate_page.open_to_permissions_page()
 
     def register(resource_type: str, identifier: str) -> None:
         if resource_type == "permission":
             delete_resource = (
-                permission_settings_app.default_permission_page.delete_default_permission_if_exists
+                app.default_permission_page.delete_default_permission_if_exists
             )
         elif resource_type == "role":
-            delete_resource = permission_settings_app.role_page.delete_role_if_exists
+            delete_resource = app.role_page.delete_role_if_exists
         elif resource_type == "scope":
-            delete_resource = permission_settings_app.scope_page.delete_scope_if_exists
+            delete_resource = app.scope_page.delete_scope_if_exists
         else:
             raise ValueError(
                 f"Unsupported default permission cleanup resource: {resource_type}"

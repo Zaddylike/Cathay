@@ -22,6 +22,7 @@ from config.settings import (
 )
 
 
+
 """
 用途:確認固定共用專案 project-abbr-main 是否存在。
 
@@ -45,13 +46,14 @@ def ensure_shared_project(app: OmniApp, create_missing: bool) -> None:
     )
 
 
-def open_shared_permission_project(app: OmniApp) -> None:
-    """
-    用途:將目前 Page 統一導向 project-abbr-main 的應用程式設定首頁。
 
-    baseline 每完成一段流程後可能回到專案列表或新增頁,因此由此方法
-    統一恢復下一個 baseline 檢查所需要的頁面狀態。
-    """
+"""
+用途:將目前 Page 統一導向 project-abbr-main 的應用程式設定首頁。
+
+baseline 每完成一段流程後可能回到專案列表或新增頁,因此由此方法
+統一恢復下一個 baseline 檢查所需要的頁面狀態。
+"""
+def open_shared_permission_project(app: OmniApp) -> None:
     app.page.goto(BASE_URL_DEV)
     app.operate_page.go_to_permission_page(PERMISSION_PROJECT_ABBR)
 
@@ -109,6 +111,8 @@ def create_permission_initialization(app: OmniApp) -> None:
     permission_page.click_to_default_permission_next_step()
     permission_page.operate_page.submit_and_confirm(enabled_timeout=15_000)
 
+
+
 """
 用途:判斷目前專案是否已完成 Permission Init。
 
@@ -123,7 +127,9 @@ def ensure_permission_initialization(app: OmniApp, create_missing: bool) -> None
         return
     if not create_missing:
         raise AssertionError(f"Permission Init is missing from project: {PERMISSION_PROJECT_ABBR}")
+
     create_permission_initialization(app)
+
 
 
 """
@@ -155,8 +161,9 @@ def ensure_permission_scope(app: OmniApp, create_missing: bool) -> None:
     )
 
 
+
 """
-用途:建立 Scope/Role/Group/Assign Permission 測試依賴的固定 SSO Application。
+用途: 建立 Group/Assign Permission 測試依賴的固定 SSO Application。
 """
 def create_sso_application(app: OmniApp) -> None:
     sso_page = app.single_sign_on_page
@@ -183,8 +190,9 @@ def create_sso_application(app: OmniApp) -> None:
     app.base_page.click_expect(elements.btn_dialog_iknow)
 
 
+
 """
-用途:確認固定 SSO Application 是否存在。    
+用途: 確認固定 SSO Application 是否存在，不存在就走 create_sso_application
 """
 def ensure_sso_application(app: OmniApp, create_missing: bool) -> None:
     if app.single_sign_on_page.application_exists(PERMISSION_SSO_APPLICATION_NAME):
@@ -199,9 +207,7 @@ def ensure_sso_application(app: OmniApp, create_missing: bool) -> None:
 
 
 """
-用途:建立 Scope/Role/Group/Permission 測試依賴的固定 S2S Application。
-
-建立時會選取固定 Scope,並相容目前系統可能出現的單頁版與兩步版 S2S UI。
+用途: 建立 Scope/Role/Group/Permission 測試依賴的固定 S2S Application。 (目前沒用到也沒呼叫到, 先建立而已)
 """
 def create_s2s_application(app: OmniApp) -> None:
     s2s_page = app.server_to_server_page
@@ -217,9 +223,7 @@ def create_s2s_application(app: OmniApp) -> None:
 
 
 """
-用途:確認固定 S2S Application 是否存在。
-
-isolated 只檢查,缺少時 fail;keep 缺少時呼叫 create_s2s_application 補建。
+用途: 確認固定 S2S Application 是否存在。 (目前沒用到也沒呼叫到, 先建立而已)
 """
 def ensure_s2s_application(app: OmniApp, create_missing: bool) -> None:
     if app.server_to_server_page.application_exists(PERMISSION_S2S_APPLICATION_NAME):

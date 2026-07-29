@@ -192,7 +192,7 @@ class OperatePage:
         self,
         project_abbreviation: str = PERMISSION_PROJECT_ABBR,
     ):
-        self.reset_to_anchor(BASE_URL_DEV)
+        self.visible_or_reset(self.elements.input_keyword_search, BASE_URL_DEV)
         self.elements.input_keyword_search.fill(project_abbreviation)
         self.base_page.wait_loading_disapper()
         expect(self.elements.msg_search_noResult).not_to_be_visible()
@@ -224,3 +224,16 @@ class OperatePage:
         self.page.keyboard.press("Escape")
         self.page.goto(url)
         self.base_page.wait_loading_disapper()
+
+    @allure.step("等待可見[{ele}], 否則回歸操作起始錨點頁面")
+    def visible_or_reset(
+        self,
+        ele,
+        url
+    ):
+        if ele.wait_for(state='visible', timeout=DEFAULT_TIMEOUT):
+            return
+        else:
+            self.page.keyboard.press("Escape")
+            self.page.goto(url)
+            self.base_page.wait_loading_disapper()

@@ -19,27 +19,27 @@ def assign_permission_data() -> AssignPermissionTestData:
 # 用途: 登記 Assign Permission、Role 與 Scope 資料，並在測試結束後清除。
 @pytest.fixture
 def assign_permission_cleanup(
-    permission_sso_app: OmniApp,
-    permission_project_context,
+    permission_sso_context,
     cleanup_registry: CleanupRegistry,
 ):
+    context = permission_sso_context
+    app = context.app
+
     def return_to_permission_settings() -> None:
-        permission_sso_app.page.keyboard.press("Escape")
-        permission_sso_app.page.goto(BASE_URL_DEV)
-        permission_sso_app.operate_page.go_to_permission_page(
-            permission_project_context.abbreviation
-        )
-        permission_sso_app.operate_page.open_to_permissions_page()
+        app.page.keyboard.press("Escape")
+        app.page.goto(BASE_URL_DEV)
+        app.operate_page.go_to_permission_page(context.abbreviation)
+        app.operate_page.open_to_permissions_page()
 
     def register(resource_type: str, identifier: str) -> None:
         if resource_type == "assignment":
             delete_resource = (
-                permission_sso_app.assign_permission_page.delete_assign_permission_if_exists
+                app.assign_permission_page.delete_assign_permission_if_exists
             )
         elif resource_type == "role":
-            delete_resource = permission_sso_app.role_page.delete_role_if_exists
+            delete_resource = app.role_page.delete_role_if_exists
         elif resource_type == "scope":
-            delete_resource = permission_sso_app.scope_page.delete_scope_if_exists
+            delete_resource = app.scope_page.delete_scope_if_exists
         else:
             raise ValueError(
                 f"Unsupported assign permission cleanup resource: {resource_type}"

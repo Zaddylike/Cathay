@@ -85,9 +85,8 @@ def application_project(
 
                 logged_app.page.keyboard.press("Escape")
                 logged_app.page.goto(BASE_URL_DEV)
-                if logged_app.project_page.project_exists(
-                    application_data.project_abbreviation
-                ):
+
+                if logged_app.project_page.project_exists(application_data.project_abbreviation):
                     if test_started:
                         logged_app.operate_page.go_to_permission_page(
                             application_data.project_abbreviation
@@ -130,11 +129,8 @@ def application_s2s_project(
 
     """將目前 Page 準備成 S2S 測試可開始的專案狀態"""
     def prepare_permission_scope():
-        logged_app.page.goto(BASE_URL_DEV)
         logged_app.operate_page.go_to_permission_page(data.project_abbreviation)
         ensure_permission_initialization(logged_app, create_missing=True)
-        ensure_permission_scope(logged_app, create_missing=True)
-        logged_app.page.goto(BASE_URL_DEV)
 
     try:
         if data_mode == KEEP:
@@ -154,31 +150,18 @@ def application_s2s_project(
                     raise AssertionError(
                         "Isolated S2S cleanup received the baseline S2S application"
                     )
-
                 logged_app.page.keyboard.press("Escape")
                 logged_app.page.goto(BASE_URL_DEV)
+
                 if logged_app.project_page.project_exists(data.project_abbreviation):
-                    logged_app.operate_page.go_to_permission_page(
-                        data.project_abbreviation
-                    )
-                    permission_initialized = not logged_app.application_permission_page.permission_initialization_available()
-                    if permission_initialized:
-                        logged_app.default_permission_page.delete_default_permission_if_exists(
-                            PERMISSION_ROLE_CODE
-                        )
-                        logged_app.role_page.delete_role_if_exists(
-                            PERMISSION_ROLE_CODE
-                        )
-
-                    logged_app.server_to_server_page.delete_application_if_exists(
-                        data.s2s_application_name
-                    )
-
-                    if permission_initialized:
+                    logged_app.operate_page.go_to_permission_page(data.project_abbreviation)
+                    logged_app.server_to_server_page.delete_application_if_exists(data.s2s_application_name)
+                    if not logged_app.application_permission_page.permission_initialization_available():
                         logged_app.operate_page.open_to_permissions_page()
                         logged_app.scope_page.delete_scope_if_exists(
                             PERMISSION_SCOPE_CODE
                         )
+
             except Exception as error:
                 allure.attach(
                     str(error),
@@ -228,15 +211,8 @@ def application_permission_init_project(
 
     cleanup_errors = []
 
-    def open_permission_settings() -> None:
-        logged_app.page.keyboard.press("Escape")
-        logged_app.page.goto(BASE_URL_DEV)
-        logged_app.operate_page.go_to_permission_page(data.project_abbreviation)
-        logged_app.operate_page.open_to_permissions_page()
-
     def cleanup_step(resource_name: str, action) -> None:
         try:
-            open_permission_settings()
             action()
         except Exception as error:
             allure.attach(
@@ -250,17 +226,13 @@ def application_permission_init_project(
         for role_code in (data.second_role_code, data.role_code):
             cleanup_step(
                 f"Default Permission {role_code}",
-                lambda role_code=role_code: logged_app.default_permission_page.delete_default_permission_if_exists(
-                    role_code
-                ),
+                lambda role_code=role_code: logged_app.default_permission_page.delete_default_permission_if_exists(role_code),
             )
 
         for role_code in (data.second_role_code, data.role_code):
             cleanup_step(
                 f"Assign Permission {role_code}",
-                lambda role_code=role_code: logged_app.assign_permission_page.delete_assign_permission_if_exists(
-                    role_code
-                ),
+                lambda role_code=role_code: logged_app.assign_permission_page.delete_assign_permission_if_exists(role_code),
             )
 
         cleanup_step(
@@ -271,21 +243,13 @@ def application_permission_init_project(
         for role_code in (data.second_role_code, data.role_code):
             cleanup_step(
                 f"Role {role_code}",
-                lambda role_code=role_code: logged_app.role_page.delete_role_if_exists(
-                    role_code
-                ),
+                lambda role_code=role_code: logged_app.role_page.delete_role_if_exists(role_code),
             )
 
-        for scope_code in (
-            data.third_scope_code,
-            data.second_scope_code,
-            data.scope_code,
-        ):
+        for scope_code in (data.third_scope_code,data.second_scope_code,data.scope_code):
             cleanup_step(
                 f"Scope {scope_code}",
-                lambda scope_code=scope_code: logged_app.scope_page.delete_scope_if_exists(
-                    scope_code
-                ),
+                lambda scope_code=scope_code: logged_app.scope_page.delete_scope_if_exists(scope_code),
             )
 
     try:
@@ -293,21 +257,22 @@ def application_permission_init_project(
             pytest.fail(
                 f"Fresh project is already initialized: {data.project_abbreviation}"
             )
+
         yield data
+
     finally:
         try:
             if data.project_abbreviation == PERMISSION_PROJECT_ABBR:
                 raise AssertionError(
                     "Isolated Permission Init cleanup received the baseline project"
                 )
-
             logged_app.page.keyboard.press("Escape")
             logged_app.page.goto(BASE_URL_DEV)
+
             if logged_app.project_page.project_exists(data.project_abbreviation):
-                logged_app.operate_page.go_to_permission_page(
-                    data.project_abbreviation
-                )
+                logged_app.operate_page.go_to_permission_page(data.project_abbreviation)
                 logged_app.operate_page.open_to_permissions_page()
+
                 permission_initialized = not logged_app.application_permission_page.permission_initialization_available()
 
                 if permission_initialized:
