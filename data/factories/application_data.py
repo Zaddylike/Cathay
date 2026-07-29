@@ -64,7 +64,7 @@ class ApplicationTestData:
     assignment_description: str
 
 
-def build_application_test_data(data_mode: str) -> ApplicationTestData:
+def build_disposable_data(data_mode: str) -> ApplicationTestData:
     suffix = uuid4().hex[:4]
 
     if data_mode == KEEP:

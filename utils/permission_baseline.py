@@ -1,5 +1,4 @@
 from app.omni_app import OmniApp
-from pages.locators.elements import BaseElements
 from config.settings import (
     BASE_URL_DEV,
     PERMISSION_ENTRA_ATTRIBUTE,
@@ -10,9 +9,6 @@ from config.settings import (
     PERMISSION_PROJECT_DESCRIPTION,
     PERMISSION_PROJECT_EN_NAME,
     PERMISSION_PROJECT_ZH_NAME,
-    PERMISSION_ROLE_CODE,
-    PERMISSION_ROLE_DESCRIPTION,
-    PERMISSION_ROLE_NAME,
     PERMISSION_S2S_APPLICATION_NAME,
     PERMISSION_S2S_DESCRIPTION,
     PERMISSION_S2S_SCOPE_DESCRIPTION,
@@ -197,6 +193,7 @@ def ensure_sso_application(app: OmniApp, create_missing: bool) -> None:
         raise AssertionError(
             f"Required SSO Application does not exist: {PERMISSION_SSO_APPLICATION_NAME}"
         )
+
     create_sso_application(app)
 
 

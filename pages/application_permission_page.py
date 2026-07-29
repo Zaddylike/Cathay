@@ -42,6 +42,12 @@ class ApplicationPermissionPage:
         self.base_page.click_expect(self.elements.tab_permission, self.elements.btn_permission_add_permission)
         self.base_page.click_expect(self.elements.btn_permission_add_permission, self.elements.btn_permission_add_scope)
 
+    @allure.step("確認權限是否初始化")
+    def application_exists(self, application_name: str) -> bool:
+        self.elements.tab_permission.click()
+        expect(self.elements.tab_permission).to_have_attribute("aria-selected", "true")
+        self.base_page.wait_loading_disapper()
+        return self.elements.btn_permission_add_permission.is_visible()
 
     # Scope
 

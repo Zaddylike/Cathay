@@ -7,11 +7,13 @@ from data.factories.resource_data import (
 )
 
 
+# 用途: 產生 Project Member 測試資料。
 @pytest.fixture
 def project_member_data() -> ProjectMemberTestData:
     return build_project_member_test_data()
 
 
+# 用途: 建立 Project Member 測試使用的專案。
 @pytest.fixture
 def created_member_project(
     logged_app: OmniApp,
@@ -26,10 +28,11 @@ def created_member_project(
         project_member_data.project_en_name,
         project_member_data.project_description,
     )
-    
+
     return project_member_data
 
 
+# 用途: 建立供 Project Member 查詢、修改與刪除測試使用的成員。
 @pytest.fixture
 def created_project_member(
     logged_app: OmniApp,

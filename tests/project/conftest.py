@@ -7,11 +7,13 @@ from data.factories.resource_data import (
 )
 
 
+# 用途: 產生 Project 測試資料。
 @pytest.fixture
 def project_data() -> ProjectTestData:
     return build_project_test_data()
 
 
+# 用途: 建立供 Project 查詢、修改與刪除測試使用的專案。
 @pytest.fixture
 def created_project(
     logged_app: OmniApp,
