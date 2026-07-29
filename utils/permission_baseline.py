@@ -1,4 +1,5 @@
 from app.omni_app import OmniApp
+from playwright.sync_api import Page, expect, Error as PlaywrightError
 from config.settings import (
     BASE_URL_DEV,
     PERMISSION_ENTRA_ATTRIBUTE,
@@ -97,8 +98,7 @@ def create_permission_initialization(app: OmniApp) -> None:
     permission_page.open_to_create_permission_page()
 
     scope_panels = app.application_permission_page.elements.page_scope_create
-    if scope_panels.count() != 1:
-        raise AssertionError(f"Expected one initial Scope panel, got {scope_panels.count()}")
+    expect(scope_panels).to_have_count(1)
     
     first_scope_panel = scope_panels.nth(0)
     first_scope_panel.locator('[formcontrolname="code"]').fill(PERMISSION_SCOPE_CODE)

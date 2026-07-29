@@ -1,5 +1,5 @@
 import allure
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, expect, Error as PlaywrightError
 from pages.locators.elements import OperationElements
 from pages.base_page import BasePage
 import re
@@ -60,7 +60,7 @@ class OperatePage:
             expect(inputElement).to_be_visible()
 
             actual_value = inputElement.input_value()
-
+            expect(inputElement).to_have_value(re.compile(rf".*{re.escape(value)}.*"))
             if value not in actual_value:
                 raise AssertionError(
                     f"Expected input value to contain '{value}', but got '{actual_value}'"
@@ -86,10 +86,13 @@ class OperatePage:
     def select_list_by_text(self, list_element, option_element, option_text: str):
         try:
             list_element.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
-            list_element.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
+            try:
+                list_element.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
+            except PlaywrightError:
+                pass
+            
             list_element.click()
             option = option_element.filter(has_text=option_text).first
-            print(option_element.filter(has_text=option_text))
             expect(option).to_be_visible()
             option.click()
         except Exception as e:

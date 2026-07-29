@@ -26,6 +26,19 @@ class RolePage:
         self.base_page = base_page or BasePage(page)
         self.operate_page = operate_page or OperatePage(page, self.base_page)
 
+    def role_card(self, role_code: str):
+        return self.elements.option_cards.filter(
+            has=self.page.get_by_text(role_code, exact=True)
+        )
+
+    def search_role_card(self, role_code: str):
+        self.base_page.click_expect(self.elements.tab_permission_role)
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
+        self.elements.input_keyword_search.fill(role_code)
+        self.base_page.wait_loading_disapper()
+        return self.role_card(role_code)
+
     @allure.step("新增角色 [{role_code}]")
     def create_role(
         self,
@@ -273,15 +286,19 @@ class RolePage:
 
     @allure.step("開啟刪除角色視窗")
     def open_role_delete_dialog(self, role_code: str):
-        self.base_page.click_expect(self.elements.tab_permission_role)
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            role_code,
-            self.elements.btn_card_threepoint_menu,
+        role_card = self.search_role_card(role_code)
+        expect(role_card).to_have_count(1)
+        menu_button = role_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
-            self.elements.btn_card_menu_delete,
-            action_reclick=True,
         )
+        self.base_page.click_expect(
+            self.elements.btn_card_menu_delete,
+            reclick=True,
+        )
+        return role_card
 
     @allure.step("驗證未輸入確認文字時不可刪除")
     def verify_deleted_input(self):
@@ -289,18 +306,24 @@ class RolePage:
 
     @allure.step("刪除角色 [{role_code}]")
     def delete_role(self, role_code: str):
-        self.open_role_delete_dialog(role_code)
+        role_card = self.open_role_delete_dialog(role_code)
         self.verify_deleted_input()
+        self.base_page.wait_loading_disapper()
+        expect(role_card).to_have_count(0)
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
 
     @allure.step("若角色存在則刪除 [{role_code}]")
     def delete_role_if_exists(self, role_code: str) -> bool:
-        self.base_page.click_expect(self.elements.tab_permission_role)
-        self.elements.input_keyword_search.fill(role_code)
-        self.base_page.wait_loading_disapper()
-        
-        if self.elements.msg_search_noResult.is_visible():
+        role_card = self.search_role_card(role_code)
+
+        if role_card.count() == 0:
+            expect(self.elements.msg_search_noResult).to_be_visible()
             self.elements.input_keyword_search.clear()
+            self.base_page.wait_loading_disapper()
             return False
+
+        expect(role_card).to_have_count(1)
         self.delete_role(role_code)
         return True
 

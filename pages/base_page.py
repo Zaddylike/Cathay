@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import Page, expect, TimeoutError as PlaywrightTimeoutError, Error as PlaywrightError
 from config.settings import DEFAULT_TIMEOUT, LOGIN_TIMEOUT
 from pages.locators.elements import BaseElements
 import random
@@ -37,13 +37,16 @@ class BasePage:
         except Exception as e:
             raise Exception(f"Failed while waiting for loading to disappear, Because of {e}")
 
-
     def click_expect(self, locator, expected_value=None, reclick=False):
         try:
             locator.wait_for(state="visible", timeout=DEFAULT_TIMEOUT)
-            locator.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
+            try:
+                locator.scroll_into_view_if_needed(timeout=DEFAULT_TIMEOUT)
+            except PlaywrightError:
+                pass
+
             locator.click(timeout=DEFAULT_TIMEOUT)
-            self.page.wait_for_selector(".loading__main", state="hidden", timeout=DEFAULT_TIMEOUT)
+            self.elements.icon_loading.wait_for(state="hidden", timeout=DEFAULT_TIMEOUT)
             self.sleep(0.25)
 
         except PlaywrightTimeoutError as e:
