@@ -213,6 +213,7 @@ def application_permission_init_project(
 
     def cleanup_step(resource_name: str, action) -> None:
         try:
+            logged_app.page.keyboard.press("Escape")
             action()
         except Exception as error:
             allure.attach(
@@ -267,7 +268,7 @@ def application_permission_init_project(
                     "Isolated Permission Init cleanup received the baseline project"
                 )
             logged_app.page.keyboard.press("Escape")
-            logged_app.page.goto(BASE_URL_DEV)
+            logged_app.operate_page.reset_to_anchor(BASE_URL_DEV)
 
             if logged_app.project_page.project_exists(data.project_abbreviation):
                 logged_app.operate_page.go_to_permission_page(data.project_abbreviation)
