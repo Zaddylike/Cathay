@@ -1,68 +1,16 @@
 # Omni Autotest
 
-Cathay OmniHub UI 自動化測試框架，使用 Python、Pytest、Playwright 與 Allure。
+OmniHub UI 自動化測試框架，使用 Python、Pytest、pytest-playwright、Playwright
+與 Allure。
 
-## 測試範圍
+目前涵蓋 Login、Project、Project Member、Application、Scope、Role、Group、
+Assign Permission 與 Default Permission，包括 CRUD、Copy、Journey 與欄位驗證。
 
-| 功能               | 測試內容                                 |
-| ------------------ | ---------------------------------------- |
-| Login              | Account、Microsoft Entra ID、Google 登入 |
-| Project            | Create、Read、Update、Delete             |
-| Project Member     | Create、Read、Update、Delete             |
-| Application        | Permission Init、SSO Init、S2S Init      |
-| Scope              | Create、Copy、Read、Update、Delete       |
-| Role               | Create、Copy、Read、Update、Delete       |
-| Group              | Create、Copy、Read、Update、Delete       |
-| Assign Permission  | Create、Read、Update、Delete             |
-| Default Permission | Create、Read、Update、Delete             |
+## 快速開始
 
-## 測試設計
+### 1. 安裝
 
-### 獨立功能測試
-
-Create、Copy、Read、Update、Delete 分別放在獨立測試檔案中。Read、Update、Delete
-等案例會透過 fixture 建立自己的前置資料，不依賴其他測試先執行。
-
-測試資料會加入 UUID，例如 `<prefix>a12b`，避免不同案例使用相同名稱。`isolated`
-模式下，fixture 會在測試結束後清除自己建立的資料。
-
-### CRUD Journey
-
-每個 `test_*_journey.py` 都是一個完整 E2E journey，在同一個測試案例內依序執行:
-
-```text
-Create -> Read -> Update -> Delete
-```
-
-Journey 用來驗證完整操作流程;獨立功能測試則用來確認單一功能可以獨立執行與重跑。
-
-### Page Object 與 Fixture
-
-```text
-Test
-  -> Feature fixture / test data
-  -> OmniApp
-  -> Page Object
-  -> Locator
-  -> OmniHub UI
-```
-
-- `OmniApp` 集中提供各功能的 Page Object。
-- `pages/` 負責頁面操作與驗證。
-- `pages/locators/` 集中管理 Locator。
-- 根目錄 `conftest.py` 管理瀏覽器、登入、資料模式與 Permission Project。
-- 各 `tests/<feature>/conftest.py` 管理該功能的測試資料與 cleanup。
-
-## 環境需求
-
-- Python 3.13
-- Node.js 與 npm
-- Java,僅產生或開啟 Allure HTML 報表時需要
-- Chrome 或 Playwright Chromium
-
-## 安裝
-
-### Windows
+Windows：
 
 ```powershell
 python -m venv venv_dev
@@ -72,7 +20,7 @@ python -m playwright install chromium
 npm ci
 ```
 
-### macOS
+macOS：
 
 ```bash
 python3 -m venv .venv
@@ -83,217 +31,227 @@ npm ci
 chmod +x shortcut/mac/*.sh
 ```
 
-## 測試設定
+`npm ci` 安裝 Allure CLI。產生 Allure HTML 時還需要 Java。
 
-執行前請檢查 `config/settings.py`:
+### 2. 設定
 
-- `BASE_URL_DEV`:測試環境網址
-- `HEADLESS`:是否使用無頭瀏覽器
-- `DELAY_TIME`:Playwright 操作延遲
-- `DEFAULT_TIMEOUT`:一般操作 timeout
-- 登入帳號與密碼
-- 測試資料 prefix
-- Permission 共用資料
+執行前檢查 `config/settings.py`：
 
-請勿將正式環境或仍有效的帳密提交至版本控制。
+- `BASE_URL_DEV`：測試環境網址。
+- `ACCOUNT_USERNAME*` / `ACCOUNT_PASSWORD*`：測試帳號。
+- `HEADLESS`：是否使用無頭瀏覽器。
+- `DELAY_TIME`：Playwright 操作延遲。
+- `DEFAULT_TIMEOUT` / `LOGIN_TIMEOUT`：一般操作與登入 timeout。
+- 各功能 prefix 與 `PERMISSION_*`：測試資料及共用 baseline。
 
-## 執行測試
+只使用測試環境帳號，不要提交正式環境或個人帳號憑證。
 
-```bash
+### 3. 執行
+
+```powershell
 # 全部測試
 python -m pytest
 
 # 單一功能
-python -m pytest tests/project
 python -m pytest tests/scope
 
 # 單一檔案
-python -m pytest tests/project/test_project_update.py
+python -m pytest tests/scope/test_scope_create.py
 
 # 單一案例
-python -m pytest tests/project/test_project_update.py::test_project_update_success
+python -m pytest tests/scope/test_scope_create.py::test_scope_create_success
 
 # 顯示瀏覽器
-python -m pytest tests/project --headed
+python -m pytest tests/scope/test_scope_create.py --headed
 ```
 
-預設瀏覽器、輸出報表及其他共用參數定義於 `pytest.ini`。
+預設使用 Chromium，並產生錄影、HTML report 與 Allure results。共用參數位於
+`pytest.ini`。
 
-## 測試錄影
-
-錄影功能由 `pytest-playwright` 提供，不需要在 Page Object 或 fixture 內另外撰寫錄影程式。
-
-目前 `pytest.ini` 已設定:
-
-```ini
---video=on
---output=reports/playwright
-```
-
-因此執行 Pytest 時，所有測試都會自動錄影。影片會在測試結束、Browser Context 關閉後寫入:
+## 框架分工
 
 ```text
-reports/playwright/<test-case-name>/video.webm
+Test
+  -> Feature fixture / Test data
+  -> OmniApp
+  -> Page Object
+  -> Locator
+  -> OmniHub UI
 ```
 
-### 錄影模式
+| 位置 | 責任 |
+|---|---|
+| `tests/test_*.py` | 描述測試情境 |
+| `tests/<feature>/conftest.py` | 功能前置資料與 cleanup 登記 |
+| 根目錄 `conftest.py` | Browser、登入、data mode、Permission lifecycle |
+| `app/omni_app.py` | 組裝並提供 Page Object |
+| `pages/` | UI 操作、流程與 Playwright assertion |
+| `pages/locators/` | Locator 定義 |
+| `data/factories/` | UUID 測試資料 |
+| `data/schema/` | 欄位驗證案例 |
+| `utils/` | Cleanup、data mode、Permission baseline |
 
-| 參數                        | 行為                             |
-| --------------------------- | -------------------------------- |
-| `--video=off`               | 不錄影                           |
-| `--video=on`                | 錄製並保留所有測試影片           |
-| `--video=retain-on-failure` | 錄製所有測試，只保留失敗案例影片 |
+### Pytest 與 Playwright
 
-只想在單次執行時指定錄影模式，可以直接加入指令:
+- Pytest 管理 fixture、setup、yield、teardown 與測試收集。
+- Playwright 管理 Browser、Page、Locator、UI 操作與等待。
+- UI 結果使用 Playwright `expect()`。
+- 普通 Python `assert` 只用於不依賴 UI 的程式邏輯。
+- Test 不直接操作 locator；操作細節放在 Page Object。
 
-```bash
-# 保留所有測試影片
-python -m pytest tests/project/test_project_journey.py --video=on
+## 測試生命週期
 
-# 只保留失敗案例影片
-python -m pytest tests/project/test_project_journey.py --video=retain-on-failure
+一般 Permission 測試：
 
-# 關閉錄影
-python -m pytest tests/project/test_project_journey.py --video=off
+```text
+建立 Browser / Context / Page
+  -> 登入
+  -> 準備 Permission Project
+  -> 完成 Permission Init
+  -> 建立功能前置資料
+  -> 執行測試
+  -> 反向清除測試資料
+  -> 清除 baseline
+  -> 刪除 isolated Project
 ```
 
-若要永久更改模式，修改 `pytest.ini` 內的 `--video` 設定即可。一般 CI 或完整 regression
-建議使用 `retain-on-failure`，可減少影片占用空間。
+### Permission fixtures
 
-影片可能包含登入畫面、帳號或其他敏感資訊，請避免將 `reports/playwright/` 提交至版本控制
-或長期存放於公開位置。
+| Fixture | 提供的狀態 |
+|---|---|
+| `permission_project_context` | 已登入並取得 Permission Project |
+| `permission_initialized_context` | 已完成 Permission Init |
+| `permission_settings_app` | 已進入 Permission 設定頁 |
+| `permission_sso_context` | 已建立 SSO 前置 |
+| `permission_sso_app` | 已建立 SSO 並進入 Permission 設定頁 |
 
-## 測試資料模式
+Scope、Role、Default Permission 通常使用 `permission_settings_app`；Group、Assign
+Permission 使用 `permission_sso_app`。
 
-使用 `--data-mode` 控制 fixture 建立資料後是否清除。預設為 `isolated`。
+### Data mode
 
-| 模式       | 適用情境                          | 測試資料                              |
-| ---------- | --------------------------------- | ------------------------------------- |
-| `isolated` | 一般執行、CI、重跑                | 建立 UUID 資料並在 teardown 清除      |
-| `keep`     | 人工除錯、保留資料、準備 baseline | 保留測試資料並補建缺少的共用 baseline |
+預設為 `isolated`：
 
-### isolated
+| 模式 | 用途 | 測試後 |
+|---|---|---|
+| `isolated` | 一般執行、CI、重跑 | 清除 UUID 資料與臨時 Project |
+| `keep` | 人工除錯、保留資料 | 保留測試資料 |
 
-```bash
-python -m pytest tests/scope --data-mode=isolated
+```powershell
+python -m pytest tests/role --data-mode=isolated
+python -m pytest tests/role --data-mode=keep --headed
 ```
 
-- Project、Application 與 Permission 功能使用各案例專屬的 UUID Project。
-- Permission Project 會建立最小 Permission Init 前置資料。
-- 測試結束後依資源相依順序執行 cleanup。
-- 不會修改 `project-abbr-main`。
+- `isolated` 使用測試專屬 Project，不修改 `project-abbr-main`。
+- `keep` 使用共用 Project，缺少 baseline 時自動補建。
+- 共用 baseline 使用跨程序 lock，避免同時重複建立。
 
-### keep
+## 測試設計
 
-```bash
-python -m pytest tests/scope --data-mode=keep
-```
+- CRUD 功能分開測試，可單獨執行與重跑。
+- Read、Update、Delete 透過 fixture 建立自己的前置資料。
+- `test_*_journey.py` 在同一案例驗證 `Create -> Read -> Update -> Delete`。
+- `test_*_validation.py` 驗證必填、格式、長度與重複資料。
+- 測試資料由 factory 加入 UUID，避免重跑或平行執行時撞名。
 
-- fixture 建立的測試資料會保留。
-- Permission 與 Application 使用共用專案 `project-abbr-main`。
-- 缺少 Permission Init、Scope、SSO 或其他必要 baseline 時會自動補建。
-- 建立共用 baseline 時使用跨程序鎖，避免多個 process 同時建立相同資料。
+## 新增測試
 
-Permission Init 是一次性流程。`keep` 模式發現共用專案已完成初始化時，對應測試會顯示
-`skipped`，避免重複初始化。
+1. 在 `data/factories/` 增加測試資料。
+2. 在 `pages/locators/` 增加 locator。
+3. 在 `pages/` 增加 UI 操作與 `expect()`。
+4. 在功能 `conftest.py` 建立前置資料並登記 cleanup。
+5. 在 `tests/<feature>/` 撰寫測試。
+6. 單跑案例，確認 teardown 沒有殘留資料。
+7. 執行 Ruff 與該功能目錄測試。
 
-## 平行執行
+## 報表與錄影
 
-框架已依 Pytest worker ID 分配測試帳號，目前設定兩組帳號，因此最多支援兩個 worker。
-平行執行前，需先將 `pytest-xdist` 加入專案依賴;目前預設仍為單程序執行。
-
-啟用後可使用:
-
-```bash
-python -m pytest -n 2
-```
-
-Worker 數量不可超過 `conftest.py` 中設定的帳號數量。
-
-## 測試報表
-
-Pytest 每次執行會輸出:
+預設輸出：
 
 ```text
 reports/report.html
 reports/allure-results/
+reports/playwright/
 ```
 
-產生並開啟 Allure HTML 報表:
+單次調整錄影模式：
 
 ```powershell
-# Windows
+python -m pytest --video=on
+python -m pytest --video=retain-on-failure
+python -m pytest --video=off
+```
+
+產生並開啟 Allure：
+
+```powershell
 .\shortcut\windows\run_allure.bat
 ```
 
 ```bash
-# macOS
 ./shortcut/mac/run_allure.sh
 ```
 
-只開啟已產生的報表:
-
-```powershell
-# Windows
-.\shortcut\windows\open_allure.bat
-```
-
-```bash
-# macOS
-./shortcut/mac/open_allure.sh
-```
+影片可能包含帳號與頁面資料，不要提交或公開 `reports/`。
 
 ## 程式檢查
 
-```bash
-# Lint
+```powershell
 python -m ruff check .
-
-# 檢查格式
 python -m ruff format --check .
+```
 
-# 自動修正與格式化
+需要自動修正時：
+
+```powershell
 python -m ruff check . --fix
 python -m ruff format .
-```
-
-## 常見問題
-
-### 找不到瀏覽器
-
-```bash
-python -m playwright install chromium
-```
-
-### Allure CLI not found
-
-```bash
-npm ci
-```
-
-### Permission Init 顯示 skipped
-
-`keep` 模式使用共用專案。共用專案已完成一次性 Permission Init 時，測試會自動跳過。
-
-### cleanup 失敗
-
-Cleanup 錯誤會附加到 Allure 結果。可使用 `--data-mode=keep` 保留資料並開啟瀏覽器檢查:
-
-```bash
-python -m pytest tests/project/test_project_update.py --data-mode=keep --headed
 ```
 
 ## 專案結構
 
 ```text
-app/             OmniApp,整合所有 Page Object
-config/          環境、帳號與測試資料設定
+app/             OmniApp 與 Page Object 組裝
+config/          環境、帳號與 timeout
+data/            測試資料 factory 與 schema
 pages/           Page Object
 pages/locators/  Locator
-shortcut/        Windows 與 macOS 報表、清理腳本
-tests/           測試案例與各功能 fixture
-utils/           data mode、Permission baseline 等共用工具
-conftest.py      共用 fixture、CLI、登入與瀏覽器設定
-pytest.ini       Pytest 預設參數與 marker
+tests/           測試案例與功能 fixtures
+utils/           lifecycle、cleanup、Permission baseline
+shortcut/        報表與清理指令
+conftest.py      共用 pytest fixtures
+pytest.ini       Pytest 預設參數
 pyproject.toml   Ruff 設定
 ```
+
+## 常見問題
+
+### 找不到 Chromium
+
+```powershell
+python -m playwright install chromium
+```
+
+### 找不到 Allure
+
+執行 `npm ci`，並確認電腦已安裝 Java。
+
+### 測試資料沒有清除
+
+1. 確認沒有使用 `--data-mode=keep`。
+2. 查看 Allure teardown 與 `cleanup failed` 附件。
+3. 使用 `--headed --data-mode=keep` 重跑並人工檢查。
+
+### Permission Init 被 skipped
+
+`keep` 模式的共用 Project 若已完成一次性 Permission Init，初始化測試會跳過，
+避免重複建立。
+
+## 交接檢查
+
+- 測試環境 URL 與測試帳號仍有效。
+- `python -m pytest --collect-only` 能成功收集案例。
+- Login、Project Journey 與 Permission Journey 可以單獨通過。
+- `isolated` 執行後沒有殘留 UUID 資料。
+- HTML、Allure 與 Playwright 錄影可正常產生。
+- 新增設定或 marker 時同步更新 `pytest.ini` 與本文件。
