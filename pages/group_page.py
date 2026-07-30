@@ -1,5 +1,5 @@
 import allure
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
 from pages.base_page import BasePage
 from pages.locators.elements import GroupElements
@@ -21,6 +21,19 @@ class GroupPage:
         self.elements = GroupElements(page)
         self.base_page = base_page or BasePage(page)
         self.operate_page = operate_page or OperatePage(page, self.base_page)
+
+    def group_card(self, group_name: str):
+        return self.elements.option_cards.filter(
+            has=self.page.get_by_text(group_name, exact=True)
+        )
+
+    def search_group_card(self, group_name: str):
+        self.click_to_group_page()
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
+        self.elements.input_keyword_search.fill(group_name)
+        self.base_page.wait_loading_disapper()
+        return self.group_card(group_name)
 
     @allure.step("新增群組 [{group_name}]")
     def create_group(self, group_name: str, group_description: str, member_keyword: str):
@@ -90,11 +103,15 @@ class GroupPage:
 
     @allure.step("開啟複製群組頁面")
     def open_copy_group_page(self, source_group_name: str):
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            source_group_name,
-            self.elements.btn_card_threepoint_menu,
+        group_card = self.search_group_card(source_group_name)
+        expect(group_card).to_have_count(1)
+        menu_button = group_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
             self.elements.btn_card_menu_copy,
         )
 
@@ -111,11 +128,7 @@ class GroupPage:
     @allure.step("送出群組並驗證複製成功")
     def submit_and_verify_copied(self, copied_group_name: str):
         self.operate_page.submit_and_confirm()
-        self.operate_page.search_keyword(
-            self.elements.input_keyword_search,
-            copied_group_name,
-            self.elements.option_cards.last
-        )
+        expect(self.search_group_card(copied_group_name)).to_have_count(1)
 
     #  read
 
@@ -219,13 +232,18 @@ class GroupPage:
 
     @allure.step("開啟刪除群組視窗")
     def open_group_delete_dialog(self, group_name: str):
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            group_name,
-            self.elements.btn_card_threepoint_menu,
+        group_card = self.search_group_card(group_name)
+        expect(group_card).to_have_count(1)
+        menu_button = group_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
             self.elements.btn_card_menu_delete,
         )
+        return group_card
 
     @allure.step("驗證群組刪除確認欄位")
     def verify_deleted_input(self):
@@ -233,20 +251,25 @@ class GroupPage:
 
     @allure.step("刪除群組 [{group_name}]")
     def delete_group(self, group_name: str):
-        self.click_to_group_page()
-        self.open_group_delete_dialog(group_name)
+        group_card = self.open_group_delete_dialog(group_name)
         self.verify_deleted_input()
+        self.base_page.wait_loading_disapper()
+        expect(group_card).to_have_count(0)
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
 
     @allure.step("若群組存在則刪除 [{group_name}]")
     def delete_group_if_exists(self, group_name: str) -> bool:
-        self.click_to_group_page()
-        self.elements.input_keyword_search.fill(group_name)
-        self.base_page.wait_loading_disapper()
-        if self.elements.msg_search_noResult.is_visible():
+        group_card = self.search_group_card(group_name)
+
+        if group_card.count() == 0:
+            expect(self.elements.msg_search_noResult).to_be_visible()
             self.elements.input_keyword_search.clear()
+            self.base_page.wait_loading_disapper()
             return False
-        self.open_group_delete_dialog(group_name)
-        self.verify_deleted_input()
+
+        expect(group_card).to_have_count(1)
+        self.delete_group(group_name)
         return True
 
     @allure.step("驗證群組已刪除 [{group_name}]")

@@ -119,12 +119,15 @@ class RolePage:
     
     @allure.step("開啟複製角色頁面")
     def click_to_copy_role_page(self, source_role_code: str):
-        self.base_page.click_expect(self.elements.tab_permission_role)
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            source_role_code,
-            self.elements.btn_card_threepoint_menu,
+        role_card = self.search_role_card(source_role_code)
+        expect(role_card).to_have_count(1)
+        menu_button = role_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
             self.elements.btn_card_menu_copy,
         )
 
@@ -160,11 +163,7 @@ class RolePage:
     def submit_and_verify_copied(self, copied_role_code: str):
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
-        self.operate_page.search_keyword(
-            self.elements.input_keyword_search,
-            copied_role_code,
-            self.elements.option_cards.last,
-        )
+        expect(self.search_role_card(copied_role_code)).to_have_count(1)
 
     #  read
 

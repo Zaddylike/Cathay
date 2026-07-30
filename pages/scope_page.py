@@ -10,7 +10,6 @@ from data.schema.permission_cases import (
     duplicate_permission_code_cases,
 )
 
-from config.settings import DEFAULT_TIMEOUT
 from pages.locators.elements import ScopeElements
 from pages.base_page import BasePage
 from pages.operate_page import OperatePage
@@ -27,18 +26,25 @@ class ScopePage:
         self.base_page = base_page or BasePage(page)
         self.operate_page = operate_page or OperatePage(page, self.base_page)
 
+    def scope_card(self, scope_code: str):
+        return self.elements.option_cards.filter(
+            has=self.page.get_by_text(scope_code, exact=True)
+        )
 
+    def search_scope_card(self, scope_code: str):
+        self.base_page.click_expect(self.elements.tab_permission_scope)
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
+        self.elements.input_keyword_search.fill(scope_code)
+        self.base_page.wait_loading_disapper()
+        return self.scope_card(scope_code)
 
     """以完整 Scope code 搜尋並確認是否存在唯一資料。"""
     def scope_exists(self, scope_code: str) -> bool:
-        self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.elements.input_keyword_search.fill(scope_code)
-        self.base_page.wait_loading_disapper()
-        scope_card = self.elements.option_cards.filter(
-            has=self.page.get_by_text(scope_code, exact=True)
-        )
+        scope_card = self.search_scope_card(scope_code)
         exists = scope_card.count() == 1
         self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
         return exists
 
 
@@ -129,12 +135,15 @@ class ScopePage:
 
     @allure.step("開啟複製範圍視窗")
     def click_to_copy_scope_page(self, source_scope_code: str):
-        self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            source_scope_code,
-            self.elements.btn_card_threepoint_menu,
+        scope_card = self.search_scope_card(source_scope_code)
+        expect(scope_card).to_have_count(1)
+        menu_button = scope_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
             self.elements.btn_card_menu_copy,
         )
 
@@ -175,13 +184,17 @@ class ScopePage:
         self.operate_page.submit_and_confirm()
         expect(self.elements.page_permission).to_contain_text(" 身份驗證 ")
 
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            copied_scope_code,
-            self.elements.btn_card_threepoint_menu,
+        scope_card = self.search_scope_card(copied_scope_code)
+        expect(scope_card).to_have_count(1)
+        menu_button = scope_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
             self.elements.btn_card_menu_update,
-            action_reclick=True,
+            reclick=True,
         )
         self.elements.radio_status_disable.click()
         self.operate_page.submit_and_confirm()
@@ -303,28 +316,35 @@ class ScopePage:
 
     @allure.step("刪除範圍 [{scope_code}]")
     def delete_scope(self, scope_code: str):
-        self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            scope_code,
-            self.elements.btn_card_threepoint_menu,
+        scope_card = self.search_scope_card(scope_code)
+        expect(scope_card).to_have_count(1)
+        menu_button = scope_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
+        )
+        self.base_page.click_expect(
             self.elements.btn_card_menu_delete,
-            action_reclick=True,
+            reclick=True,
         )
         self.operate_page.verify_delete()
+        self.base_page.wait_loading_disapper()
+        expect(scope_card).to_have_count(0)
+        self.elements.input_keyword_search.clear()
         self.base_page.wait_loading_disapper()
 
     @allure.step("若範圍存在則刪除 [{scope_code}]")
     def delete_scope_if_exists(self, scope_code: str) -> bool:
-        self.base_page.click_expect(self.elements.tab_permission_scope)
-        self.elements.input_keyword_search.fill(scope_code)
-        self.base_page.wait_loading_disapper()
+        scope_card = self.search_scope_card(scope_code)
 
-        if self.elements.msg_search_noResult.is_visible():
+        if scope_card.count() == 0:
+            expect(self.elements.msg_search_noResult).to_be_visible()
             self.elements.input_keyword_search.clear()
+            self.base_page.wait_loading_disapper()
             return False
 
+        expect(scope_card).to_have_count(1)
         self.delete_scope(scope_code)
         return True
 
