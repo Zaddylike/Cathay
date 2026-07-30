@@ -24,12 +24,18 @@ def default_permission_cleanup(
 ):
     context = permission_initialized_context
     app = context.app
+    cleanup_page_ready = False
 
-    def return_to_permission_settings() -> None:
-        app.page.keyboard.press("Escape")
-        app.page.goto(BASE_URL_DEV)
+    def ensure_cleanup_page() -> None:
+        nonlocal cleanup_page_ready
+
+        if cleanup_page_ready:
+            return
+
+        app.operate_page.reset_to_anchor(BASE_URL_DEV)
         app.operate_page.go_to_permission_page(context.abbreviation)
         app.operate_page.open_to_permissions_page()
+        cleanup_page_ready = True
 
     def register(resource_type: str, identifier: str) -> None:
         if resource_type == "permission":
@@ -46,7 +52,8 @@ def default_permission_cleanup(
             )
 
         def cleanup() -> None:
-            return_to_permission_settings()
+            app.page.keyboard.press("Escape")
+            ensure_cleanup_page()
             delete_resource(identifier)
 
         cleanup_registry.register(resource_type.title(), identifier, cleanup)

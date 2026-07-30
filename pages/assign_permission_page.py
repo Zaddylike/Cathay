@@ -227,14 +227,25 @@ class AssignPermissionPage:
 
     @allure.step("開啟刪除指定權限視窗")
     def open_assign_permission_delete_dialog(self, assignment_key: str):
-        self.open_assign_permission_list()
-        expect(self.elements.btn_create_assign_permission).to_be_visible()
-        self.operate_page.open_card_action(
-            self.elements.input_keyword_search,
-            assignment_key,
-            self.elements.btn_card_threepoint_menu,
+        assignment_card = self.search_assign_permission_card(assignment_key)
+        expect(assignment_card).to_have_count(1)
+        menu_button = assignment_card.locator(".p-splitbutton-dropdown")
+        expect(menu_button).to_have_count(1)
+        self.base_page.click_expect(
+            menu_button,
             self.elements.page_card_threepoint_menu,
-            self.elements.btn_card_menu_delete,
+        )
+        self.base_page.click_expect(self.elements.btn_card_menu_delete)
+        return assignment_card
+
+    def search_assign_permission_card(self, assignment_key: str):
+        self.open_assign_permission_list()
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
+        self.elements.input_keyword_search.fill(assignment_key)
+        self.base_page.wait_loading_disapper()
+        return self.page.locator("app-permission-card").filter(
+            has_text=assignment_key
         )
 
     @allure.step("驗證指定權限刪除確認欄位")
@@ -243,16 +254,19 @@ class AssignPermissionPage:
 
     @allure.step("刪除指定權限 [{assignment_key}]")
     def delete_assign_permission(self, assignment_key: str):
-        self.open_assign_permission_delete_dialog(assignment_key)
+        assignment_card = self.open_assign_permission_delete_dialog(assignment_key)
         self.verify_deleted_input()
+        self.base_page.wait_loading_disapper()
+        expect(assignment_card).to_have_count(0)
+        self.elements.input_keyword_search.clear()
+        self.base_page.wait_loading_disapper()
 
     @allure.step("若指定權限存在則刪除 [{assignment_key}]")
     def delete_assign_permission_if_exists(self, assignment_key: str) -> bool:
-        self.open_assign_permission_list()
-        self.elements.input_keyword_search.fill(assignment_key)
-        self.base_page.wait_loading_disapper()
-        if self.elements.msg_search_noResult.is_visible():
+        assignment_card = self.search_assign_permission_card(assignment_key)
+        if assignment_card.count() == 0:
             self.elements.input_keyword_search.clear()
+            self.base_page.wait_loading_disapper()
             return False
         self.delete_assign_permission(assignment_key)
         return True
