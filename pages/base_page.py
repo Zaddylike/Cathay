@@ -22,6 +22,7 @@ class BasePage:
             raise Exception(f"Failed to generate random number: {e}")
     
     def take_screenshot(self, photo_name):
+        self.page.wait_for_timeout(300)
         allure.attach(
             self.page.screenshot(),
             name=f"{photo_name}",

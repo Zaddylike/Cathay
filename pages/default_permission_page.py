@@ -72,7 +72,7 @@ class DefaultPermissionPage:
         self.operate_page.search_keyword(
             self.elements.input_keyword_search,
             role_code,
-            self.elements.option_default.last,
+            self.elements.option_default
         )
 
 # read

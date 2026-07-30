@@ -248,14 +248,13 @@ def browser_type_launch_args(browser_type_launch_args):
         ],
     }
 
-# 用途: 統一設定瀏覽器 Context 語系與視窗參數。
+# 用途: 統一設定瀏覽器 Context 語系。
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
     return {
         **browser_context_args,
         "java_script_enabled": True,
         "locale": "zh-TW",
-        "no_viewport": True,
         "extra_http_headers": {
             **browser_context_args.get("extra_http_headers", {}),
             "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -286,29 +285,6 @@ def context(new_context) -> Iterator[BrowserContext]:
             )
         except PlaywrightError:
             continue
-
-# 用途: 提供測試 Page，非 headless Chromium 執行時同步最大化視窗。
-@pytest.fixture
-def page(page: Page, browser_name: str, browser_type_launch_args):
-    is_headless = browser_type_launch_args.get("headless", True)
-
-    if browser_name == "chromium" and not is_headless:
-        cdp_session = page.context.new_cdp_session(page)
-        try:
-            window = cdp_session.send("Browser.getWindowForTarget")
-            cdp_session.send(
-                "Browser.setWindowBounds",
-                {
-                    "windowId": window["windowId"],
-                    "bounds": {"windowState": "maximized"},
-                },
-            )
-        finally:
-            cdp_session.detach()
-
-    return page
-
-
 
 # Parameters
 

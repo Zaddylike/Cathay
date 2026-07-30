@@ -9,8 +9,6 @@ print(f'Starting Time: {now.strftime("%Y/%m/%d %H:%M")}')
 HEADLESS = True
 DELAY_TIME = 0
 BROWSER_ARGS = [
-    "--start-maximized",
-    "--window-position=0,0",
     "--disable-features=Translate,TranslateUI",
     "--disable-translate",
     "--no-sandbox",

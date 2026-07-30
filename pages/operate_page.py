@@ -116,15 +116,19 @@ class OperatePage:
             raise Exception(f"Failed to submit and confirm: {e}")
 
     @allure.step("搜尋關鍵字並驗證結果")
-    def search_keyword(self, search_input, keyword, result_locator=None, should_exist=True):
+    def search_keyword(self, search_input, keyword, result_locator=None, picture_name="default", should_exist=True):
         try:
-            result_locator = self.elements.option_cards.first if result_locator is None else result_locator
+            result_locator = self.elements.option_cards.first if result_locator is None else result_locator.first
             search_input.fill(keyword)
             self.base_page.wait_loading_disapper()
             if should_exist:
                 expect(result_locator).to_be_visible()
             else:
                 expect(result_locator).not_to_be_visible()
+            
+            self.base_page.take_screenshot(
+                picture_name
+            )
         except Exception as e:
             raise Exception(f"Failed to search keyword [{keyword}]: {e}")
 
